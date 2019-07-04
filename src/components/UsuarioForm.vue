@@ -60,6 +60,7 @@ export default {
     }
   }
 };
+/*asd */
 </script>
 
 <style scoped>
