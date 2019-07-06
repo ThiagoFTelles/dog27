@@ -9,6 +9,7 @@ export const api = {
     return axiosInstance.get(endpoint);
   },
   post(endpoint, body) {
+    // body deve ser um objeto
     return axiosInstance.post(endpoint, body);
   }
 };
