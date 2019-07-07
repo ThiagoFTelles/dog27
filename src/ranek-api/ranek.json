@@ -2,14 +2,15 @@
   "usuario": [
     {
       "id": "atendimento.telles@gmail.com",
-      "email": "atendimento.telles@gmail.com",
       "nome": "2T",
+      "email": "atendimento.telles@gmail.com",
       "senha": "123",
-      "rua": "Rua Ali Perto",
       "cep": "12345678",
+      "rua": "Rua Ali Perto",
       "numero": "90",
-      "estado": "ES",
-      "cidade": "Vitória"
+      "bairro": "1",
+      "cidade": "Vitória",
+      "estado": "ES"
     },
     {
       "id": "andre@origamid.com",
@@ -21,226 +22,13 @@
       "numero": "25",
       "estado": "RJ",
       "cidade": "Rio de Janeiro"
-    },
-    {
-      "id": "7hUV598",
-      "nome": "Joao",
-      "email": "asd@asd.com",
-      "senha": "123",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "90",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "DzT_LLY",
-      "nome": "Jane Doe",
-      "email": "kkk@kkkkk.com",
-      "senha": "123",
-      "cep": "29055260",
-      "rua": "Rua Aleixo Netto",
-      "numero": "5235",
-      "bairro": "Praia do Canto",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "nJOKOb9",
-      "nome": "Janelson",
-      "email": "telles34@hotmail.com",
-      "senha": "123",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "2",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "8I6C-fO",
-      "nome": "qwert",
-      "email": "odarapaoecafe@gmail.com",
-      "senha": "123",
-      "cep": "29055260",
-      "rua": "Rua Aleixo Netto",
-      "numero": "2",
-      "bairro": "Praia do Canto",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "dFx6lX9",
-      "nome": "Jhions",
-      "email": "1243123@sdfsd.fgfs",
-      "senha": "123",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "1",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "Thz6cyg",
-      "nome": "Thiago Telles",
-      "email": "1231231231231@sasd.hyrf",
-      "senha": "123",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "5233",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "lkq622t",
-      "nome": "Thiago Fernandes Telles",
-      "email": "telles566534@hotmail.com",
-      "senha": "123",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro, 90/201",
-      "numero": "2",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "Espírito Santo"
-    },
-    {
-      "id": "QGnzqmK",
-      "nome": "Thiago Telles2",
-      "email": "atendimento.telles@gmail.com",
-      "senha": "www",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "w",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "CuEeDqC",
-      "nome": "Thiago Telles 333",
-      "email": "telles3333@hotmail.com",
-      "senha": "333",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "333",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "Vgl-oJo",
-      "nome": "777",
-      "email": "777atendimento.telles@gmail.com",
-      "senha": "777",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "777",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "jWiBtXv",
-      "nome": "888",
-      "email": "8887atendimento.telles@gmail.com",
-      "senha": "888",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "888",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "DDM9I6Z",
-      "nome": "999",
-      "email": "99997atendimento.telles@gmail.com",
-      "senha": "999",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "99",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "UHxL3Ne",
-      "nome": "000",
-      "email": "000@gmail.com",
-      "senha": "000",
-      "cep": "29055260",
-      "rua": "Rua Aleixo Netto",
-      "numero": "00",
-      "bairro": "Praia do Canto",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "UQMyMa6",
-      "nome": "111",
-      "email": "111@gmail.com",
-      "senha": "111",
-      "cep": "29055260",
-      "rua": "Rua Aleixo Netto",
-      "numero": "11",
-      "bairro": "Praia do Canto",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "eKyT-OP",
-      "nome": "333 Thiago Telles",
-      "email": "333@gmail.com",
-      "senha": "333",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "333",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "Ccne3PJ",
-      "nome": "787878",
-      "email": "787878atendimento.telles@gmail.com",
-      "senha": "78787",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "7878",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
-    },
-    {
-      "id": "W-gZLfL",
-      "nome": "2727277",
-      "email": "272727s@gmail.com",
-      "senha": "272727",
-      "cep": "29016-130",
-      "rua": "Rua Filomeno Ribeiro",
-      "numero": "27",
-      "bairro": "Centro",
-      "cidade": "Vitória",
-      "estado": "ES"
     }
   ],
   "produto": [
     {
-      "id": "notebook",
-      "nome": "Notebook",
-      "usuario_id": "andre@origamid.com",
-      "preco": "4999",
-      "vendido": "false",
-      "descricao": "Esse é um novo notebook.",
-      "fotos": null
-    },
-    {
       "id": "smartphone",
       "nome": "Smartphone",
-      "usuario_id": "andre@origamid.com",
+      "usuario_id": "atendimento.telles@gmail.com",
       "preco": "1999",
       "vendido": "false",
       "descricao": "Esse é um novo smartphone.",
@@ -1282,31 +1070,12 @@
       "fotos": null
     },
     {
-      "id": "notebook",
-      "nome": "Notebook",
-      "usuario_id": "andre@origamid.com",
-      "preco": "4999",
-      "vendido": "false",
-      "descricao": "Esse é um novo notebook.",
-      "fotos": null
-    },
-    {
-      "id": "smartphone",
-      "nome": "Smartphone",
-      "usuario_id": "andre@origamid.com",
-      "preco": "1999",
-      "vendido": "false",
-      "descricao": "Esse é um novo smartphone.",
-      "fotos": null
-    },
-    {
-      "id": "tablet",
-      "nome": "Tablet",
-      "usuario_id": "andre@origamid.com",
-      "preco": "1399",
-      "vendido": "false",
-      "descricao": "Esse é um novo tablet.",
-      "fotos": null
+      "nome": "Coleira estampada",
+      "preco": "123",
+      "descricao": "Muito maneira mesmo.",
+      "fotos": null,
+      "usuario_id": "atendimento.telles@gmail.com",
+      "id": "PlAoue9"
     }
   ]
 }

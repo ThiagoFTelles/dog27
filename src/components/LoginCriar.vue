@@ -27,11 +27,11 @@ export default {
     async criarUsuario() {
       // async significa que tudo que retornar uma promessa será executado só depois que o "await" anterior terminar de ser executado. Garantindo assim a ordem correta das ações e evitando uma cadeia grande de .then(()=>{}).then(()=>{})... etc
       try {
-        await this.$store
-          .dispatch("criarUsuario", this.$store.state.usuario)
-          .then(r => {
-            this.$store.dispatch("getUsuario", r.id);
-          });
+        await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
+        await this.$store.dispatch(
+          "getUsuario",
+          this.$store.state.usuario.email
+        );
         this.$router.push({ name: "usuario" });
       } catch (error) {
         console.log(error);

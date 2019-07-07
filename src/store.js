@@ -22,7 +22,8 @@ export default new Vuex.Store({
       bairro: "",
       cidade: "",
       estado: "",
-    }
+    },
+    usuario_produtos: null
   },
   mutations: {
     UPDATE_LOGIN(state, payload) {
@@ -32,8 +33,21 @@ export default new Vuex.Store({
       state.usuario = Object.assign({}, state.usuario, payload); /* Object.assign serve para combinar os objetos dentro de () e atualzar ou criar apenas o valor que está sendo passado */
       /* o objeto vazio passado em Object.assign serve para garantir que receberei um retorno mesmo se algum dos valores for nulo */
     },
+    UPDATE_USUARIO_PRODUTOS(state, payload) {
+      state.usuario_produtos = payload;
+    },
+    ADD_USUARIO_PRODUTOS(state, payload) {
+      state.usuario_produtos.unshift(payload);
+      // unshift() acrescenta o item no começo da array, ao contrário de push() que add no final
+    },
   },
   actions: {
+    getUsuarioProdutos(context) {
+      api.get(`/produto?usuario_id=${context.state.usuario.id}`)
+        .then(r => {
+          context.commit("UPDATE_USUARIO_PRODUTOS", r.data);
+        })
+    },
     getUsuario(context, payload) {
       // A api gera uma primisse, ou seja, posso botar o .then() depois dela.
       // Se eu colocar o return dentro do api.get e api.post, eu conseguirei usar a promisse nos métodos onde eu fizer o dispatch(). Ex: this.$store.dispatch("myAction", myObj).then( () => {...}  )

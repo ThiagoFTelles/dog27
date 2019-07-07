@@ -8,7 +8,7 @@
   </ul>
 </template>
 
-<script>
+<script scoped>
 export default {
   props: {
     produtosPorPagina: {
