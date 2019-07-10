@@ -26,15 +26,23 @@ export default {
     };
   },
   methods: {
-    async criarUsuario() {
+    async criarUsuario(event) {
       this.erros = [];
+      const button = event.currentTarget;
+      const valorOriginal = button.value;
+      button.value = "Aguarde...";
+      button.setAttribute("disabled", "");
       // async significa que tudo que retornar uma promessa será executado só depois que o "await" anterior terminar de ser executado. Garantindo assim a ordem correta das ações e evitando uma cadeia grande de .then(()=>{}).then(()=>{})... etc
       try {
         await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("getUsuario");
+        button.removeAttribute("disabled", "");
+        button.value = valorOriginal;
         this.$router.push({ name: "usuario" });
       } catch (e) {
+        button.removeAttribute("disabled", "");
+        button.value = valorOriginal;
         this.erros.push(e.response.data.message);
       }
       // depois de logar, Postar, ele vai pra rota "usuario" (/usuario)

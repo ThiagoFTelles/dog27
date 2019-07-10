@@ -13,6 +13,7 @@
           <p>{{produto.descricao}}</p>
           <button class="deletar" @click="deletarProduto(produto.id)"></button>
         </ProdutoItem>
+        <ErroNotificacao :erros="erros" />
       </li>
     </transition-group>
   </section>
@@ -43,8 +44,8 @@ export default {
           .then(() => {
             this.getUsuarioProdutos();
           })
-          .catch(error => {
-            console.log(error.response);
+          .catch(e => {
+            this.erros.push(e.response.data.message);
           });
       }
     }

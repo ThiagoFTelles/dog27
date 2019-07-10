@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const prefixUrl = "http://localhost/api-dog27";
+export const prefixUrl = "https://marinawave.com.br/api-dog27";
 const prefixUrlApi = `${prefixUrl}/wp-json`;
 
 const axiosInstance = axios.create({

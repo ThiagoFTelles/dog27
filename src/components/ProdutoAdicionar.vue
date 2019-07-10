@@ -51,6 +51,7 @@ export default {
     async adicionarProduto(event) {
       const produto = this.formatarProduto();
       const button = event.currentTarget;
+      const valorOriginal = button.value;
       button.value = "Adicionando...";
       button.setAttribute("disabled", "");
 
@@ -58,7 +59,7 @@ export default {
       await this.$store.dispatch("getUsuarioProdutos");
 
       button.removeAttribute("disabled", "");
-      button.value = "Adicionar Produto";
+      button.value = valorOriginal;
     }
   }
 };
