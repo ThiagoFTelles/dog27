@@ -83,6 +83,17 @@ export default {
   margin: 30px;
 }
 
+@media screen and (max-width: 500px) {
+  .produtos {
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ); /* dividiu em 1 coluna com 1fr cada uma */
+    grid-gap: 10px;
+    margin: 10px;
+  }
+}
+
 .produto {
   box-shadow: 0 4px 8px rgba(30, 60, 90, 0.1);
   padding: 10px;

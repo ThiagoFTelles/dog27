@@ -7,9 +7,13 @@
       <label for="senha">Senha</label>
       <input type="password" name="senha" id="senha" v-model="login.senha" />
       <button class="btn" @click.prevent="logar">Logar</button>
+      <ErroNotificacao :erros="erros" />
     </form>
     <p class="perdeu">
-      <a href="/" target="_blank">Perdeu a senha? Cique aqui.</a>
+      <a
+        :href="`${prefixUrl}/wp-login.php?action=lostpassword`"
+        target="_blank"
+      >Perdeu a senha? Cique aqui.</a>
     </p>
     <LoginCriar />
   </section>
@@ -17,22 +21,33 @@
 
 <script>
 import LoginCriar from "@/components/LoginCriar.vue";
+import { prefixUrl } from "@/services.js";
 
 export default {
   name: "Login",
   components: { LoginCriar },
   data() {
     return {
+      prefixUrl: prefixUrl,
       login: {
         email: "",
         senha: ""
-      }
+      },
+      erros: []
     };
   },
   methods: {
     logar() {
-      this.$store.dispatch("getUsuario", this.login.email);
-      this.$router.push({ name: "usuario" });
+      this.erros = [];
+      this.$store
+        .dispatch("logarUsuario", this.login)
+        .then(() => {
+          this.$store.dispatch("getUsuario");
+          this.$router.push({ name: "usuario" });
+        })
+        .catch(e => {
+          this.erros.push(e.response.data.message);
+        });
     }
   }
 };

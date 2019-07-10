@@ -63,6 +63,11 @@ export default {
   border-radius: 4px;
 }
 
+.sidenav a {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
 .sidenav ul li {
   display: block;
 }
@@ -74,6 +79,7 @@ export default {
   text-align: left;
   font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
   cursor: pointer;
+  color: #345;
 }
 
 .sidenav a.router-link-exact-active,

@@ -7,6 +7,7 @@
         <button class="btn btn-form" @click.prevent="criarUsuario">Criar Usuário</button>
       </UsuarioForm>
     </transition>
+    <ErroNotificacao :erros="erros" />
   </section>
 </template>
 
@@ -20,21 +21,21 @@ export default {
   },
   data() {
     return {
-      criar: false
+      criar: false,
+      erros: []
     };
   },
   methods: {
     async criarUsuario() {
+      this.erros = [];
       // async significa que tudo que retornar uma promessa será executado só depois que o "await" anterior terminar de ser executado. Garantindo assim a ordem correta das ações e evitando uma cadeia grande de .then(()=>{}).then(()=>{})... etc
       try {
         await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
-        await this.$store.dispatch(
-          "getUsuario",
-          this.$store.state.usuario.email
-        );
+        await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
+        await this.$store.dispatch("getUsuario");
         this.$router.push({ name: "usuario" });
-      } catch (error) {
-        console.log(error);
+      } catch (e) {
+        this.erros.push(e.response.data.message);
       }
       // depois de logar, Postar, ele vai pra rota "usuario" (/usuario)
     }

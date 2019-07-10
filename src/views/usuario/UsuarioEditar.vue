@@ -3,6 +3,7 @@
     <UsuarioForm>
       <button class="btn" @click.prevent="atualizarUsuario">Atualizar Usuario</button>
     </UsuarioForm>
+    <ErroNotificacao :erros="erros" />
   </section>
 </template>
 
@@ -12,24 +13,27 @@ import { api } from "@/services.js";
 
 export default {
   name: "UsuarioEditar",
+  data() {
+    return {
+      erros: []
+    };
+  },
   components: {
     UsuarioForm
   },
   methods: {
     atualizarUsuario() {
+      this.erros = [];
       api
-        .put(
-          `/usuario/${this.$store.state.usuario.id}`,
-          this.$store.state.usuario
-        )
+        .put(`/usuario`, this.$store.state.usuario)
         .then(() => {
           this.$store.dispatch(
             "getUsuario"
           ); /* conferir se a DB foi atualizada */
           this.$router.push({ name: "usuario" });
         })
-        .catch(error => {
-          console.log(error.response);
+        .catch(e => {
+          this.erros.push(e.response.data.message);
         });
     }
   }

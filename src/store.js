@@ -43,15 +43,15 @@ export default new Vuex.Store({
   },
   actions: {
     getUsuarioProdutos(context) {
-      api.get(`/produto?usuario_id=${context.state.usuario.id}`)
+      return api.get(`/produto?usuario_id=${context.state.usuario.id}`)
         .then(r => {
           context.commit("UPDATE_USUARIO_PRODUTOS", r.data);
         })
     },
-    getUsuario(context, payload) {
+    getUsuario(context) {
       // A api gera uma primisse, ou seja, posso botar o .then() depois dela.
       // Se eu colocar o return dentro do api.get e api.post, eu conseguirei usar a promisse nos métodos onde eu fizer o dispatch(). Ex: this.$store.dispatch("myAction", myObj).then( () => {...}  )
-      return api.get(`/usuario/${payload}`)
+      return api.get(`/usuario`)
         .then(r => {
           context.commit("UPDATE_USUARIO", r.data);
           context.commit("UPDATE_LOGIN", true);
@@ -62,6 +62,14 @@ export default new Vuex.Store({
         id: payload.email
       });
       return api.post("/usuario", payload);
+    },
+    logarUsuario(context, payload) {
+      return api.login({
+        username: payload.email,
+        password: payload.senha,
+      }).then(r => {
+        window.localStorage.token = `Bearer ${r.data.token}`
+      })
     },
     deslogarUsuario(context) {
       context.commit("UPDATE_USUARIO", {
@@ -76,6 +84,7 @@ export default new Vuex.Store({
         cidade: "",
         estado: "",
       });
+      window.localStorage.removeItem("token");
       context.commit("UPDATE_LOGIN", false);
     }
   }
