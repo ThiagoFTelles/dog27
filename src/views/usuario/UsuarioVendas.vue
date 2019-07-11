@@ -55,6 +55,7 @@ export default {
     if (this.login) {
       this.getVendas();
     }
+    document.title = "Minhas Vendas";
   }
 };
 </script>

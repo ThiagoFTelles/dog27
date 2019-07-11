@@ -6,7 +6,7 @@
           <img :src="foto.src" alt="foto.titulo" />
         </li>
       </ul>
-      <div class="info">
+      <div :class="finalizar ? 'info-finalizar' : 'info'">
         <h1>{{produto.nome}}</h1>
         <p class="preco">{{produto.preco | numeroPreco}}</p>
         <p class="descricao">{{produto.descricao}}</p>
@@ -41,11 +41,23 @@ export default {
     getProduto() {
       api.get(`/produto/${this.id}`).then(r => {
         this.produto = r.data;
+        document.title = this.produto.nome;
+      });
+    },
+    scrollBehavior() {
+      return window.scrollTo({
+        top: 0,
+        behavior: "smooth"
       });
     }
   },
   created() {
     this.getProduto();
+  },
+  watch: {
+    finalizar() {
+      this.scrollBehavior();
+    }
   }
 };
 </script>
@@ -77,8 +89,14 @@ export default {
   top: 20px;
 }
 
+.info-finalizar {
+  position: initial;
+  top: initial;
+}
+
 .descricao {
   font-size: 1.2rem;
+  margin-bottom: 20px;
 }
 
 img {

@@ -27,6 +27,12 @@ import { api } from "@/services.js";
 
 export default {
   name: "UsuarioProdutos",
+  data() {
+    return {
+      criar: false,
+      erros: []
+    };
+  },
   components: {
     ProdutoAdicionar,
     ProdutoItem
@@ -61,6 +67,7 @@ export default {
     if (this.login) {
       this.getUsuarioProdutos();
     }
+    document.title = "Meus Produtos";
   }
 };
 </script>

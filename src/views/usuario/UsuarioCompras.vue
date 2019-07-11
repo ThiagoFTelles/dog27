@@ -49,6 +49,7 @@ export default {
     if (this.login) {
       this.getCompras();
     }
+    document.title = "Minhas Compras";
   }
 };
 </script>

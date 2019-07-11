@@ -36,6 +36,9 @@ export default {
           this.erros.push(e.response.data.message);
         });
     }
+  },
+  created() {
+    document.title = "Editar Conta";
   }
 };
 </script>

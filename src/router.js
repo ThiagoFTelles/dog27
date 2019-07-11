@@ -8,14 +8,19 @@ import UsuarioProdutos from "@/views/usuario/UsuarioProdutos.vue";
 import UsuarioVendas from "@/views/usuario/UsuarioVendas.vue";
 import UsuarioCompras from "@/views/usuario/UsuarioCompras.vue";
 import UsuarioEditar from "@/views/usuario/UsuarioEditar.vue";
+import PaginaNaoEncontrada from "@/views/PaginaNaoEncontrada.vue";
 
 Vue.use(Router);
 
 const router = new Router({
   mode: "history",
-  // base: process.env.BASE_URL,
-  base: "dog27",
+  base: process.env.BASE_URL,
+  // base: "dog27",
   routes: [{
+      path: "*",
+      component: PaginaNaoEncontrada,
+    },
+    {
       path: "/",
       name: "home",
       component: Home

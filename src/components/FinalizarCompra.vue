@@ -1,6 +1,6 @@
 <template>
   <section>
-    <p>Endereço de Envio:</p>
+    <h3>Endereço de Envio:</h3>
     <UsuarioForm>
       <button @click.prevent="finalizarCompra" class="btn">Finalizar Compra</button>
     </UsuarioForm>
@@ -44,14 +44,11 @@ export default {
   },
   methods: {
     criarTransacao() {
-      const button = event.currentTarget;
       return api.post("/transacao", this.compra).then(() => {
-        button.removeAttribute("disabled", "");
         this.$router.push({ name: "compras" });
       });
     },
-    async criarUsuario() {
-      const button = event.currentTarget;
+    async criarUsuario(button) {
       // async significa que tudo que retornar uma promessa será executado só depois que o "await" anterior terminar de ser executado. Garantindo assim a ordem correta das ações e evitando uma cadeia grande de .then(()=>{}).then(()=>{})... etc
       try {
         await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
@@ -60,20 +57,20 @@ export default {
         await this.criarTransacao(); /* pra ter o awayt aqui a criarTransacao tem que começar com return para retornar uma promessa. */
       } catch (e) {
         button.removeAttribute("disabled", "");
+        button.value = "Finalizar Compra";
         this.erros.push(e.response.data.message);
       }
       // depois de logar, Postar, ele vai pra rota "usuario" (/usuario)
     },
     finalizarCompra(event) {
       this.erros = [];
-
       const button = event.currentTarget;
+      button.value = "Finalizando...";
       button.setAttribute("disabled", "");
-
       if (this.$store.state.login) {
-        this.criarTransacao();
+        this.criarTransacao(button);
       } else {
-        this.criarUsuario();
+        this.criarUsuario(button);
       }
     }
   }
