@@ -34,15 +34,17 @@
         <img src="@/assets/bag.svg" alt />
       </router-link>
     </section>
+    <SubMenuProdutos />
   </header>
 </template>
 
 <script>
 import BarraEngajamento from "@/components/BarraEngajamento.vue";
+import SubMenuProdutos from "@/components/SubMenuProdutos.vue";
 
 export default {
   name: "TheHeader",
-  components: { BarraEngajamento },
+  components: { BarraEngajamento, SubMenuProdutos },
   computed: {
     nome() {
       return this.$store.state.usuario.nome.replace(/ */, "");
@@ -53,7 +55,6 @@ export default {
 </script>
 
 <style scoped>
-
 .container {
   max-width: 950px;
   width: 100%;
@@ -81,6 +82,18 @@ a {
 .menu {
   display: flex;
 }
+
+.menu li:after {
+  top: 7px;
+  position: relative;
+  display: inline-block;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid #e5ebeb;
+  border-left: 9px solid transparent;
+  content: "";
+  left: 40%;
+}
+
 li a.router-link-exact-active,
 li a:hover {
   background: rgb(75, 75, 75);

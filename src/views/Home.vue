@@ -5,14 +5,12 @@
 </template>
 
 <script>
-import ProdutosBuscar from "@/components/ProdutosBuscar.vue";
 import ProdutosLista from "@/components/ProdutosLista.vue";
 // @ is an alias to /src
 
 export default {
   name: "home",
   components: {
-    ProdutosBuscar,
     ProdutosLista
   },
   created() {

@@ -82,6 +82,11 @@ img {
   display: block;
 }
 
+.arrow,
+.produto-icone {
+  cursor: pointer;
+}
+
 .btn {
   display: block;
   padding: 10px 30px;
