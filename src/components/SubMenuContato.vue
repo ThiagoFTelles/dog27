@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "SubMenuFaleConosco"
+  name: "SubMenuContato"
 };
 </script>
 

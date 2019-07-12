@@ -1,50 +1,114 @@
 <template>
-  <header class="header">
-    <BarraEngajamento />
-    <section class="container">
-      <router-link to="/" class="logo">
-        <img
-          src="https://cdn6.aptoide.com/imgs/d/2/e/d2efaa3fed8d0750a87bf61e1fb5684f_icon.png?w=55"
-          alt="Dog27"
-        />
-      </router-link>
-      <nav>
-        <ul class="menu">
-          <li>
-            <router-link to="/produtos">Produtos</router-link>
-          </li>
-          <li>
-            <router-link to="/estampas">Estampas</router-link>
-          </li>
-          <li>
-            <router-link to="/contato">Fale Conosco</router-link>
-          </li>
-          <li>
-            <router-link to="/blog">Blog</router-link>
-          </li>
-        </ul>
-      </nav>
-      <router-link to="/" class="icon">
-        <img id="lupa" src="@/assets/search.svg" />
-      </router-link>
-      <router-link to="/" class="icon">
-        <img src="@/assets/person.svg" alt />
-      </router-link>
-      <router-link to="/" class="icon">
-        <img src="@/assets/bag.svg" alt />
-      </router-link>
-    </section>
-    <SubMenuProdutos />
-  </header>
+  <section>
+    <header class="header">
+      <BarraEngajamento />
+      <section class="container">
+        <router-link to="/" class="logo">
+          <img
+            src="https://cdn6.aptoide.com/imgs/d/2/e/d2efaa3fed8d0750a87bf61e1fb5684f_icon.png?w=55"
+            alt="Dog27"
+          />
+        </router-link>
+        <nav>
+          <ul class="menu">
+            <router-link
+              @mouseover.native="hoverLinkProdutos = true"
+              @mouseleave.native="hoverLinkProdutos = false"
+              class="menu-link"
+              tag="li"
+              to="/produtos"
+            >
+              Produtos
+              <span :class="{ active: hoverLinkProdutos }" class="menu-link-arrow"></span>
+            </router-link>
+
+            <router-link
+              @mouseover.native="hoverLinkEstampas = true"
+              @mouseleave.native="hoverLinkEstampas = false"
+              class="menu-link"
+              tag="li"
+              to="/estampas"
+            >
+              Estampas
+              <span
+                :class="{ active: hoverLinkEstampas }"
+                v-if="hoverLinkEstampas"
+                class="menu-link-arrow arrow-estampas"
+              ></span>
+            </router-link>
+            <router-link
+              @mouseover.native="hoverLinkContato = true"
+              @mouseleave.native="hoverLinkContato = false"
+              class="menu-link"
+              tag="li"
+              to="/contato"
+            >
+              Fale Conosco
+              <span
+                :class="{ active: hoverLinkContato }"
+                v-if="hoverLinkContato"
+                class="menu-link-arrow"
+              ></span>
+            </router-link>
+            <router-link class="menu-link" tag="li" to="/blog">Blog</router-link>
+          </ul>
+        </nav>
+        <router-link to="/" class="icon">
+          <img id="lupa" src="@/assets/search.svg" />
+        </router-link>
+        <router-link to="/" class="icon">
+          <img src="@/assets/person.svg" alt />
+        </router-link>
+        <router-link to="/" class="icon">
+          <img src="@/assets/bag.svg" alt />
+        </router-link>
+      </section>
+    </header>
+    <transition mode="out-in">
+      <SubMenuProdutos
+        @mouseover.native="hoverLinkProdutos = true"
+        @mouseleave.native="hoverLinkProdutos = false"
+        v-show="hoverLinkProdutos"
+      />
+    </transition>
+    <transition mode="out-in">
+      <SubMenuEstampas
+        @mouseover.native="hoverLinkEstampas = true"
+        @mouseleave.native="hoverLinkEstampas = false"
+        v-show="hoverLinkEstampas"
+      />
+    </transition>
+    <transition mode="out-in">
+      <SubMenuContato
+        @mouseover.native="hoverLinkContato = true"
+        @mouseleave.native="hoverLinkContato = false"
+        v-show="hoverLinkContato"
+      />
+    </transition>
+  </section>
 </template>
 
 <script>
 import BarraEngajamento from "@/components/BarraEngajamento.vue";
 import SubMenuProdutos from "@/components/SubMenuProdutos.vue";
+import SubMenuEstampas from "@/components/SubMenuEstampas.vue";
+import SubMenuContato from "@/components/SubMenuContato.vue";
 
 export default {
   name: "TheHeader",
-  components: { BarraEngajamento, SubMenuProdutos },
+  data() {
+    return {
+      hoverLinkProdutos: false,
+      hoverLinkEstampas: false,
+      hoverLinkContato: false
+    };
+  },
+  components: {
+    BarraEngajamento,
+    SubMenuProdutos,
+    SubMenuEstampas,
+    SubMenuContato
+  },
   computed: {
     nome() {
       return this.$store.state.usuario.nome.replace(/ */, "");
@@ -75,38 +139,42 @@ export default {
   flex-wrap: wrap; /* faz os flex-items ficarem um em cima do outro qndo a tela reduzir e eles colidirem */
 }
 
-a {
-  color: #fff;
-}
-
 .menu {
   display: flex;
 }
 
-.menu li:after {
-  top: 7px;
+.menu-link {
+  color: #fff;
+  margin-left: 10px;
+  display: block;
+  padding: 25px 10px; /* isso aumenta a área de click do botão para ficar maior que apenas o texto */
+}
+
+.menu-link-arrow {
+  bottom: 0;
   position: relative;
-  display: inline-block;
+  display: table;
   border-right: 9px solid transparent;
   border-bottom: 9px solid #e5ebeb;
   border-left: 9px solid transparent;
   content: "";
   left: 40%;
+  height: 100%;
+  visibility: hidden;
 }
 
-li a.router-link-exact-active,
-li a:hover {
+.arrow-estampas {
+  border-bottom: 9px solid #f3f3f3;
+}
+
+.active {
+  visibility: visible;
+}
+
+.menu-link.router-link-exact-active,
+.menu-link:hover {
   background: rgb(75, 75, 75);
   color: #fff;
-}
-
-.menu li {
-  margin-left: 10px;
-}
-
-.menu li a {
-  display: block;
-  padding: 25px 10px; /* isso aumenta a área de click do botão para ficar maior que apenas o texto */
 }
 
 .logo,
@@ -125,5 +193,23 @@ li a:hover {
   border: none;
   cursor: pointer;
   box-shadow: none;
+}
+
+.v-enter,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter {
+  transform: translate3d(0, -20px, 0);
+}
+/* um entra por cima enquanto o outro sai por baixo */
+.v-leave-to {
+  transform: translate3d(0, 20px, 0);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.3s;
 }
 </style>

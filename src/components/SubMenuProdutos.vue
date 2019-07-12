@@ -50,6 +50,8 @@ export default {
 
 <style scoped>
 .submenu-container {
+  position: absolute;
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
