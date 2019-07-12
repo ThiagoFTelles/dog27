@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <p>Ranek. Alguns direitos reservados.</p>
+    <p>Dog27. Todos os direitos reservados.</p>
   </footer>
 </template>
 // PAREI NO 14:28
@@ -12,7 +12,7 @@ export default {
 
 <style scoped>
 footer {
-  background: #87f;
+  background: #000;
   padding: 25px 0;
   text-align: center;
   font-size: 1.2rem;

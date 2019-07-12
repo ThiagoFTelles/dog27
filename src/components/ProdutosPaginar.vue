@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 ul {
   grid-column: 1 / -1; /* isso faz a coluna onde exibe os produtos ocupar ponta a ponta horizintalmente, evitando assim que os links de página (1, 2, etc) subam para o lado dos produtos */
 }

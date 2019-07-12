@@ -44,6 +44,14 @@ export default {
 body,
 ul,
 li,
+p {
+  font-size: 1.2rem;
+  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+}
+
+body,
+ul,
+li,
 h1,
 h2,
 p {
@@ -55,19 +63,22 @@ ul {
   list-style: none;
 }
 
-body {
-  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
-  color: #345;
-  background: url("./assets/pattern.svg") repeat top;
-}
-
 a {
   color: #345;
   text-decoration: none;
 }
 
+/* DAQUI PRA CIMA É DOG27 */
+
+body {
+  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+  color: #345;
+  background: #f7f8fa;
+}
+
 img {
   max-width: 100%;
+  max-height: 100%;
   display: block;
 }
 

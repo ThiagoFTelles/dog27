@@ -3,13 +3,96 @@
     <transition mode="out-in">
       <!-- Quando quero animar diferentes itens com a mesma tag (ex: div), preciso definir uma key para cada item -->
       <div v-if="produtos && produtos.length" class="produtos" key="produtos">
-        <div class="produto" v-for="(produto, index) in produtos" :key="produto.id+index">
-          <router-link :to="{name: 'produto', params: {id: produto.id}}">
-            <img v-if="produto.fotos" :src="produto.fotos[0].src" :alt="produto.fotos[0].titulo" />
-            <p class="preco">{{produto.preco | numeroPreco}}</p>
-            <h2 class="titulo">{{produto.nome}}</h2>
-            <p>{{produto.descricao}}</p>
-          </router-link>
+        <div class="produto duplo">
+          <div class="banner-imagem">
+            <img src="../assets/coleira.png" alt="coleira" />
+          </div>
+          <div class="banner-textos">
+            <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
+            <h2
+              class="banner-descricao"
+            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            <div class="links">
+              <a class="banner-link left-link">Saiba mais >></a>
+              <a class="banner-link">Comprar >></a>
+            </div>
+          </div>
+        </div>
+        <div class="produto simples">
+          <div class="banner-imagem">
+            <img src="../assets/coleira.png" alt="coleira" />
+          </div>
+          <div class="banner-textos">
+            <h1 class="banner-titulo">COLEIRAS</h1>
+            <h2
+              class="banner-descricao"
+            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            <div class="links">
+              <a class="banner-link left-link">Saiba mais >></a>
+              <a class="banner-link">Comprar >></a>
+            </div>
+          </div>
+        </div>
+        <div class="produto simples">
+          <div class="banner-imagem">
+            <img src="../assets/coleira.png" alt="coleira" />
+          </div>
+          <div class="banner-textos">
+            <h1 class="banner-titulo">COLEIRAS</h1>
+            <h2
+              class="banner-descricao"
+            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            <div class="links">
+              <a class="banner-link left-link">Saiba mais >></a>
+              <a class="banner-link">Comprar >></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto duplo">
+          <div class="banner-imagem">
+            <img src="../assets/coleira.png" alt="coleira" />
+          </div>
+          <div class="banner-textos">
+            <h1 class="banner-titulo">COMEDOURO</h1>
+            <h2
+              class="banner-descricao"
+            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            <div class="links">
+              <a class="banner-link left-link">Saiba mais >></a>
+              <a class="banner-link">Comprar >></a>
+            </div>
+          </div>
+        </div>
+        <div class="produto simples">
+          <div class="banner-imagem">
+            <img src="../assets/coleira.png" alt="coleira" />
+          </div>
+          <div class="banner-textos">
+            <h1 class="banner-titulo">COLEIRAS</h1>
+            <h2
+              class="banner-descricao"
+            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            <div class="links">
+              <a class="banner-link left-link">Saiba mais >></a>
+              <a class="banner-link">Comprar >></a>
+            </div>
+          </div>
+        </div>
+        <div class="produto simples">
+          <div class="banner-imagem">
+            <img src="../assets/coleira.png" alt="coleira" />
+          </div>
+          <div class="banner-textos">
+            <h1 class="banner-titulo">COLEIRAS</h1>
+            <h2
+              class="banner-descricao"
+            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            <div class="links">
+              <a class="banner-link left-link">Saiba mais >></a>
+              <a class="banner-link">Comprar >></a>
+            </div>
+          </div>
         </div>
         <ProdutosPaginar :produtosTotal="produtosTotal" :produtosPorPagina="produtosPorPagina" />
       </div>
@@ -76,9 +159,9 @@ export default {
 .produtos {
   display: grid;
   grid-template-columns: repeat(
-    3,
+    2,
     1fr
-  ); /* dividiu em 3 colunas com 1fr cada uma */
+  ); /* dividiu em 2 colunas com 1fr cada uma */
   grid-gap: 30px;
   margin: 30px;
 }
@@ -95,11 +178,36 @@ export default {
 }
 
 .produto {
-  box-shadow: 0 4px 8px rgba(30, 60, 90, 0.1);
-  padding: 10px;
+  grid-column: initial;
+  /* box-shadow: 0 4px 8px rgba(30, 60, 90, 0.1); */
+  margin: 10px;
   background: #fff;
-  border-radius: 4px;
   transition: all 0.2s;
+  position: relative;
+  display: grid;
+
+  grid-gap: 10px;
+}
+
+.duplo {
+  height: 300px;
+  max-height: 300px;
+  grid-column: 1/3;
+  grid-template-columns: 320px 1fr;
+}
+
+.duplo img {
+  grid-column: 1/3;
+}
+
+.simples {
+  grid-template-rows: 300px auto;
+  max-height: 520px;
+}
+
+.simples img {
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .produto:hover {
@@ -110,8 +218,43 @@ export default {
 }
 
 .produto img {
-  border-radius: 4px;
-  margin-bottom: 20px;
+  padding: 5px;
+}
+.banner-textos {
+  padding: 5px;
+  margin: auto;
+}
+.banner-titulo {
+  margin: 10px;
+  font-family: "Fira Sans", sans-serif;
+  text-align: center;
+  font-size: 2em;
+  font-style: italic;
+  color: black;
+}
+.banner-descricao {
+  padding: 5px;
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  text-align: center;
+  font-size: 1em;
+  color: black;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.banner-link {
+  margin: 15px;
+  cursor: pointer;
+  flex: 1;
+  color: #00acff;
+  font-size: 1rem;
+}
+.left-link {
+  text-align: right;
 }
 
 .titulo {
