@@ -13,7 +13,10 @@
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <a class="banner-link left-link">Saiba mais >></a>
+              <router-link
+                :to="{name: 'peitoral', params: {id: 'peitoral-hibrido'}}"
+                class="banner-link left-link"
+              >Saiba mais >></router-link>
               <a class="banner-link">Comprar >></a>
             </div>
           </div>

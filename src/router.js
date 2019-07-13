@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Home from "@/views/Home.vue";
 import Produto from "@/views/Produto.vue";
 import Login from "@/views/Login.vue";
+import Peitoral from "@/views/Peitoral.vue";
 import Usuario from "@/views/usuario/Usuario.vue";
 import UsuarioProdutos from "@/views/usuario/UsuarioProdutos.vue";
 import UsuarioVendas from "@/views/usuario/UsuarioVendas.vue";
@@ -24,6 +25,12 @@ const router = new Router({
       path: "/",
       name: "home",
       component: Home
+    },
+    {
+      path: "/peitoral/:id",
+      name: "peitoral",
+      component: Peitoral,
+      props: true
     },
     {
       path: "/produto/:id",

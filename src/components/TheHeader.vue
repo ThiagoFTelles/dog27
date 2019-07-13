@@ -4,10 +4,7 @@
       <BarraEngajamento />
       <section class="container">
         <router-link to="/" class="logo">
-          <img
-            src="https://cdn6.aptoide.com/imgs/d/2/e/d2efaa3fed8d0750a87bf61e1fb5684f_icon.png?w=55"
-            alt="Dog27"
-          />
+          <img src="@/assets/dog27-icone-branco.svg" alt="Dog27" />
         </router-link>
         <nav>
           <ul class="menu">
@@ -183,8 +180,8 @@ export default {
 }
 
 .logo img {
-  width: 55px;
-  filter: saturate(0);
+  width: 35px;
+  height: 35px;
 }
 
 .icon img {

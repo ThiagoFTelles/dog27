@@ -1,0 +1,259 @@
+<template>
+  <section>
+    <div class="peitoral-container">
+      <div class="texto-box">
+        <h1 class="saiba-mais-titulo">PEITORAL HÍBRIDO</h1>
+        <p
+          class="saiba-mais-paragrafo"
+        >O único peitoral híbrido do mercado. onde o funcional encontra beleza e conforto.</p>
+      </div>
+      <img
+        src="@/assets/peitoral-para-cachorro-dog27.jpg"
+        alt="Peitoral para cahorro dog27"
+        class="peitoral-detalhe"
+      />
+      <div class="texto-box">
+        <h1 class="saiba-mais-titulo">COMO ASSIM "HÍBRIDO"?</h1>
+        <p class="saiba-mais-paragrafo maior">Basta desengatar, virar, ajustar e pronto.</p>
+        <p
+          class="saiba-mais-paragrafo maior"
+        >Do peitoral Anti-puxão ao convencional em poucos segundos</p>
+      </div>
+      <img
+        src="@/assets/peitoral-para-cachorro-dog27-demonstracao.jpg"
+        alt="Peitoral para cahorro dog27"
+        class="peitoral-demonstracao"
+      />
+      <h1 class="saiba-mais-subtitulo">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
+      <img
+        src="@/assets/peitoral-para-cachorro-dog27-estampa.jpg"
+        alt="Peitoral para cahorro dog27"
+        class="peitoral-estampa"
+      />
+      <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
+      <div class="peitoral-tamanhos-container">
+        <img
+          src="@/assets/peitoral-para-cachorro-dog27-tamanhos-1.jpg"
+          alt="Peitoral para cahorro dog27"
+          class="peitoral-tamanhos"
+        />
+        <img
+          src="@/assets/peitoral-para-cachorro-dog27-tamanhos-2.jpg"
+          alt="Peitoral para cahorro dog27"
+          class="peitoral-tamanhos"
+        />
+      </div>
+      <h2 class="saiba-mais-titulo">UM DESIGN PERFEITO</h2>
+      <div class="design-info-container">
+        <div class="design-info left">
+          <div class="design-info-chunk">
+            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <p>DESIGN HÍBRIDO INOVADOR</p>
+          </div>
+          <div class="design-info-chunk">
+            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <p>RESISTENTE AO CLIMA E POEIRA</p>
+          </div>
+          <div class="design-info-chunk">
+            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <p>ESTAMPAS DESENHADAS A MÃO</p>
+          </div>
+        </div>
+        <div class="design-info right">
+          <div class="design-info-chunk">
+            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <p>AJUSTÁVEL: CABE EM QUALQUER DOG</p>
+          </div>
+          <div class="design-info-chunk">
+            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <p>FECHO SUPER RESISTENTE</p>
+          </div>
+          <div class="design-info-chunk">
+            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <p>TIRA SUPER RESISTENTE</p>
+          </div>
+        </div>
+      </div>
+      <div class="comprar-agora">
+        <h2 class="saiba-mais-subtitulo">a segurança e o conforto que o seu dog merece!</h2>
+        <div class="btn-vazado">
+          <button>COMPRAR AGORA</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+import { api } from "@/services.js";
+
+export default {
+  name: "Peitoral",
+  props: ["id"],
+  components: {},
+  data() {
+    return {
+      produto: null,
+      finalizar: false
+    };
+  },
+  methods: {
+    getProduto() {
+      api.get(`/produto/${this.id}`).then(r => {
+        this.produto = r.data;
+        document.title = this.produto.nome;
+      });
+    },
+    scrollBehavior() {
+      return window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  },
+  created() {
+    this.getProduto();
+  },
+  watch: {
+    finalizar() {
+      this.scrollBehavior();
+    }
+  }
+};
+</script>
+
+<style scoped>
+section {
+  background: #fffefd;
+}
+
+.peitoral-container {
+}
+
+.texto-box {
+  margin-bottom: 50px;
+}
+
+.saiba-mais-titulo {
+  padding-top: 50px;
+  font-family: "Fira Sans", sans-serif;
+  text-align: center;
+  font-size: 2em;
+  font-style: italic;
+  color: black;
+  margin: 0 auto;
+}
+
+.saiba-mais-subtitulo {
+  font-size: 1.4rem;
+  font-family: "Fira Sans", sans-serif;
+  text-align: center;
+  font-size: 1.5em;
+  font-style: italic;
+  color: black;
+  margin: 0 auto;
+  padding-top: 100px;
+  padding-bottom: 50px;
+}
+
+.saiba-mais-paragrafo {
+  font-family: "Fira Sans", sans-serif;
+  color: black;
+  text-align: center;
+
+  font-weight: 200;
+}
+
+.saiba-mais-paragrafo .maior {
+  font-size: 1.4rem;
+}
+
+img {
+  margin: 0 auto;
+}
+
+.peitoral-demonstracao {
+  max-width: 800px;
+  padding: 50px;
+}
+
+.peitoral-estampa {
+  margin: 0;
+  width: 100%;
+}
+
+.peitoral-tamanhos-container {
+  text-align: center;
+}
+
+.peitoral-tamanhos {
+  display: inline-block;
+}
+
+.design-info-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.design-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  display: inline-block;
+}
+
+.design-info.left {
+  justify-items: end;
+}
+
+.design-info.right {
+  justify-items: start;
+}
+
+.design-info-chunk {
+  display: grid;
+  grid-template-columns: 55px 1fr;
+  margin-bottom: 10px;
+}
+
+.design-info-chunk p {
+  margin: auto 20px;
+  text-align: left;
+  font-size: 1.1rem;
+}
+
+.design-info-chunk img {
+  height: 40px;
+}
+
+.comprar-agora {
+  display: grid;
+  grid-template-rows: 175px 1fr 1fr;
+  background: url("../assets/bg-comprar-agora-peitoral.jpg") no-repeat center
+    center;
+  width: 600px;
+  height: 400px;
+  margin: auto;
+  text-align: center;
+}
+
+.comprar-agora h2 {
+  font-size: 1.5rem;
+  grid-row-start: 2;
+  color: #fff;
+}
+
+.btn-vazado {
+  grid-row-start: 3;
+}
+
+.btn-vazado button {
+  background: none;
+  padding: 8px 15px;
+  border: 3px solid #fff;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+}
+</style>
