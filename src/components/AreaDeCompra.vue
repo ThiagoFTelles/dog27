@@ -28,35 +28,46 @@
               <img src="@/assets/imagem-submenu-estampa.png" alt="Dog27" class="estampa-opcao" />
               <img src="@/assets/imagem-submenu-estampa.png" alt="Dog27" class="estampa-opcao" />
             </div>
+            <section v-if="!menuEstampas">
+              <p class="label-estampa">Tamanho:</p>
+              <div class="tamanho-area">
+                <div class="selecionar-tamanho">
+                  <select name="tamanhos-disponiveis" id="tamanhos-disponiveis">
+                    <option value>SELECIONE O TAMANHO</option>
+                    <option value="PP">PP</option>
+                    <option value="P">P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                  </select>
+                </div>
+                <div class="selecionar-quantidade">
+                  <div class="alterar-quantidade" @click="quantidadeEscolhida--">-</div>
+                  <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                  <div class="alterar-quantidade" @click="quantidadeEscolhida++">+</div>
+                </div>
+              </div>
+              <div class="finalizar-compra-item">
+                <p class="valor-dos-itens">{{valorUnitario * quantidadeEscolhida | numeroPreco}}</p>
+                <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
+                <div v-else>Clique no + para adicionar produtos à sua compra.</div>
+              </div>
+            </section>
           </transition>
-        </div>
-        <p class="label-estampa">Tamanho:</p>
-        <div class="tamanho-area">
-          <div class="selecionar-tamanho">
-            <select name="tamanhos-disponiveis" id="tamanhos-disponiveis">
-              <option value>SELECIONE O TAMANHO</option>
-              <option value="PP">PP</option>
-              <option value="P">P</option>
-              <option value="M">M</option>
-              <option value="G">G</option>
-            </select>
-          </div>
-          <div class="selecionar-quantidade">
-            <div class="alterar-quantidade" @click="quantidadeEscolhida--">-</div>
-            <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
-            <div class="alterar-quantidade" @click="quantidadeEscolhida++">+</div>
-          </div>
-        </div>
-        <div class="finalizar-compra-item">
-          <p class="valor-dos-itens">{{valorUnitario * quantidadeEscolhida | numeroPreco}}</p>
-          <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
-          <div v-else>Clique no + para adicionar produtos à sua compra.</div>
         </div>
       </div>
     </div>
     <div class="combo">
-      <div class="combo-oferta banner-titulo">
-        <h1>comrepeerpeprep</h1>
+      <div class="combo-produtos">
+        <div class="combo-produto"></div>
+        <h1 class="banner-titulo">+</h1>
+        <div class="combo-produto"></div>
+      </div>
+      <div class="combo-conteudo">
+        <h1 class="combo-titulo">Aproveite e compre junto</h1>
+        <p class="preco-antigo">de R$159</p>
+        <p class="preco-combo">por R$140</p>
+        <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
+        <div v-else>Clique no + para adicionar produtos à sua compra.</div>
       </div>
     </div>
   </section>
@@ -246,8 +257,72 @@ export default {
 }
 
 .combo {
+  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   background: #0e6a8d;
+  text-align: center;
+}
+
+.combo-produtos {
+  display: flex;
+  align-items: center;
   height: 350px;
   grid-column: 1/3;
+  padding: 20px 0;
+  margin: 0 auto;
+}
+
+.combo-produto {
+  display: inline-block;
+  background: #fff;
+  width: 300px;
+  height: 100%;
+  margin: 20px 30px;
+}
+
+.combo .banner-titulo {
+  color: #fff;
+  font-size: 5rem;
+  font-style: italic;
+}
+
+.combo-conteudo {
+  margin: auto;
+}
+
+.combo-titulo {
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 2.5rem;
+}
+
+.preco-antigo {
+  color: #fff;
+  text-decoration: line-through;
+  font-size: 1rem;
+  font-family: sans-serif;
+  padding: 10px;
+}
+
+.preco-combo {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.combo .adicionar-ao-carrinho {
+  background: #fff;
+  color: #0e6a8d;
+  padding: 10px 90px;
+  margin: 20px;
+  width: auto;
+}
+
+.combo-conteudo div {
+  color: #fff;
+  margin: 30px;
+  font-size: 1rem;
+  font-weight: 100;
 }
 </style>
