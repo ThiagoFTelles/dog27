@@ -46,7 +46,7 @@ ul,
 li,
 p {
   font-size: 1.2rem;
-  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
 }
 
 body,
@@ -71,7 +71,7 @@ a {
 /* DAQUI PRA CIMA É DOG27 */
 
 body {
-  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
   color: #345;
   background: #f7f8fa;
 }
@@ -98,7 +98,7 @@ img {
   box-shadow: 4px 8px rgba(30, 60, 90, 0.1);
   transition: all 0.3s;
   border: none;
-  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
   cursor: pointer;
 }
 
@@ -135,7 +135,7 @@ textarea {
   box-shadow: 0 4px 8px rgba(30, 60, 90, 0.1);
   transition: all 0.3s;
   font-size: 1rem;
-  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
   margin-bottom: 15px;
   width: 100%;
 }

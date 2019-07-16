@@ -2,7 +2,7 @@
   <section>
     <header class="header">
       <BarraEngajamento />
-      <section class="container">
+      <section class="container-header">
         <router-link to="/" class="logo">
           <img src="@/assets/dog27-icone-branco.svg" alt="Dog27" />
         </router-link>
@@ -116,7 +116,13 @@ export default {
 </script>
 
 <style scoped>
-.container {
+section {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+.container-header {
   max-width: 950px;
   width: 100%;
   margin: 0 auto;
@@ -129,7 +135,7 @@ export default {
 }
 
 .header {
-  background: #212121;
+  background: #2f2c2c;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,10 +151,11 @@ export default {
   margin-left: 10px;
   display: block;
   padding: 25px 10px; /* isso aumenta a área de click do botão para ficar maior que apenas o texto */
+  cursor: pointer;
 }
 
 .menu-link-arrow {
-  bottom: 0;
+  bottom: -2px;
   position: relative;
   display: table;
   border-right: 9px solid transparent;

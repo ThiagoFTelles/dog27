@@ -17,7 +17,10 @@
                 :to="{name: 'peitoral', params: {id: 'peitoral-hibrido'}}"
                 class="banner-link left-link"
               >Saiba mais >></router-link>
-              <a class="banner-link">Comprar >></a>
+              <router-link
+                :to="{name: 'peitoral', params: {id: 'peitoral-hibrido'}}"
+                class="banner-link left-link"
+              >Comprar >></router-link>
             </div>
           </div>
         </div>

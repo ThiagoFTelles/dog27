@@ -1,5 +1,17 @@
 <template>
   <section>
+    <transition mode="out-in">
+      <div class="call-to-buy" v-if="!areaDeCompra" key="header-compra">
+        <div>
+          <p>Peitoral Híbrido</p>
+        </div>
+        <div>
+          <p class="medidas">Medidas</p>
+          <button @click="vaiComprar">Comprar</button>
+        </div>
+      </div>
+      <AreaDeCompra v-else key="area-de-compra"></AreaDeCompra>
+    </transition>
     <div class="peitoral-container">
       <div class="texto-box">
         <h1 class="saiba-mais-titulo">PEITORAL HÍBRIDO</h1>
@@ -7,6 +19,7 @@
           class="saiba-mais-paragrafo"
         >O único peitoral híbrido do mercado. onde o funcional encontra beleza e conforto.</p>
       </div>
+
       <img
         src="@/assets/peitoral-para-cachorro-dog27.jpg"
         alt="Peitoral para cahorro dog27"
@@ -86,18 +99,23 @@
 
 <script>
 import { api } from "@/services.js";
+import AreaDeCompra from "@/components/AreaDeCompra.vue";
 
 export default {
   name: "Peitoral",
   props: ["id"],
-  components: {},
+  components: { AreaDeCompra },
   data() {
     return {
       produto: null,
-      finalizar: false
+      finalizar: false,
+      areaDeCompra: false
     };
   },
   methods: {
+    vaiComprar() {
+      this.areaDeCompra = true;
+    },
     getProduto() {
       api.get(`/produto/${this.id}`).then(r => {
         this.produto = r.data;
@@ -127,7 +145,39 @@ section {
   background: #fffefd;
 }
 
-.peitoral-container {
+.call-to-buy {
+  max-width: 950px;
+  width: 100%;
+  padding: 7px 3px;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0px 2px 1px -2px rgba(30, 60, 90, 0.1);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.call-to-buy div p {
+  display: inline-block;
+  font-size: 1rem;
+  color: #2f2c2c;
+}
+
+.call-to-buy div button {
+  margin-left: 20px;
+  background: #239dce;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.2) 10%, #239dce);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.medidas {
+  cursor: pointer;
 }
 
 .texto-box {
