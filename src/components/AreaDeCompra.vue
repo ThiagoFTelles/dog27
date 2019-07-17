@@ -56,7 +56,7 @@
     </div>
     <div class="combo">
       <div class="combo-oferta banner-titulo">
-        <h1>comrepeerpeprep</h1>
+        <h1>comrepeerpeprep test</h1>
       </div>
     </div>
   </section>
