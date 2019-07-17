@@ -41,7 +41,8 @@
                   </select>
                 </div>
                 <div class="selecionar-quantidade">
-                  <div class="alterar-quantidade" @click="quantidadeEscolhida--">-</div>
+                  <div v-if="quantidadeEscolhida > 0" class="alterar-quantidade" @click="quantidadeEscolhida--">-</div>
+                  <div v-else class="alterar-quantidade" >-</div>
                   <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
                   <div class="alterar-quantidade" @click="quantidadeEscolhida++">+</div>
                 </div>
