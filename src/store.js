@@ -6,6 +6,10 @@ import {
 
 Vue.use(Vuex);
 
+// Admin Woocommerce API Key:
+// Consumer key: ck_a3ad52137fa0b8fa2fb3b807c9eefe698c700677
+// Consumer secret: cs_da345bb0929a82537d754889a9113cd328100204
+
 export default new Vuex.Store({
   strict: true,
   /* strict não deixa o objeto ser modificado por fora, apenas via mutation */
