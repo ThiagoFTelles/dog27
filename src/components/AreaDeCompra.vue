@@ -18,8 +18,7 @@
         <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
         <ul>
           <li v-for="(estampa, index) in estampasDisponiveis" :key="`estampa-${index}`">
-            
-            {{estampa}}
+            <img :src="getImgEstampaUrl(estampa)" alt="Dog27" class="estampa-selecionada" />
           </li>
         </ul>
         <p class="label-estampa">Escolha a estampa: Tropical</p>
@@ -120,6 +119,10 @@ export default {
         this.estampasDisponiveis.push(item.options[0]);
       }
     },
+    getImgEstampaUrl(estampa) {
+    var images = require.context('../assets/estampas/', false, /\.png$/)
+    return images('./' + estampa + ".png")
+  },
     mostrarEstampas() {
       this.menuEstampas = !this.menuEstampas;
     }
