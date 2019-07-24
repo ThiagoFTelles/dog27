@@ -16,6 +16,11 @@
       </div>
       <div class="area-de-compra-opcoes">
         <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
+        <ul>
+          <li v-for="(estampa, index) in estampasDisponiveis" :key="`estampa-${index}`">
+            <img :src="getImgEstampaUrl(estampa)" alt="Dog27" class="estampa-selecionada" />
+          </li>
+        </ul>
         <p class="label-estampa">Escolha a estampa: Tropical</p>
         <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
           <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
@@ -41,7 +46,8 @@
                   </select>
                 </div>
                 <div class="selecionar-quantidade">
-                  <div class="alterar-quantidade" @click="quantidadeEscolhida--">-</div>
+                  <div v-if="quantidadeEscolhida > 0" class="alterar-quantidade" @click="quantidadeEscolhida--">-</div>
+                  <div v-else class="alterar-quantidade" >-</div>
                   <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
                   <div class="alterar-quantidade" @click="quantidadeEscolhida++">+</div>
                 </div>
@@ -74,19 +80,60 @@
 </template>
 
 <script>
+import { api } from "@/services.js";
+
 export default {
   name: "AreaDeCompra",
   data() {
     return {
       menuEstampas: false,
       quantidadeEscolhida: 1,
-      valorUnitario: 89
+      valorUnitario: 89,
+      estampasDisponiveis: [],
     };
   },
   methods: {
+    getEstampas() {
+      this.estampas = null;
+      
+      api.get(`https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=16`).then(response => {
+        this.estampas = response.data;
+        response.data.forEach(this.estampaDisponivel);
+      });
+    },
+    estampaDisponivel(item) {
+      const isOnSale = item.on_sale;
+      const isPurchasable = item.purchasable;
+      const estoqueDisponivel = item.stock_status === "instock";
+      const quantidadeEmEstoque = item.stock_quantity > 0;
+      
+      
+      if (isOnSale && isPurchasable && estoqueDisponivel && quantidadeEmEstoque) {
+        item.attributes.forEach(this.nomeDaEstampa);
+        
+      }
+
+    },
+    nomeDaEstampa(item){
+      if(item.name === "estampa") {
+        this.estampasDisponiveis.push(item.options[0]);
+      }
+    },
+    getImgEstampaUrl(estampa) {
+    var images = require.context('../assets/estampas/', false, /\.png$/)
+    return images('./' + estampa + ".png")
+  },
     mostrarEstampas() {
       this.menuEstampas = !this.menuEstampas;
     }
+  },
+  watch: {
+    url() {
+      this.getEstampas();
+    }
+  },
+  created() {
+    this.getEstampas();
   }
 };
 </script>

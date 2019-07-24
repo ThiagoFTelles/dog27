@@ -90,7 +90,7 @@
       <div class="comprar-agora">
         <h2 class="saiba-mais-subtitulo">a segurança e o conforto que o seu dog merece!</h2>
         <div class="btn-vazado">
-          <button>COMPRAR AGORA</button>
+          <button  @click="vaiComprar">COMPRAR AGORA</button>
         </div>
       </div>
     </div>
@@ -114,6 +114,7 @@ export default {
   },
   methods: {
     vaiComprar() {
+      this.scrollBehavior();
       this.areaDeCompra = true;
     },
     getProduto() {

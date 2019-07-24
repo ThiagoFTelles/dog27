@@ -19,7 +19,7 @@
               >Saiba mais >></router-link>
               <router-link
                 :to="{name: 'peitoral', params: {id: 'peitoral-hibrido'}}"
-                class="banner-link left-link"
+                class="banner-link"
               >Comprar >></router-link>
             </div>
           </div>

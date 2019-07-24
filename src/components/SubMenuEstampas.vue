@@ -13,7 +13,7 @@
             <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
           </div>
           <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">Pipoca</h2>
+            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
             <div class="btn-submenu-estampas">Comprar >></div>
           </div>
         </div>
@@ -22,7 +22,7 @@
             <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
           </div>
           <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">Pipoca</h2>
+            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
             <div class="btn-submenu-estampas">Comprar >></div>
           </div>
         </div>
@@ -31,7 +31,7 @@
             <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
           </div>
           <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">Pipoca</h2>
+            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
             <div class="btn-submenu-estampas">Comprar >></div>
           </div>
         </div>
@@ -40,7 +40,7 @@
             <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
           </div>
           <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">Pipoca</h2>
+            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
             <div class="btn-submenu-estampas">Comprar >></div>
           </div>
         </div>
@@ -61,7 +61,6 @@ export default {
 <style scoped>
 .submenu-container {
   position: absolute;
-  height: 380px;
   z-index: 2;
   display: flex;
   flex-wrap: wrap;
@@ -111,20 +110,28 @@ export default {
   margin: 0 auto;
 }
 
-.btn-submenu-estampas {
-  margin: 15px;
-  cursor: pointer;
-  flex: 1;
-  color: #00acff;
-  font-size: 1rem;
+.imagem-submenu-estampas img {
+  padding: 20px;
+}
+
+.subtitulo-submenu-estampas {
+  text-align: center;
 }
 
 .submenu-estampa-titulo {
   margin: 10px;
   font-family: "Fira Sans", sans-serif;
   text-align: center;
-  font-size: 2em;
+  font-size: 1.3em;
   font-style: italic;
   color: black;
+}
+
+.btn-submenu-estampas {
+  margin: 15px;
+  cursor: pointer;
+  flex: 1;
+  color: #00acff;
+  font-size: 1rem;
 }
 </style>
