@@ -293,8 +293,9 @@ export default {
 
 .combo-titulo {
   color: #fff;
-  font-family: sans-serif;
-  font-size: 2.5rem;
+  font-family: Fira Sans, Helvetica, Arial, sans-serif;
+  font-weight: 100;
+  font-size: 3rem;
 }
 
 .preco-antigo {
