@@ -90,7 +90,7 @@
       <div class="comprar-agora">
         <h2 class="saiba-mais-subtitulo">a segurança e o conforto que o seu dog merece!</h2>
         <div class="btn-vazado">
-          <button  @click="vaiComprar">COMPRAR AGORA</button>
+          <button @click="vaiComprar">COMPRAR AGORA</button>
         </div>
       </div>
     </div>
@@ -107,21 +107,65 @@ export default {
   components: { AreaDeCompra },
   data() {
     return {
+      produtos: null,
       produto: null,
-      finalizar: false,
-      areaDeCompra: false
+      estampa: null,
+      tamanho: null,
+      estoque: null,
+      areaDeCompra: false,
+      categoriaId: 86
     };
   },
   methods: {
     vaiComprar() {
-      this.scrollBehavior();
       this.areaDeCompra = true;
     },
-    getProduto() {
-      api.get(`/produto/${this.id}`).then(r => {
-        this.produto = r.data;
-        document.title = this.produto.nome;
+    getProdutos() {
+      var page = 1;
+      var url = `/products/${this.categoriaId}/variations?page=${page}&on_sale=true&stock_status=instock&status=publish&orderby=slug`;
+      api.getApiWc(url).then(r => {
+        const paginas = 3; //Number(r.headers["x-wp-totalpages"]);
+        var i;
+        for (i = 2; i <= paginas; i++) {
+          page = i;
+          url = `/products/${this.categoriaId}/variations?page=${page}&on_sale=true&stock_status=instock&status=publish&orderby=slug`;
+          console.log(url);
+          // api.getApiWc(url).then(r => {}
+        }
+        this.produtos = r.data;
+        r.data.forEach(this.getProduto);
+        r.data.forEach(this.ProdutoEstoque);
+        r.data.forEach(this.ProdutoNome);
       });
+    },
+    ProdutoNome(item, index) {
+      if (index === 0) {
+        item.attributes.forEach((
+          item //Quando eu uso aerofunction ele não usa o "this." dentro do contexto da function e sim no contexto do elemento pai, assim consigo acessar o "this.produto".
+        ) => {
+          if (item.name === "Produto") {
+            this.produto = item.option;
+            document.title = item.option;
+          }
+        });
+      }
+    },
+    getProduto(item) {
+      item.attributes.forEach(this.ProdutoEstampa);
+      item.attributes.forEach(this.ProdutoTamanho);
+    },
+    ProdutoEstampa(item) {
+      if (item.name === "Estampa") {
+        this.estampa = item.option;
+      }
+    },
+    ProdutoTamanho(item) {
+      if (item.name === "Tamanho") {
+        this.tamanho = item.option;
+      }
+    },
+    ProdutoEstoque(item) {
+      this.estoque = item.stock_quantity;
     },
     scrollBehavior() {
       return window.scrollTo({
@@ -131,10 +175,10 @@ export default {
     }
   },
   created() {
-    this.getProduto();
+    this.getProdutos();
   },
   watch: {
-    finalizar() {
+    areaDeCompra() {
       this.scrollBehavior();
     }
   }

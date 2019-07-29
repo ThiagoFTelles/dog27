@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const prefixUrl = "https://marinawave.com.br/api-dog27";
+const prefix = "https://marinawave.com.br"
+export const prefixUrl = `${prefix}/api-dog27`;
 const prefixUrlApi = `${prefixUrl}/wp-json`;
 
 const axiosInstance = axios.create({
@@ -39,6 +40,10 @@ export const api = {
   },
   validateToken() {
     return axiosInstance.post(`${prefixUrlApi}/jwt-auth/v1/token/validate`);
+  },
+  getApiWc(endpoint) {
+    const keySufix = "&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9";
+    return axios.get(`${prefixUrlApi}/wc/v3${endpoint}${keySufix}`);
   }
 };
 

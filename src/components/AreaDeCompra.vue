@@ -16,23 +16,18 @@
       </div>
       <div class="area-de-compra-opcoes">
         <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
-        <ul>
-          <li v-for="(estampa, index) in estampasDisponiveis" :key="`estampa-${index}`">
-            <img :src="getImgEstampaUrl(estampa)" alt="Dog27" class="estampa-selecionada" />
-          </li>
-        </ul>
-        <p class="label-estampa">Escolha a estampa: Tropical</p>
+        <p class="label-estampa">Escolha a estampa: {{estampaEscolhida}}</p>
         <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
           <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
             <img src="@/assets/imagem-submenu-estampa.png" alt="Dog27" class="estampa-selecionada" />
             <img class="triangle-arrow-down" src="@/assets/triangle-arrow-down.png" alt />
           </div>
           <transition mode="out-in">
-            <div class="estampas-opcoes" @click="mostrarEstampas" v-if="menuEstampas">
-              <img src="@/assets/imagem-submenu-estampa.png" alt="Dog27" class="estampa-opcao" />
-              <img src="@/assets/imagem-submenu-estampa.png" alt="Dog27" class="estampa-opcao" />
-              <img src="@/assets/imagem-submenu-estampa.png" alt="Dog27" class="estampa-opcao" />
-            </div>
+            <ul class="estampas-opcoes" @click="mostrarEstampas" v-if="menuEstampas">
+              <li v-for="(estampa, index) in estampasDisponiveis" :key="`estampa-${index}`">
+                <img :src="getImgEstampaUrl(estampa)" alt="Dog27" class="estampa-opcao" />
+              </li>
+            </ul>
             <section v-if="!menuEstampas">
               <p class="label-estampa">Tamanho:</p>
               <div class="tamanho-area">
@@ -46,8 +41,12 @@
                   </select>
                 </div>
                 <div class="selecionar-quantidade">
-                  <div v-if="quantidadeEscolhida > 0" class="alterar-quantidade" @click="quantidadeEscolhida--">-</div>
-                  <div v-else class="alterar-quantidade" >-</div>
+                  <div
+                    v-if="quantidadeEscolhida > 0"
+                    class="alterar-quantidade"
+                    @click="quantidadeEscolhida--"
+                  >-</div>
+                  <div v-else class="alterar-quantidade">-</div>
                   <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
                   <div class="alterar-quantidade" @click="quantidadeEscolhida++">+</div>
                 </div>
@@ -89,40 +88,48 @@ export default {
       menuEstampas: false,
       quantidadeEscolhida: 1,
       valorUnitario: 89,
+      categoria: 16,
       estampasDisponiveis: [],
+      estampaEscolhida: "Tropical"
     };
   },
   methods: {
     getEstampas() {
       this.estampas = null;
-      
-      api.get(`https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=16`).then(response => {
-        this.estampas = response.data;
-        response.data.forEach(this.estampaDisponivel);
-      });
+
+      api
+        .get(
+          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=${this.categoria}&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9`
+        )
+        .then(response => {
+          this.estampas = response.data;
+          response.data.forEach(this.estampaDisponivel);
+        });
     },
     estampaDisponivel(item) {
       const isOnSale = item.on_sale;
       const isPurchasable = item.purchasable;
       const estoqueDisponivel = item.stock_status === "instock";
       const quantidadeEmEstoque = item.stock_quantity > 0;
-      
-      
-      if (isOnSale && isPurchasable && estoqueDisponivel && quantidadeEmEstoque) {
-        item.attributes.forEach(this.nomeDaEstampa);
-        
-      }
 
+      if (
+        isOnSale &&
+        isPurchasable &&
+        estoqueDisponivel &&
+        quantidadeEmEstoque
+      ) {
+        item.attributes.forEach(this.nomeDaEstampa);
+      }
     },
-    nomeDaEstampa(item){
-      if(item.name === "estampa") {
+    nomeDaEstampa(item) {
+      if (item.name === "estampa") {
         this.estampasDisponiveis.push(item.options[0]);
       }
     },
     getImgEstampaUrl(estampa) {
-    var images = require.context('../assets/estampas/', false, /\.png$/)
-    return images('./' + estampa + ".png")
-  },
+      var images = require.context("../assets/estampas/", false, /\.png$/);
+      return images("./" + estampa + ".png");
+    },
     mostrarEstampas() {
       this.menuEstampas = !this.menuEstampas;
     }

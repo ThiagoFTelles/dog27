@@ -24,7 +24,7 @@ export default {
     query(pagina) {
       return {
         ...this.$route.query,
-        /* estou desestruturando "..." a quary atual da página para ela não se parder ao mudar de página, evitando um reset das queries de busca por exemplo */
+        /* estou desestruturando "..." a query atual da página para ela não se perder ao mudar de página, evitando um reset das queries de busca por exemplo */
         _page: pagina
       };
     }
