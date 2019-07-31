@@ -16,10 +16,20 @@
       </div>
       <div class="area-de-compra-opcoes">
         <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
-        <p class="label-estampa">Escolha a estampa: {{estampaEscolhida}}</p>
+        <p class="label-estampa">Escolha a estampa: {{estampaEscolhida.nome}}</p>
         <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
           <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
-            <img src="@/assets/imagem-submenu-estampa.png" alt="Dog27" class="estampa-selecionada" />
+            <section
+              v-for="(estampa, index) in estampasDisponiveis"
+              :key="`estampa-selecionada-${index}`"
+            >
+              <img
+                v-if="index === 0"
+                :src="getImgEstampaUrl(estampa)"
+                alt="Dog27"
+                class="estampa-selecionada"
+              />
+            </section>
             <img class="triangle-arrow-down" src="@/assets/triangle-arrow-down.png" alt />
           </div>
           <transition mode="out-in">
@@ -52,9 +62,12 @@
                 </div>
               </div>
               <div class="finalizar-compra-item">
-                <p class="valor-dos-itens">{{valorUnitario * quantidadeEscolhida | numeroPreco}}</p>
+                <p
+                  v-show="quantidadeEscolhida >0"
+                  class="valor-dos-itens"
+                >{{valorUnitario * quantidadeEscolhida | numeroPreco}}</p>
                 <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
-                <div v-else>Clique no + para adicionar produtos à sua compra.</div>
+                <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
               </div>
             </section>
           </transition>
@@ -72,7 +85,7 @@
         <p class="preco-antigo">de R$159</p>
         <p class="preco-combo">por R$140</p>
         <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
-        <div v-else>Clique no + para adicionar produtos à sua compra.</div>
+        <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
       </div>
     </div>
   </section>
@@ -90,7 +103,7 @@ export default {
       valorUnitario: 89,
       categoria: 16,
       estampasDisponiveis: [],
-      estampaEscolhida: "Tropical"
+      estampaEscolhida: { nome: "asd", url: "" }
     };
   },
   methods: {
@@ -127,8 +140,8 @@ export default {
       }
     },
     getImgEstampaUrl(estampa) {
-      var images = require.context("../assets/estampas/", false, /\.png$/);
-      return images("./" + estampa + ".png");
+      var estampas = require.context("../assets/estampas/", false, /\.png$/);
+      return estampas("./" + estampa + ".png");
     },
     mostrarEstampas() {
       this.menuEstampas = !this.menuEstampas;
@@ -308,6 +321,11 @@ export default {
   font-size: 1.3rem;
   font-family: sans-serif;
   cursor: pointer;
+}
+
+.adicionar-ao-carrinho:disabled {
+  background: rgb(156, 156, 156);
+  color: #fff;
 }
 
 .combo {
