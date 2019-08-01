@@ -8,7 +8,7 @@
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
           <div class="banner-textos">
-            <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
+            <h1 class="banner-titulo">{{getBanner(16)}}</h1>
             <h2
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
@@ -114,6 +114,7 @@
 import { api } from "@/services.js";
 import { serialize } from "@/helpers.js";
 import ProdutosPaginar from "@/components/ProdutosPaginar.vue";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "ProdutosLista",
@@ -128,12 +129,14 @@ export default {
     };
   },
   computed: {
+    ...mapState(["categorias"]),
     url() {
       const query = serialize(this.$route.query);
       return `/produto?_limit=${this.produtosPorPagina}${query}`;
     }
   },
   methods: {
+    ...mapActions(["getBanner"]),
     getProdutos() {
       this.produtos = null;
       api.get(this.url).then(r => {
@@ -152,6 +155,7 @@ export default {
   },
   created() {
     this.getProdutos();
+    this.getBannerData();
   }
 };
 </script>

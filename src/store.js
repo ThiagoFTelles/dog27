@@ -14,6 +14,8 @@ export default new Vuex.Store({
   strict: true,
   /* strict não deixa o objeto ser modificado por fora, apenas via mutation */
   state: {
+    categorias: [],
+    carregando: true,
     login: false,
     usuario: {
       id: "",
@@ -30,6 +32,19 @@ export default new Vuex.Store({
     usuario_produtos: null
   },
   mutations: {
+    ADD_CATEGORIA(state, payload) {
+      state.categorias.push(payload);
+      // state.categorias.forEach(item => {
+      //   console.log(item.nome)
+      // })
+    },
+    GET_BANNER_DATA(state, payload) {
+      state.categorias.forEach(item => {
+        if (item.id === 16) {
+          console.log(item);
+        }
+      });
+    },
     UPDATE_LOGIN(state, payload) {
       state.login = payload;
     },
@@ -46,6 +61,26 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    getBanner(context) {
+      context.commit("GET_BANNER_DATA", context);
+    },
+    getCategoriasProdutos(context) {
+      var url = `/products/categories?`;
+      return api.getApiWc(url)
+        .then(r => {
+          r.data.forEach(item => {
+            context.commit("ADD_CATEGORIA", {
+              nome: item.name,
+              id: item.id,
+              descricao: item.description,
+              quantidadeDeProdutos: item.count,
+              imagemSrc: item.image ? item.image.src : "",
+            });
+          });
+          this.state.carregando = false;
+          console.log(this.state.categorias)
+        })
+    },
     getUsuarioProdutos(context) {
       return api.get(`/produto?usuario_id=${context.state.usuario.id}`)
         .then(r => {
@@ -53,7 +88,7 @@ export default new Vuex.Store({
         })
     },
     getUsuario(context) {
-      // A api gera uma primisse, ou seja, posso botar o .then() depois dela.
+      // A api gera uma promisse, ou seja, posso botar o .then() depois dela.
       // Se eu colocar o return dentro do api.get e api.post, eu conseguirei usar a promisse nos métodos onde eu fizer o dispatch(). Ex: this.$store.dispatch("myAction", myObj).then( () => {...}  )
       return api.get(`/usuario`)
         .then(r => {
