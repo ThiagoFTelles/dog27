@@ -24,13 +24,12 @@
           </div>
           <transition mode="out-in">
             <ul class="estampas-opcoes" @click="mostrarEstampas" v-if="menuEstampas">
-              <li v-for="(estampa, index) in estampasDisponiveis" :key="`estampa-${index}`">
-                <img
-                  :src="estampa.urlThumbnail"
-                  alt="Dog27"
-                  class="estampa-opcao"
-                  @click="escolherEstampa(estampa)"
-                />
+              <li
+                v-for="(estampa, index) in estampasDisponiveis"
+                :key="`estampa-${index}`"
+                @click="escolherEstampa(estampa)"
+              >
+                <img :src="estampa.urlThumbnail" alt="Dog27" class="estampa-opcao" />
               </li>
             </ul>
             <section v-if="!menuEstampas">
@@ -100,7 +99,7 @@ export default {
       estampaEscolhida: {
         nome: "",
         urlThumbnail: "",
-        idVariacoes: []
+        idProdutoPai: ""
       },
       variacoesDisponiveis: [],
       variacaoEscolhida: {
@@ -130,8 +129,6 @@ export default {
           );
 
           this.estampaEscolhida.nome = primeiraEstampaDisponivel.estampa;
-          this.estampaEscolhida.idVariacoes =
-            primeiraEstampaDisponivel.idVariacoes;
           this.estampaEscolhida.urlThumbnail =
             primeiraEstampaDisponivel.urlThumbnail;
 
@@ -146,7 +143,6 @@ export default {
       this.estampasDisponiveis.push({
         estampa: estampa,
         idProdutoPai: item.id,
-        idVariacoes: item.variations,
         urlThumbnail: this.getImgEstampaUrl(estampa)
       });
     },
@@ -177,9 +173,11 @@ export default {
       this.menuEstampas = !this.menuEstampas;
     },
     escolherEstampa(estampa) {
+      console.log("clicada: " + estampa.estampa + estampa.idProdutoPai);
       this.estampaEscolhida.nome = estampa.estampa;
       this.estampaEscolhida.urlThumbnail = estampa.urlThumbnail;
-      this.estampaEscolhida.idVariacoes = estampa.idVariacoes;
+      this.estampaEscolhida.idProdutoPai = estampa.idProdutoPai;
+      this.getVariacoes(estampa.idProdutoPai);
     },
     getVariacoes(idProdutoPai) {
       api
@@ -187,6 +185,7 @@ export default {
           `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9`
         )
         .then(response => {
+          this.variacoesDisponiveis = [];
           response.data.forEach(this.variacoesDaEstampa);
         })
         .then(() => {
@@ -201,9 +200,14 @@ export default {
           this.variacaoEscolhida.estoque = primeiraVariacaoDisponivel.estoque;
           this.variacaoEscolhida.id = primeiraVariacaoDisponivel.id;
           this.variacaoEscolhida.tamanho = primeiraVariacaoDisponivel.tamanho;
+          console.log("variacaoEscolhida = " + this.variacaoEscolhida.id);
+          console.log(
+            "variacaoEscolhida Estoque = " + this.variacaoEscolhida.estoque
+          );
         });
     },
     variacoesDaEstampa(item) {
+      console.log(item);
       let atributoDoTamanho = item.attributes.filter(chave => {
         return chave.name === "Tamanho";
       });
@@ -213,7 +217,9 @@ export default {
         id: item.id,
         tamanho: tamanho,
         preco: item.regular_price,
-        precoPromocional: item.sale_price,
+        precoPromocional: item.sale_price
+          ? item.sale_price
+          : item.regular_price,
         estoque: item.stock_quantity
       });
     }
