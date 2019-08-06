@@ -10,7 +10,9 @@
           <button @click="vaiComprar">Comprar</button>
         </div>
       </div>
-      <AreaDeCompra v-else key="area-de-compra"></AreaDeCompra>
+    </transition>
+    <transition mode="out-in">
+      <AreaDeCompra v-show="areaDeCompra" key="area-de-compra"></AreaDeCompra>
     </transition>
     <div class="peitoral-container">
       <div class="texto-box">
@@ -100,6 +102,7 @@
 <script>
 import { api } from "@/services.js";
 import AreaDeCompra from "@/components/AreaDeCompra.vue";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Peitoral",
@@ -113,10 +116,11 @@ export default {
       tamanho: null,
       estoque: null,
       areaDeCompra: false,
-      categoriaId: 86
+      categoriaId: 16
     };
   },
   methods: {
+    ...mapActions(["selecionarCategoria"]),
     vaiComprar() {
       this.areaDeCompra = true;
     },
@@ -174,8 +178,12 @@ export default {
       });
     }
   },
+  computed: {
+    ...mapState(["idCategoriaSelecionada"])
+  },
   created() {
-    this.getProdutos();
+    this.selecionarCategoria(this.categoriaId);
+    // this.getProdutos();
   },
   watch: {
     areaDeCompra() {

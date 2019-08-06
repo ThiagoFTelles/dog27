@@ -8,7 +8,7 @@
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
           <div class="banner-textos">
-            <h1 class="banner-titulo">{{getBanner(16)}}</h1>
+            <h1 class="banner-titulo">Peitoral Híbrido</h1>
             <h2
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
@@ -155,7 +155,6 @@ export default {
   },
   created() {
     this.getProdutos();
-    this.getBannerData();
   }
 };
 </script>

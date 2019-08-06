@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {
-  api
-} from "@/services.js";
+import { api } from "@/services.js";
 
 Vue.use(Vuex);
 
@@ -14,8 +12,9 @@ export default new Vuex.Store({
   strict: true,
   /* strict não deixa o objeto ser modificado por fora, apenas via mutation */
   state: {
-    categorias: [],
     carregando: true,
+    categorias: [],
+    idCategoriaSelecionada: "",
     login: false,
     usuario: {
       id: "",
@@ -27,20 +26,26 @@ export default new Vuex.Store({
       numero: "",
       bairro: "",
       cidade: "",
-      estado: "",
+      estado: ""
     },
     usuario_produtos: null
   },
   mutations: {
+    REMOVER_CARREGANDO(state) {
+      state.carregando = false;
+    },
     ADD_CATEGORIA(state, payload) {
       state.categorias.push(payload);
       // state.categorias.forEach(item => {
       //   console.log(item.nome)
       // })
     },
+    SET_CATEGORIA_SELECIONADA_ID(state, payload) {
+      state.idCategoriaSelecionada = payload;
+    },
     GET_BANNER_DATA(state, payload) {
       state.categorias.forEach(item => {
-        if (item.id === 16) {
+        if (item.id === payload) {
           console.log(item);
         }
       });
@@ -49,7 +54,11 @@ export default new Vuex.Store({
       state.login = payload;
     },
     UPDATE_USUARIO(state, payload) {
-      state.usuario = Object.assign({}, state.usuario, payload); /* Object.assign serve para combinar os objetos dentro de () e atualzar ou criar apenas o valor que está sendo passado */
+      state.usuario = Object.assign(
+        {},
+        state.usuario,
+        payload
+      ); /* Object.assign serve para combinar os objetos dentro de () e atualzar ou criar apenas o valor que está sendo passado */
       /* o objeto vazio passado em Object.assign serve para garantir que receberei um retorno mesmo se algum dos valores for nulo */
     },
     UPDATE_USUARIO_PRODUTOS(state, payload) {
@@ -58,43 +67,45 @@ export default new Vuex.Store({
     ADD_USUARIO_PRODUTOS(state, payload) {
       state.usuario_produtos.unshift(payload);
       // unshift() acrescenta o item no começo da array, ao contrário de push() que add no final
-    },
+    }
   },
   actions: {
+    selecionarCategoria(context, payload) {
+      context.commit("SET_CATEGORIA_SELECIONADA_ID", payload);
+    },
     getBanner(context) {
       context.commit("GET_BANNER_DATA", context);
     },
     getCategoriasProdutos(context) {
       var url = `/products/categories?`;
-      return api.getApiWc(url)
-        .then(r => {
-          r.data.forEach(item => {
-            context.commit("ADD_CATEGORIA", {
-              nome: item.name,
-              id: item.id,
-              descricao: item.description,
-              quantidadeDeProdutos: item.count,
-              imagemSrc: item.image ? item.image.src : "",
-            });
+      return api.getApiWc(url).then(r => {
+        r.data.forEach(item => {
+          context.commit("ADD_CATEGORIA", {
+            nome: item.name,
+            id: item.id,
+            descricao: item.description,
+            quantidadeDeProdutos: item.count,
+            imagemSrc: item.image ? item.image.src : ""
           });
-          this.state.carregando = false;
-          console.log(this.state.categorias)
-        })
+        });
+        context.commit("REMOVER_CARREGANDO");
+        console.log(this.state.categorias);
+      });
     },
     getUsuarioProdutos(context) {
-      return api.get(`/produto?usuario_id=${context.state.usuario.id}`)
+      return api
+        .get(`/produto?usuario_id=${context.state.usuario.id}`)
         .then(r => {
           context.commit("UPDATE_USUARIO_PRODUTOS", r.data);
-        })
+        });
     },
     getUsuario(context) {
       // A api gera uma promisse, ou seja, posso botar o .then() depois dela.
       // Se eu colocar o return dentro do api.get e api.post, eu conseguirei usar a promisse nos métodos onde eu fizer o dispatch(). Ex: this.$store.dispatch("myAction", myObj).then( () => {...}  )
-      return api.get(`/usuario`)
-        .then(r => {
-          context.commit("UPDATE_USUARIO", r.data);
-          context.commit("UPDATE_LOGIN", true);
-        })
+      return api.get(`/usuario`).then(r => {
+        context.commit("UPDATE_USUARIO", r.data);
+        context.commit("UPDATE_LOGIN", true);
+      });
     },
     criarUsuario(context, payload) {
       context.commit("UPDATE_USUARIO", {
@@ -103,12 +114,14 @@ export default new Vuex.Store({
       return api.post("/usuario", payload);
     },
     logarUsuario(context, payload) {
-      return api.login({
-        username: payload.email,
-        password: payload.senha,
-      }).then(r => {
-        window.localStorage.token = `Bearer ${r.data.token}`
-      })
+      return api
+        .login({
+          username: payload.email,
+          password: payload.senha
+        })
+        .then(r => {
+          window.localStorage.token = `Bearer ${r.data.token}`;
+        });
     },
     deslogarUsuario(context) {
       context.commit("UPDATE_USUARIO", {
@@ -121,7 +134,7 @@ export default new Vuex.Store({
         numero: "",
         bairro: "",
         cidade: "",
-        estado: "",
+        estado: ""
       });
       window.localStorage.removeItem("token");
       context.commit("UPDATE_LOGIN", false);

@@ -19,23 +19,18 @@
         <p class="label-estampa">Escolha a estampa: {{estampaEscolhida.nome}}</p>
         <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
           <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
-            <section
-              v-for="(estampa, index) in estampasDisponiveis"
-              :key="`estampa-selecionada-${index}`"
-            >
-              <img
-                v-if="index === 0"
-                :src="getImgEstampaUrl(estampa)"
-                alt="Dog27"
-                class="estampa-selecionada"
-              />
-            </section>
+            <img :src="estampaEscolhida.urlThumbnail" alt="Dog27" class="estampa-selecionada" />
             <img class="triangle-arrow-down" src="@/assets/triangle-arrow-down.png" alt />
           </div>
           <transition mode="out-in">
             <ul class="estampas-opcoes" @click="mostrarEstampas" v-if="menuEstampas">
               <li v-for="(estampa, index) in estampasDisponiveis" :key="`estampa-${index}`">
-                <img :src="getImgEstampaUrl(estampa)" alt="Dog27" class="estampa-opcao" />
+                <img
+                  :src="estampa.urlThumbnail"
+                  alt="Dog27"
+                  class="estampa-opcao"
+                  @click="escolherEstampa(estampa)"
+                />
               </li>
             </ul>
             <section v-if="!menuEstampas">
@@ -65,7 +60,7 @@
                 <p
                   v-show="quantidadeEscolhida >0"
                   class="valor-dos-itens"
-                >{{valorUnitario * quantidadeEscolhida | numeroPreco}}</p>
+                >{{variacaoEscolhida.preco * quantidadeEscolhida | numeroPreco}}</p>
                 <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
                 <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
               </div>
@@ -93,6 +88,7 @@
 
 <script>
 import { api } from "@/services.js";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "AreaDeCompra",
@@ -100,24 +96,59 @@ export default {
     return {
       menuEstampas: false,
       quantidadeEscolhida: 1,
-      valorUnitario: 89,
-      categoria: 16,
       estampasDisponiveis: [],
-      estampaEscolhida: { nome: "asd", url: "" }
+      estampaEscolhida: {
+        nome: "",
+        urlThumbnail: "",
+        idVariacoes: []
+      },
+      variacoesDisponiveis: [],
+      variacaoEscolhida: {
+        tamanho: "",
+        preco: "",
+        precoPromocional: "",
+        estoque: null
+      }
     };
   },
+  computed: {
+    ...mapState(["idCategoriaSelecionada"])
+  },
   methods: {
+    ...mapActions(["getBanner"]),
     getEstampas() {
-      this.estampas = null;
-
       api
         .get(
-          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=${this.categoria}&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9`
+          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=${this.idCategoriaSelecionada}&per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9`
         )
         .then(response => {
-          this.estampas = response.data;
-          response.data.forEach(this.estampaDisponivel);
+          response.data.forEach(this.estampasDaCategoria);
+          let primeiraEstampaDisponivel = this.estampasDisponiveis.find(
+            function() {
+              return true;
+            }
+          );
+
+          this.estampaEscolhida.nome = primeiraEstampaDisponivel.estampa;
+          this.estampaEscolhida.idVariacoes =
+            primeiraEstampaDisponivel.idVariacoes;
+          this.estampaEscolhida.urlThumbnail =
+            primeiraEstampaDisponivel.urlThumbnail;
+
+          this.getVariacoes(primeiraEstampaDisponivel.idProdutoPai);
         });
+    },
+    estampasDaCategoria(item) {
+      let atributoDaEstampa = item.attributes.filter(chave => {
+        return chave.name === "Estampa";
+      });
+      let estampa = atributoDaEstampa[0].options[0];
+      this.estampasDisponiveis.push({
+        estampa: estampa,
+        idProdutoPai: item.id,
+        idVariacoes: item.variations,
+        urlThumbnail: this.getImgEstampaUrl(estampa)
+      });
     },
     estampaDisponivel(item) {
       const isOnSale = item.on_sale;
@@ -134,17 +165,57 @@ export default {
         item.attributes.forEach(this.nomeDaEstampa);
       }
     },
-    nomeDaEstampa(item) {
-      if (item.name === "estampa") {
-        this.estampasDisponiveis.push(item.options[0]);
-      }
-    },
     getImgEstampaUrl(estampa) {
-      var estampas = require.context("../assets/estampas/", false, /\.png$/);
-      return estampas("./" + estampa + ".png");
+      var estampas = require.context("../assets/estampas/", false, /\.jpg$/);
+      return estampas(
+        "./Coleira_de_cachorro_" +
+          estampa.toLowerCase().replace(/\s/g, "") +
+          ".jpg"
+      );
     },
     mostrarEstampas() {
       this.menuEstampas = !this.menuEstampas;
+    },
+    escolherEstampa(estampa) {
+      this.estampaEscolhida.nome = estampa.estampa;
+      this.estampaEscolhida.urlThumbnail = estampa.urlThumbnail;
+      this.estampaEscolhida.idVariacoes = estampa.idVariacoes;
+    },
+    getVariacoes(idProdutoPai) {
+      api
+        .get(
+          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9`
+        )
+        .then(response => {
+          response.data.forEach(this.variacoesDaEstampa);
+        })
+        .then(() => {
+          let primeiraVariacaoDisponivel = this.variacoesDisponiveis.find(
+            function() {
+              return true;
+            }
+          );
+          this.variacaoEscolhida.preco = primeiraVariacaoDisponivel.preco;
+          this.variacaoEscolhida.precoPromocional =
+            primeiraVariacaoDisponivel.precoPromocional;
+          this.variacaoEscolhida.estoque = primeiraVariacaoDisponivel.estoque;
+          this.variacaoEscolhida.id = primeiraVariacaoDisponivel.id;
+          this.variacaoEscolhida.tamanho = primeiraVariacaoDisponivel.tamanho;
+        });
+    },
+    variacoesDaEstampa(item) {
+      let atributoDoTamanho = item.attributes.filter(chave => {
+        return chave.name === "Tamanho";
+      });
+      let tamanho = atributoDoTamanho[0].option;
+
+      this.variacoesDisponiveis.push({
+        id: item.id,
+        tamanho: tamanho,
+        preco: item.regular_price,
+        precoPromocional: item.sale_price,
+        estoque: item.stock_quantity
+      });
     }
   },
   watch: {
@@ -237,6 +308,8 @@ export default {
 .estampas-opcoes {
   border: 1px solid #ccc;
   background: #fff;
+  overflow: overlay;
+  height: 250px;
 }
 .estampa-opcao {
   max-width: 100%;
