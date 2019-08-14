@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { api } from "@/services.js";
+import {
+  api
+} from "@/services.js";
+import cart from '@/store/cart.js'
 
 Vue.use(Vuex);
 
@@ -9,6 +12,9 @@ Vue.use(Vuex);
 // Consumer secret: cs_288b43034883692fe6a025fc646782638b5906f9
 
 export default new Vuex.Store({
+  modules: {
+    cart
+  },
   strict: true,
   /* strict não deixa o objeto ser modificado por fora, apenas via mutation */
   state: {
@@ -54,8 +60,7 @@ export default new Vuex.Store({
       state.login = payload;
     },
     UPDATE_USUARIO(state, payload) {
-      state.usuario = Object.assign(
-        {},
+      state.usuario = Object.assign({},
         state.usuario,
         payload
       ); /* Object.assign serve para combinar os objetos dentro de () e atualzar ou criar apenas o valor que está sendo passado */

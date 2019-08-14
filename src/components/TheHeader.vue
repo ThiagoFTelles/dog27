@@ -53,8 +53,8 @@
         <router-link to="/" class="icon">
           <img id="lupa" src="@/assets/search.svg" />
         </router-link>
-        <router-link to="/" class="icon">
-          <img src="@/assets/person.svg" alt />
+        <router-link to="/" class="icon login-profile">
+          <img src="@/assets/person.svg" alt="login-dog27" @click.prevent="logar" />
         </router-link>
         <router-link to="/" class="icon">
           <img src="@/assets/bag.svg" alt />
@@ -82,6 +82,7 @@
         v-show="hoverLinkContato"
       />
     </transition>
+    <CarrinhoDeCompras />
   </section>
 </template>
 
@@ -90,11 +91,17 @@ import BarraEngajamento from "@/components/BarraEngajamento.vue";
 import SubMenuProdutos from "@/components/SubMenuProdutos.vue";
 import SubMenuEstampas from "@/components/SubMenuEstampas.vue";
 import SubMenuContato from "@/components/SubMenuContato.vue";
+import CarrinhoDeCompras from "@/components/CarrinhoDeCompras.vue";
 
 export default {
   name: "TheHeader",
   data() {
     return {
+      login: {
+        email: "admin",
+        senha: "admin"
+      },
+      erros: [],
       hoverLinkProdutos: false,
       hoverLinkEstampas: false,
       hoverLinkContato: false
@@ -104,7 +111,19 @@ export default {
     BarraEngajamento,
     SubMenuProdutos,
     SubMenuEstampas,
-    SubMenuContato
+    SubMenuContato,
+    CarrinhoDeCompras
+  },
+  methods: {
+    logar() {
+      this.erros = [];
+      this.$store
+        .dispatch("logarUsuario", this.login)
+        .then(() => {})
+        .catch(e => {
+          this.erros.push(e.response.data.message);
+        });
+    }
   },
   computed: {
     nome() {

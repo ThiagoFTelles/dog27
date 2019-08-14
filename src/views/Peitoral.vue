@@ -116,7 +116,8 @@ export default {
       tamanho: null,
       estoque: null,
       areaDeCompra: false,
-      categoriaId: 16
+      categoriaId: 16,
+      idCategoriaCombo: 35
     };
   },
   methods: {

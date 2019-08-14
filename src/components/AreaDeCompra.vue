@@ -2,16 +2,18 @@
   <section>
     <div class="area-de-compra-container">
       <div class="area-de-compra-imagens">
-        <img
-          src="@/assets/detalhes-produto-principal.jpg"
-          alt="Dog27"
-          class="img-area-de-compra principal"
-        />
-        <div class="area-de-compra-thumbnail">
-          <img src="@/assets/detalhes-produto-thumbnail.jpg" alt="Dog27" class="img-area-de-compra" />
-        </div>
-        <div class="area-de-compra-thumbnail">
-          <img src="@/assets/detalhes-produto-thumbnail.jpg" alt="Dog27" class="img-area-de-compra" />
+        <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-area-de-compra principal" />
+        <div
+          v-for="imagem in estampaEscolhida.srcFotos"
+          :key="imagem.src"
+          class="area-de-compra-thumbnail"
+        >
+          <img
+            :src="imagem.src"
+            alt="Dog27"
+            class="img-area-de-compra"
+            @click="destacarFoto(imagem)"
+          />
         </div>
       </div>
       <div class="area-de-compra-opcoes">
@@ -33,16 +35,28 @@
               </li>
             </ul>
             <section v-if="!menuEstampas">
-              <p class="label-estampa">Tamanho:</p>
+              <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+
               <div class="tamanho-area">
                 <div class="selecionar-tamanho">
-                  <select name="tamanhos-disponiveis" id="tamanhos-disponiveis">
-                    <option value>SELECIONE O TAMANHO</option>
-                    <option value="PP">PP</option>
-                    <option value="P">P</option>
-                    <option value="M">M</option>
-                    <option value="G">G</option>
-                  </select>
+                  <div
+                    class="tamanhos-disponiveis"
+                    @click="mostrarTamanhos"
+                    v-if="!menuTamanhos"
+                  >{{variacaoEscolhida.tamanho}}</div>
+                  <ul
+                    v-else
+                    @click="mostrarTamanhos"
+                    name="tamanhos-disponiveis"
+                    class="tamanhos-disponiveis"
+                  >
+                    <li
+                      v-for="variacao in variacoesDisponiveis"
+                      :value="variacao.tamanho"
+                      :key="variacao.tamanho"
+                      @click="escolherVariacao(variacao)"
+                    >{{variacao.tamanho}}</li>
+                  </ul>
                 </div>
                 <div class="selecionar-quantidade">
                   <div
@@ -94,10 +108,13 @@ export default {
   data() {
     return {
       menuEstampas: false,
+      menuTamanhos: false,
       quantidadeEscolhida: 1,
       estampasDisponiveis: [],
       estampaEscolhida: {
         nome: "",
+        srcFotos: [],
+        fotoClicada: "",
         urlThumbnail: "",
         idProdutoPai: ""
       },
@@ -114,7 +131,6 @@ export default {
     ...mapState(["idCategoriaSelecionada"])
   },
   methods: {
-    ...mapActions(["getBanner"]),
     getEstampas() {
       api
         .get(
@@ -129,6 +145,11 @@ export default {
           );
 
           this.estampaEscolhida.nome = primeiraEstampaDisponivel.estampa;
+          this.estampaEscolhida.srcFotos = primeiraEstampaDisponivel.srcFotos;
+          this.estampaEscolhida.fotoClicada =
+            primeiraEstampaDisponivel.srcFotos[0].src;
+          this.estampaEscolhida.idProdutoPai =
+            primeiraEstampaDisponivel.idProdutoPai;
           this.estampaEscolhida.urlThumbnail =
             primeiraEstampaDisponivel.urlThumbnail;
 
@@ -140,9 +161,17 @@ export default {
         return chave.name === "Estampa";
       });
       let estampa = atributoDaEstampa[0].options[0];
+
+      let fotosDoProduto = item.images;
+      let fotosSrc = [];
+      fotosDoProduto.forEach(element => {
+        fotosSrc.push({ src: element.src });
+      });
+
       this.estampasDisponiveis.push({
         estampa: estampa,
         idProdutoPai: item.id,
+        srcFotos: fotosSrc,
         urlThumbnail: this.getImgEstampaUrl(estampa)
       });
     },
@@ -169,14 +198,22 @@ export default {
           ".jpg"
       );
     },
+    destacarFoto(foto) {
+      this.estampaEscolhida.fotoClicada = foto.src;
+    },
     mostrarEstampas() {
       this.menuEstampas = !this.menuEstampas;
+    },
+    mostrarTamanhos() {
+      this.menuTamanhos = !this.menuTamanhos;
     },
     escolherEstampa(estampa) {
       console.log("clicada: " + estampa.estampa + estampa.idProdutoPai);
       this.estampaEscolhida.nome = estampa.estampa;
       this.estampaEscolhida.urlThumbnail = estampa.urlThumbnail;
       this.estampaEscolhida.idProdutoPai = estampa.idProdutoPai;
+      this.estampaEscolhida.srcFotos = estampa.srcFotos;
+      this.estampaEscolhida.fotoClicada = estampa.srcFotos[0].src;
       this.getVariacoes(estampa.idProdutoPai);
     },
     getVariacoes(idProdutoPai) {
@@ -194,20 +231,22 @@ export default {
               return true;
             }
           );
-          this.variacaoEscolhida.preco = primeiraVariacaoDisponivel.preco;
-          this.variacaoEscolhida.precoPromocional =
-            primeiraVariacaoDisponivel.precoPromocional;
-          this.variacaoEscolhida.estoque = primeiraVariacaoDisponivel.estoque;
-          this.variacaoEscolhida.id = primeiraVariacaoDisponivel.id;
-          this.variacaoEscolhida.tamanho = primeiraVariacaoDisponivel.tamanho;
-          console.log("variacaoEscolhida = " + this.variacaoEscolhida.id);
-          console.log(
-            "variacaoEscolhida Estoque = " + this.variacaoEscolhida.estoque
-          );
+          this.escolherVariacao(primeiraVariacaoDisponivel);
         });
     },
+    escolherVariacao(variacao) {
+      console.log(variacao);
+      this.variacaoEscolhida.preco = variacao.preco;
+      this.variacaoEscolhida.precoPromocional = variacao.precoPromocional;
+      this.variacaoEscolhida.estoque = variacao.estoque;
+      this.variacaoEscolhida.id = variacao.id;
+      this.variacaoEscolhida.tamanho = variacao.tamanho;
+      console.log("variacaoEscolhida = " + this.variacaoEscolhida.id);
+      console.log(
+        "variacaoEscolhida Estoque = " + this.variacaoEscolhida.estoque
+      );
+    },
     variacoesDaEstampa(item) {
-      console.log(item);
       let atributoDoTamanho = item.attributes.filter(chave => {
         return chave.name === "Tamanho";
       });
@@ -271,8 +310,8 @@ export default {
 }
 
 .area-de-compra-container div img.principal {
-  width: 450px;
-  max-width: 100%;
+  max-height: 300px;
+  max-width: 90%;
   margin: 0 auto;
 }
 
@@ -373,7 +412,7 @@ export default {
   font-size: 1rem;
 }
 
-#tamanhos-disponiveis {
+.tamanhos-disponiveis {
   padding: 0 20px;
   border: 1px solid #ccc;
 }
