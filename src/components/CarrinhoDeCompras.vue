@@ -10,14 +10,15 @@
             v-for="(item, index) in carrinho"
             :key="`carrinho-item${index}`"
           >
-            <p>{{item.nome}}</p>
-            <p class="carrinho_preco">{{item.preco | numeroPreco}}</p>
-            <button class="carrinho_remover" @click="removerItem(index)">X</button>
+            <p>x {{item.quantidade}}</p>
+            <p>{{item.nomeDoProduto}}</p>
+            <p class="carrinho_preco">{{item.valorUnitarioCobrado | numeroPreco}}</p>
+            <button class="carrinho_remover" @click="removerItemDoCarrinho(index)">X</button>
             <p></p>
           </li>
         </ul>
         <p class="carrinho_total">{{carrinhoTotal | numeroPreco}}</p>
-        <button class="carrinho_finalizar">Finalizar Compra</button>
+        <router-link :to="{name: 'checkout'}" class="carrinho_finalizar">Finalizar Compra</router-link>
       </div>
       <p v-else>O carrinho está vazio.</p>
     </div>
@@ -35,22 +36,24 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["atualizarCarrinhoTotal", "checarLocalStorage"]),
-    removerItem(index) {
-      this.$store.commit("REMOVE_CART_ITEM", index);
-    }
+    ...mapActions([
+      "atualizarCarrinhoTotal",
+      "checarLocalStorage",
+      "removerItemDoCarrinho"
+    ])
   },
   computed: {
     ...mapState({
       carrinho: state => state.cart.carrinho
-      // carrinhoTotal: state => state.cart.carrinhoTotal
     }),
     carrinhoTotal() {
       let total = 0;
       if (this.carrinho.length) {
         this.carrinho.forEach(item => {
           //esta propriedade sempre será atualizada reativamente quando Carrinho mudar
-          total += item.preco; //para + ou para - porque tudo que está em 'data' é reativo
+          let valorDoItem =
+            Number(item.valorUnitarioCobrado) * Number(item.quantidade);
+          total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
         });
       }
       return total;

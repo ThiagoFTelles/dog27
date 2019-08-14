@@ -74,7 +74,11 @@
                   v-show="quantidadeEscolhida >0"
                   class="valor-dos-itens"
                 >{{variacaoEscolhida.preco * quantidadeEscolhida | numeroPreco}}</p>
-                <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
+                <button
+                  v-if="quantidadeEscolhida >0"
+                  class="adicionar-ao-carrinho"
+                  @click="colocarNoCarrinho(variacaoEscolhida)"
+                >Comprar</button>
                 <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
               </div>
             </section>
@@ -112,18 +116,24 @@ export default {
       quantidadeEscolhida: 1,
       estampasDisponiveis: [],
       estampaEscolhida: {
+        nomeDoProduto: "",
+        idProdutoPai: "",
         nome: "",
         srcFotos: [],
         fotoClicada: "",
-        urlThumbnail: "",
-        idProdutoPai: ""
+        urlThumbnail: ""
       },
       variacoesDisponiveis: [],
       variacaoEscolhida: {
         tamanho: "",
         preco: "",
         precoPromocional: "",
-        estoque: null
+        estoque: null,
+        nomeDoProduto: "",
+        valorUnitarioCobrado: "",
+        idProdutoPai: "",
+        idDaVariacao: "",
+        quantidade: 0
       }
     };
   },
@@ -131,6 +141,7 @@ export default {
     ...mapState(["idCategoriaSelecionada"])
   },
   methods: {
+    ...mapActions(["adicionarItemAoCarrinho"]),
     getEstampas() {
       api
         .get(
@@ -152,11 +163,16 @@ export default {
             primeiraEstampaDisponivel.idProdutoPai;
           this.estampaEscolhida.urlThumbnail =
             primeiraEstampaDisponivel.urlThumbnail;
+          this.estampaEscolhida.nomeDoProduto =
+            primeiraEstampaDisponivel.nomeDoProduto +
+            " " +
+            primeiraEstampaDisponivel.estampa;
 
           this.getVariacoes(primeiraEstampaDisponivel.idProdutoPai);
         });
     },
     estampasDaCategoria(item) {
+      console.log(item.categories[0].name);
       let atributoDaEstampa = item.attributes.filter(chave => {
         return chave.name === "Estampa";
       });
@@ -169,6 +185,7 @@ export default {
       });
 
       this.estampasDisponiveis.push({
+        nomeDoProduto: item.categories[0].name,
         estampa: estampa,
         idProdutoPai: item.id,
         srcFotos: fotosSrc,
@@ -210,8 +227,10 @@ export default {
     escolherEstampa(estampa) {
       console.log("clicada: " + estampa.estampa + estampa.idProdutoPai);
       this.estampaEscolhida.nome = estampa.estampa;
-      this.estampaEscolhida.urlThumbnail = estampa.urlThumbnail;
+      this.estampaEscolhida.nomeDoProduto =
+        estampa.nomeDoProduto + " " + estampa.estampa;
       this.estampaEscolhida.idProdutoPai = estampa.idProdutoPai;
+      this.estampaEscolhida.urlThumbnail = estampa.urlThumbnail;
       this.estampaEscolhida.srcFotos = estampa.srcFotos;
       this.estampaEscolhida.fotoClicada = estampa.srcFotos[0].src;
       this.getVariacoes(estampa.idProdutoPai);
@@ -223,6 +242,7 @@ export default {
         )
         .then(response => {
           this.variacoesDisponiveis = [];
+          console.log(response.data);
           response.data.forEach(this.variacoesDaEstampa);
         })
         .then(() => {
@@ -236,15 +256,26 @@ export default {
     },
     escolherVariacao(variacao) {
       console.log(variacao);
+      this.variacaoEscolhida.tamanho = variacao.tamanho;
       this.variacaoEscolhida.preco = variacao.preco;
       this.variacaoEscolhida.precoPromocional = variacao.precoPromocional;
       this.variacaoEscolhida.estoque = variacao.estoque;
-      this.variacaoEscolhida.id = variacao.id;
-      this.variacaoEscolhida.tamanho = variacao.tamanho;
-      console.log("variacaoEscolhida = " + this.variacaoEscolhida.id);
-      console.log(
-        "variacaoEscolhida Estoque = " + this.variacaoEscolhida.estoque
-      );
+      this.variacaoEscolhida.nomeDoProduto = this.estampaEscolhida.nomeDoProduto;
+      this.variacaoEscolhida.valorUnitarioCobrado = variacao.preco;
+      this.variacaoEscolhida.idProdutoPai = this.estampaEscolhida.idProdutoPai;
+      this.variacaoEscolhida.idDaVariacao = variacao.id;
+      this.variacaoEscolhida.quantidade = this.quantidadeEscolhida;
+    },
+    colocarNoCarrinho(item) {
+      const itemDoCarrinho = {
+        nomeDoProduto: item.nomeDoProduto,
+        valorUnitarioCobrado: item.valorUnitarioCobrado,
+        idProdutoPai: item.idProdutoPai,
+        idDaVariacao: item.idDaVariacao,
+        quantidade: item.quantidade
+      };
+
+      this.adicionarItemAoCarrinho(itemDoCarrinho);
     },
     variacoesDaEstampa(item) {
       let atributoDoTamanho = item.attributes.filter(chave => {
@@ -264,6 +295,9 @@ export default {
     }
   },
   watch: {
+    quantidadeEscolhida() {
+      this.variacaoEscolhida.quantidade = this.quantidadeEscolhida;
+    },
     url() {
       this.getEstampas();
     }

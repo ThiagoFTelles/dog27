@@ -3,19 +3,9 @@ import {
 } from "vm";
 
 export default {
-  // namespaced: false,
+  strict: true,
   state: {
-    carrinho: [{
-        id: 123,
-        nome: "Coleira Verde",
-        preco: 85
-      },
-      {
-        id: 222,
-        nome: "Peitoral Azul",
-        preco: 200
-      }
-    ]
+    carrinho: []
   },
   mutations: {
     ATUALIZAR_CART(state, payload) {
@@ -47,7 +37,13 @@ export default {
     },
     atualizarCarrinhoTotal(context) {
       context.commit("TOTAL_CART");
-    }
+    },
+    adicionarItemAoCarrinho(context, payload) {
+      context.commit("ADD_CART_ITEM", payload);
+    },
+    removerItemDoCarrinho(context, payload) {
+      context.commit("REMOVE_CART_ITEM", payload);
+    },
   },
   watch: {
     carrinho() {

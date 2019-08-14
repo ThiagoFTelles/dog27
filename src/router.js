@@ -2,6 +2,9 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home.vue";
 import Produto from "@/views/Produto.vue";
+import Checkout from "@/views/Checkout.vue";
+import CheckoutCredito from "@/components/CheckoutCredito.vue";
+import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
 import Login from "@/views/Login.vue";
 import Peitoral from "@/views/Peitoral.vue";
 import Usuario from "@/views/usuario/Usuario.vue";
@@ -37,6 +40,21 @@ const router = new Router({
       name: "produto",
       component: Produto,
       props: true
+    },
+    {
+      path: "/checkout",
+      name: "checkout",
+      component: Checkout,
+    },
+    {
+      path: "/checkoutcredito",
+      name: "checkoutcredito",
+      component: CheckoutCredito
+    },
+    {
+      path: "/checkoutboleto",
+      name: "checkoutboleto",
+      component: CheckoutBoleto
     },
     {
       path: "/login",

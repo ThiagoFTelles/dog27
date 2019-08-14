@@ -1,6 +1,5 @@
 <template>
   <section class="produtos-container">
-    <AutorizacaoCieloCredito />
     <transition mode="out-in">
       <!-- Quando quero animar diferentes itens com a mesma tag (ex: div), preciso definir uma key para cada item -->
       <div v-if="produtos && produtos.length" class="produtos" key="produtos">
@@ -115,13 +114,11 @@
 import { api } from "@/services.js";
 import { serialize } from "@/helpers.js";
 import ProdutosPaginar from "@/components/ProdutosPaginar.vue";
-import AutorizacaoCieloCredito from "@/components/AutorizacaoCieloCredito.vue";
 
 export default {
   name: "ProdutosLista",
   components: {
-    ProdutosPaginar,
-    AutorizacaoCieloCredito
+    ProdutosPaginar
   },
   data() {
     return {
