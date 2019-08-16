@@ -4,6 +4,7 @@ import {
   api
 } from "@/services.js";
 import cart from '@/store/cart.js'
+import order from '@/store/order.js'
 
 Vue.use(Vuex);
 
@@ -13,7 +14,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    cart
+    cart,
+    order
   },
   strict: true,
   /* strict não deixa o objeto ser modificado por fora, apenas via mutation */
@@ -30,6 +32,7 @@ export default new Vuex.Store({
       cep: "",
       rua: "",
       numero: "",
+      complemento: "",
       bairro: "",
       cidade: "",
       estado: ""

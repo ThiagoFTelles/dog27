@@ -44,7 +44,10 @@ export const api = {
   getApiWc(endpoint) {
     const keySufix = "&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9";
     return axios.get(`${prefixUrlApi}/wc/v3${endpoint}${keySufix}`);
-  }
+  },
+  postApiWc(data) {
+    return axiosInstance.post(`${prefixUrlApi}/wc/v3${data.endpoint}`, data.body);
+  },
 };
 
 export function getCep(cep) {
