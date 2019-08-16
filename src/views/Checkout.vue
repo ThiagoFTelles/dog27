@@ -79,16 +79,16 @@ export default {
           }
         ]
       };
-      console.log(order);
       this.setOrder(order);
     },
     setCart() {
       this.$store.state.cart.carrinho.forEach(item => {
+        let total = item.valorUnitarioCobrado * item.quantidade;
         let cartItem = {
           product_id: item.idProdutoPai,
           variation_id: item.idDaVariacao,
           quantity: item.quantidade,
-          total: item.valorUnitarioCobrado
+          total: total.toString()
         };
         this.line_items.push(cartItem);
       });
