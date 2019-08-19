@@ -16,7 +16,7 @@
       <input type="text" name="Installments" id="Installments" v-model="Installments" />
     </form>
     <button @click="abrirOrdem">Pagar</button>
-    <p>order: {{this.order.order}}</p>
+    <h1>Status: 1 = Autorizado</h1>parei aqui: https://developercielo.github.io/manual/cielo-ecommerce#captura-total
   </section>
 </template>
 
@@ -65,25 +65,121 @@ export default {
             }
           };
 
-          this.solicitarAutorizacaoCielo(cobranca);
+          this.capturarCielo(cobranca);
         });
       } else {
         this.$router.push({ name: "home" });
       }
     },
+    requestCielo(method, url, data) {
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.setRequestHeader(
+          "MerchantId",
+          "48bc5fbd-3265-4acc-95a9-d93666cce6ad"
+        );
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader(
+          "MerchantKey",
+          "ZIJXQQJDLILCUVGBKIBQRAIXXKZLUSCSDTATLENT"
+        );
+        xhr.setRequestHeader("Accept", "*/*");
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.onload = resolve;
+        xhr.onerror = reject;
+        xhr.send(data);
+      });
+    },
     solicitarAutorizacaoCielo(oderPayment) {
       var data = JSON.stringify(oderPayment);
+
+      return this.requestCielo(
+        "POST",
+        "https://apisandbox.cieloecommerce.cielo.com.br/1/sales",
+        data
+      ).then(function(e) {
+        let resposta = JSON.parse(e.target.response);
+
+        let links = resposta.Payment.Links;
+        let objLinkCaptura = links.filter(element => element.Rel === "capture");
+        let linkCaptura = objLinkCaptura[0].Href;
+
+        return linkCaptura;
+      });
+    },
+    capturarCielo(oderPayment) {
+      this.solicitarAutorizacaoCielo(oderPayment).then(r => {
+        console.log("oi :)");
+        console.log(r);
+
+        this.requestCielo("PUT", r).then(function(e) {
+          let resposta = JSON.parse(e.target.response);
+
+          console.log(e);
+          console.log(resposta);
+        });
+      });
+    },
+
+    // solicitarAutorizacaoCielo(oderPayment) {
+
+    //   var data = JSON.stringify(oderPayment);
+    //   var xhr = new XMLHttpRequest();
+
+    //   xhr.addEventListener("readystatechange", function() {
+    //     if (this.readyState === 4) {
+    //       console.log("Link captura:");
+    //       let linkCaptura = this.responseText.Links.forEach(element => {
+    //         if (element.Rel === "capture") {
+    //           return element.Href;
+    //         }
+    //       });
+    //       console.log(linkCaptura);
+    //       console.log(this.responseText);
+    //       let PaymentId = this.responseText.PaymentId;
+    //       console.log("Status:");
+    //       console.log(this.responseText);
+    //       capturarPagamentoCielo(PaymentId);
+    //     }
+    //   });
+
+    //   xhr.open(
+    //     "POST",
+    //     "https://apisandbox.cieloecommerce.cielo.com.br/1/sales"
+    //   );
+    //   xhr.setRequestHeader(
+    //     "MerchantId",
+    //     "48bc5fbd-3265-4acc-95a9-d93666cce6ad"
+    //   );
+    //   xhr.setRequestHeader("Content-Type", "application/json");
+    //   xhr.setRequestHeader(
+    //     "MerchantKey",
+    //     "ZIJXQQJDLILCUVGBKIBQRAIXXKZLUSCSDTATLENT"
+    //   );
+    //   xhr.setRequestHeader("Accept", "*/*");
+    //   xhr.setRequestHeader("Cache-Control", "no-cache");
+    //   // xhr.setRequestHeader(
+    //   //   "Postman-Token",
+    //   //   "e484d2ef-8424-4dd9-b515-3c8776c16fc6,ebbffaa7-8e31-4875-8c7e-233bcf31f837"
+    //   // );
+    //   xhr.setRequestHeader("cache-control", "no-cache");
+
+    //   xhr.send(data);
+    // },
+    capturarPagamentoCielo(PaymentId) {
       var xhr = new XMLHttpRequest();
 
       xhr.addEventListener("readystatechange", function() {
         if (this.readyState === 4) {
+          console.log("resposta:");
           console.log(this.responseText);
         }
       });
 
       xhr.open(
-        "POST",
-        "https://apisandbox.cieloecommerce.cielo.com.br/1/sales"
+        "PUT",
+        `https://apisandbox.cieloecommerce.cielo.com.br/1/sales/${PaymentId}/capture`
       );
       xhr.setRequestHeader(
         "MerchantId",
@@ -96,10 +192,10 @@ export default {
       );
       xhr.setRequestHeader("Accept", "*/*");
       xhr.setRequestHeader("Cache-Control", "no-cache");
-      xhr.setRequestHeader(
-        "Postman-Token",
-        "e484d2ef-8424-4dd9-b515-3c8776c16fc6,ebbffaa7-8e31-4875-8c7e-233bcf31f837"
-      );
+      // xhr.setRequestHeader(
+      //   "Postman-Token",
+      //   "e484d2ef-8424-4dd9-b515-3c8776c16fc6,ebbffaa7-8e31-4875-8c7e-233bcf31f837"
+      // );
       xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(data);
