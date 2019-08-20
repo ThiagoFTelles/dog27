@@ -1,13 +1,43 @@
 <template>
   <div class="container-engajamento">
-    <div class="preenchimento"></div>
+    <div class="preenchimento" :style="{width: calculatePercentage(carrinhoTotal)}"></div>
     <div class="texto-engajamento">Faltam apenas R$1000 pra você ganhar uma coleira!</div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-  name: "BarraEngajamento"
+  name: "BarraEngajamento",
+  methods: {
+    calculatePercentage(valor) {
+      var meta = 169;
+      var meta_2 = 700;
+      if (valor > meta) {
+        meta = meta_2;
+      }
+      let progresso = valor / meta;
+      return progresso * 100 + "%";
+    }
+  },
+  computed: {
+    ...mapState({
+      carrinho: state => state.cart.carrinho
+    }),
+    carrinhoTotal() {
+      let total = 0;
+      if (this.carrinho.length) {
+        this.carrinho.forEach(item => {
+          //esta propriedade sempre será atualizada reativamente quando Carrinho mudar
+          let valorDoItem =
+            Number(item.valorUnitarioCobrado) * Number(item.quantidade);
+          total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
+        });
+      }
+      return total;
+    }
+  }
 };
 </script>
 
