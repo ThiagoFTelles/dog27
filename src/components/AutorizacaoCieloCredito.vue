@@ -22,14 +22,11 @@ export default {
         "POST",
         "https://apisandbox.cieloecommerce.cielo.com.br/1/sales"
       );
-      xhr.setRequestHeader(
-        "MerchantId",
-        "48bc5fbd-3265-4acc-95a9-d93666cce6ad"
-      );
+      xhr.setRequestHeader("MerchantId", process.env.VUE_APP_MERCHANT_ID_CIELO);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader(
         "MerchantKey",
-        "ZIJXQQJDLILCUVGBKIBQRAIXXKZLUSCSDTATLENT"
+        process.env.VUE_APP_MERCHANT_KEY_CIELO
       );
       xhr.setRequestHeader("Accept", "*/*");
       xhr.setRequestHeader("Cache-Control", "no-cache");

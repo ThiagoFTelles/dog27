@@ -1,22 +1,41 @@
 <template>
   <section class="checkout">
-    <form action>
-      <label for="Brand">Bandeira</label>
-      <input type="text" name="Brand" id="Brand" v-model="Brand" />
-      <label for="CardNumber">Número do Cartão</label>
-      <input type="text" name="CardNumber" id="CardNumber" v-model="CardNumber" />
+    <p v-if="Brand">Bandeira: {{Brand}}</p>
+    <p v-if="!Brand">Aceitamos: Visa, Master e AMEX</p>
+
+    <label for="CardNumber">Número do Cartão</label>
+    <input
+      type="text"
+      v-mask="'####.####.####.####'"
+      name="CardNumber"
+      id="CardNumber"
+      v-model="CardNumber"
+    />
+    <section v-if="Brand">
       <label for="ExpirationDate">Válido até</label>
-      <input type="text" name="ExpirationDate" id="ExpirationDate" v-model="ExpirationDate" />
+      <input
+        type="text"
+        name="ExpirationDate"
+        id="ExpirationDate"
+        placeholder="MM/AAAA"
+        v-mask="'##/####'"
+        v-model="ExpirationDate"
+      />
       <label for="SecurityCode">CVV</label>
-      <input type="text" name="SecurityCode" id="SecurityCode" v-model="SecurityCode" />
+      <input
+        type="text"
+        name="SecurityCode"
+        id="SecurityCode"
+        v-model="SecurityCode"
+        v-mask="'###'"
+      />
       <label for="Holder">Nome Impresso no Cartão</label>
-      <input type="text" name="Holder" id="Holder" v-model="Holder" />
+      <input type="text" name="Holder" id="Holder" v-model="Holder" maxlength="40" />
       <label for="Installments">Parcelas</label>
       <!-- Parcela mínima R$50, pode parcelar em até 4x sem juros -->
       <input type="text" name="Installments" id="Installments" v-model="Installments" />
-    </form>
-    <button @click="abrirOrdem">Pagar</button>
-    <h1>Status: 1 = Autorizado</h1>parei aqui: https://developercielo.github.io/manual/cielo-ecommerce#captura-total
+      <button @click="abrirOrdem">Pagar</button>
+    </section>
   </section>
 </template>
 
@@ -77,12 +96,12 @@ export default {
         xhr.open(method, url);
         xhr.setRequestHeader(
           "MerchantId",
-          "48bc5fbd-3265-4acc-95a9-d93666cce6ad"
+          process.env.VUE_APP_MERCHANT_ID_CIELO
         );
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader(
           "MerchantKey",
-          "ZIJXQQJDLILCUVGBKIBQRAIXXKZLUSCSDTATLENT"
+          process.env.VUE_APP_MERCHANT_KEY_CIELO
         );
         xhr.setRequestHeader("Accept", "*/*");
         xhr.setRequestHeader("Cache-Control", "no-cache");
@@ -150,12 +169,12 @@ export default {
     //   );
     //   xhr.setRequestHeader(
     //     "MerchantId",
-    //     "48bc5fbd-3265-4acc-95a9-d93666cce6ad"
+    //     process.env.VUE_APP_MERCHANT_ID_CIELO
     //   );
     //   xhr.setRequestHeader("Content-Type", "application/json");
     //   xhr.setRequestHeader(
     //     "MerchantKey",
-    //     "ZIJXQQJDLILCUVGBKIBQRAIXXKZLUSCSDTATLENT"
+    //     process.env.VUE_APP_MERCHANT_KEY_CIELO
     //   );
     //   xhr.setRequestHeader("Accept", "*/*");
     //   xhr.setRequestHeader("Cache-Control", "no-cache");
@@ -181,14 +200,11 @@ export default {
         "PUT",
         `https://apisandbox.cieloecommerce.cielo.com.br/1/sales/${PaymentId}/capture`
       );
-      xhr.setRequestHeader(
-        "MerchantId",
-        "48bc5fbd-3265-4acc-95a9-d93666cce6ad"
-      );
+      xhr.setRequestHeader("MerchantId", process.env.VUE_APP_MERCHANT_ID_CIELO);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader(
         "MerchantKey",
-        "ZIJXQQJDLILCUVGBKIBQRAIXXKZLUSCSDTATLENT"
+        process.env.VUE_APP_MERCHANT_KEY_CIELO
       );
       xhr.setRequestHeader("Accept", "*/*");
       xhr.setRequestHeader("Cache-Control", "no-cache");
@@ -204,9 +220,27 @@ export default {
   computed: {
     ...mapState(["order"])
   },
+  watch: {
+    CardNumber() {
+      {
+        if (this.CardNumber.charAt() == 4) {
+          this.Brand = "Visa";
+        } else if (this.CardNumber.charAt() == 5) {
+          this.Brand = "Master";
+        } else if (this.CardNumber.charAt() == 3) {
+          this.Brand = "Amex";
+        } else {
+          this.Brand = "";
+        }
+      }
+    }
+  },
   created() {}
 };
 </script>
 <style scoped>
+input {
+  text-transform: uppercase;
+}
 </style> 
  

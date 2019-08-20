@@ -42,7 +42,7 @@ export const api = {
     return axiosInstance.post(`${prefixUrlApi}/jwt-auth/v1/token/validate`);
   },
   getApiWc(endpoint) {
-    const keySufix = "&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9";
+    const keySufix = `&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`;
     return axios.get(`${prefixUrlApi}/wc/v3${endpoint}${keySufix}`);
   },
   postApiWc(data) {

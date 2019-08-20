@@ -145,7 +145,7 @@ export default {
     getEstampas() {
       api
         .get(
-          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=${this.idCategoriaSelecionada}&per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9`
+          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=${this.idCategoriaSelecionada}&per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           response.data.forEach(this.estampasDaCategoria);
@@ -238,7 +238,7 @@ export default {
     getVariacoes(idProdutoPai) {
       api
         .get(
-          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=ck_edc3033a3399e37cb273477f2d69b7f1192e7d49&consumer_secret=cs_288b43034883692fe6a025fc646782638b5906f9`
+          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           this.variacoesDisponiveis = [];

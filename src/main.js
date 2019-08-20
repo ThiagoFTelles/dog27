@@ -4,6 +4,8 @@ import router from "./router";
 import store from "./store/index.js";
 import PaginaCarregando from "@/components/PaginaCarregando.vue"
 import ErroNotificacao from "@/components/ErroNotificacao.vue"
+import VueTheMask from 'vue-the-mask'
+Vue.use(VueTheMask)
 
 Vue.config.productionTip = false;
 

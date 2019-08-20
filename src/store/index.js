@@ -8,10 +8,6 @@ import order from '@/store/order.js'
 
 Vue.use(Vuex);
 
-// Consumer Woocommerce API Key (Read only):
-// Consumer key: ck_edc3033a3399e37cb273477f2d69b7f1192e7d49
-// Consumer secret: cs_288b43034883692fe6a025fc646782638b5906f9
-
 export default new Vuex.Store({
   modules: {
     cart,
