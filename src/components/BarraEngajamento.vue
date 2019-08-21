@@ -1,7 +1,22 @@
 <template>
   <div class="container-engajamento">
-    <div class="preenchimento" :style="{width: calculatePercentage(carrinhoTotal)}"></div>
-    <div class="texto-engajamento">Faltam apenas R$1000 pra você ganhar uma coleira!</div>
+    <transition-group>
+      <div class="preenchimento" :style="preenchimentoStyle" key="preenchimento"></div>
+      <div
+        v-if="!freteGratis && !ganhouPresente"
+        class="texto-engajamento"
+        key="barra1"
+      >Falta apenas {{valorQueFalta | numeroPreco}} pra você ganhar frete grátis!</div>
+      <div
+        v-if="freteGratis && !ganhouPresente"
+        class="texto-engajamento"
+        key="barra2"
+      >Você ganhou frete grátis! Falta apenas {{valorQueFalta | numeroPreco}} pra você ganhar um presente!</div>
+      <div v-if="freteGratis && ganhouPresente" class="texto-engajamento" key="barra3">
+        Parabéns! Você ganhou frete grátis e um presente pro seu Dog!
+        <router-link :to="{name: 'checkout'}" tag="span" class="finalizar-compra">Finalizar Compra</router-link>
+      </div>
+    </transition-group>
   </div>
 </template>
 
@@ -10,15 +25,51 @@ import { mapState } from "vuex";
 
 export default {
   name: "BarraEngajamento",
+  data() {
+    return {
+      freteGratis: false,
+      ganhouPresente: false,
+      valorQueFalta: 0,
+      corDaBarra: ""
+    };
+  },
   methods: {
-    calculatePercentage(valor) {
-      var meta = 169;
-      var meta_2 = 700;
-      if (valor > meta) {
-        meta = meta_2;
+    calculatePercentage(valorDoCarrinho) {
+      var metaMenor = 169;
+      var metaMaior = 300;
+
+      var metaAtual = metaMenor;
+      var freteGratis = false;
+      var ganhouPresente = false;
+      var corDaBarra = "#fffb00";
+
+      if (valorDoCarrinho > metaMaior) {
+        freteGratis = true;
+        ganhouPresente = true;
+        progresso = 1;
+        corDaBarra = "#00d13f";
+      } else if (valorDoCarrinho > metaMenor) {
+        metaAtual = metaMaior;
+        freteGratis = true;
+        corDaBarra = "#4bd6ff";
       }
-      let progresso = valor / meta;
+
+      this.ganhouPresente = ganhouPresente;
+      this.freteGratis = freteGratis;
+      this.corDaBarra = corDaBarra;
+
+      let progresso = valorDoCarrinho / metaAtual;
+      this.valorQueFalta = metaAtual - valorDoCarrinho;
       return progresso * 100 + "%";
+    }
+  },
+  filters: {
+    numeroPreco(valor) {
+      //return `R$ ${valor},00`;
+      return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
     }
   },
   computed: {
@@ -36,6 +87,14 @@ export default {
         });
       }
       return total;
+    },
+    preenchimentoStyle() {
+      let style = {
+        width: this.calculatePercentage(this.carrinhoTotal),
+        background: this.corDaBarra
+      };
+
+      return style;
     }
   }
 };
@@ -49,9 +108,12 @@ export default {
 }
 
 .preenchimento {
-  width: 35%;
-  background: #4bd6ff;
   height: 100%;
+}
+
+.finalizar-compra {
+  color: white;
+  cursor: pointer;
 }
 
 .texto-engajamento {
