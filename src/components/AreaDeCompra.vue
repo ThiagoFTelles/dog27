@@ -131,6 +131,7 @@ export default {
         estoque: null,
         nomeDoProduto: "",
         valorUnitarioCobrado: "",
+        peso: "",
         idProdutoPai: "",
         idDaVariacao: "",
         quantidade: 0
@@ -262,6 +263,7 @@ export default {
       this.variacaoEscolhida.estoque = variacao.estoque;
       this.variacaoEscolhida.nomeDoProduto = this.estampaEscolhida.nomeDoProduto;
       this.variacaoEscolhida.valorUnitarioCobrado = variacao.preco;
+      this.variacaoEscolhida.peso = variacao.peso;
       this.variacaoEscolhida.idProdutoPai = this.estampaEscolhida.idProdutoPai;
       this.variacaoEscolhida.idDaVariacao = variacao.id;
       this.variacaoEscolhida.quantidade = this.quantidadeEscolhida;
@@ -270,6 +272,7 @@ export default {
       const itemDoCarrinho = {
         nomeDoProduto: item.nomeDoProduto,
         valorUnitarioCobrado: item.valorUnitarioCobrado,
+        pesoTotal: item.peso * item.quantidade,
         idProdutoPai: item.idProdutoPai,
         idDaVariacao: item.idDaVariacao,
         quantidade: item.quantidade
@@ -278,6 +281,8 @@ export default {
       this.adicionarItemAoCarrinho(itemDoCarrinho);
     },
     variacoesDaEstampa(item) {
+      console.log("Peso:");
+      console.log(item);
       let atributoDoTamanho = item.attributes.filter(chave => {
         return chave.name === "Tamanho";
       });
@@ -287,6 +292,7 @@ export default {
         id: item.id,
         tamanho: tamanho,
         preco: item.regular_price,
+        peso: item.weight,
         precoPromocional: item.sale_price
           ? item.sale_price
           : item.regular_price,

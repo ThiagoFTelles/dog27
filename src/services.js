@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const prefix = "https://marinawave.com.br"
+const prefix = `${process.env.VUE_APP_SITE_PREFIX}`;
 export const prefixUrl = `${prefix}/api-dog27`;
 const prefixUrlApi = `${prefixUrl}/wp-json`;
 

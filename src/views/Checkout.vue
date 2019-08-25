@@ -4,7 +4,6 @@
     <h2>Frete:</h2>
     <CalcularFrete />
     <h2>Forma de Pagamento:</h2>
-    <p>aqui eu já criei a order com status = pending</p>
     <router-link
       :to="{name: 'checkoutcredito'}"
       class="opcao_de_pagamento"

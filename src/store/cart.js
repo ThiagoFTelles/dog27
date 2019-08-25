@@ -22,10 +22,10 @@ export default {
       if (state.carrinho.length) {
         state.carrinho.forEach(item => {
           //esta propriedade sempre será atualizada reativamente quando Carrinho mudar
-          total += item.preco; //para + ou para - porque tudo que está em 'data' é reativo
+          total += Number(item.valorUnitarioCobrado); //para + ou para - porque tudo que está em 'data' é reativo
         });
       }
-      state.carrinhoTotal = total;
+      state.carrinhoTotal = Number(total);
     }
   },
   actions: {
