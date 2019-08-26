@@ -1,26 +1,43 @@
 <template>
   <section>
-    <p>endereço de entrega</p>
+    <h2>Dados da Entrega</h2>
+    <button @click="igualarDados">Copiar do faturamento</button>
+    <section id="dadosDaEntrega">
+      <label for="nameEntrega">Nome</label>
+      <input type="text" name="nameEntrega" id="nameEntrega" v-model="nomeEntrega" />
+      <label for="phoneEntrega">Telefone</label>
+      <input type="text" name="phoneEntrega" id="phoneEntrega" v-model="telefoneEntrega" />
+      <label for="postcodeEntrega">CEP</label>
+      <input
+        type="text"
+        name="postcodeEntrega"
+        id="postcodeEntrega"
+        v-model="cepEntrega"
+        @keyup="preencherCepEntrega"
+      />
+      <label for="address_1Entrega">RUA</label>
+      <input type="text" name="address_1Entrega" id="address_1Entrega" v-model="ruaEntrega" />
+      <label for="numeroEntrega">Número</label>
+      <input type="text" name="numeroEntrega" id="numeroEntrega" v-model="numeroEntrega" />
+      <label for="complementoEntrega">Complemento</label>
+      <input
+        type="text"
+        name="complementoEntrega"
+        id="complementoEntrega"
+        v-model="complementoEntrega"
+      />
+      <label for="address_2Entrega">Bairro</label>
+      <input type="text" name="address_2Entrega" id="address_2Entrega" v-model="bairroEntrega" />
+      <label for="cityEntrega">Cidade</label>
+      <input type="text" name="cityEntrega" id="cityEntrega" v-model="cidadeEntrega" />
+      <label for="stateEntrega">Estado</label>
+      <input type="text" name="stateEntrega" id="stateEntrega" v-model="estadoEntrega" />
+    </section>
+
     <button @click="calcularPrecoPrazo">calcular preço</button>
 
     <p>PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</p>
     <p>SEDEX R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</p>
-    <form action>
-      <label for="postcode">CEP</label>
-      <input type="text" name="postcode" id="postcode" v-model="cep" @keyup="preencherCep" />
-      <label for="address_1">RUA</label>
-      <input type="text" name="address_1" id="address_1" v-model="rua" />
-      <label for="numero">Número</label>
-      <input type="text" name="numero" id="numero" v-model="numero" />
-      <label for="complemento">Complemento</label>
-      <input type="text" name="complemento" id="complemento" v-model="complemento" />
-      <label for="address_2">Bairro</label>
-      <input type="text" name="address_2" id="address_2" v-model="bairro" />
-      <label for="city">Cidade</label>
-      <input type="text" name="city" id="city" v-model="cidade" />
-      <label for="state">Estado</label>
-      <input type="text" name="state" id="state" v-model="estado" />
-    </form>
 
     <p>valor do frete</p>
   </section>
@@ -49,13 +66,15 @@ export default {
   computed: {
     ...mapFields({
       fields: [
-        "rua",
-        "cep",
-        "numero",
-        "complemento",
-        "bairro",
-        "cidade",
-        "estado"
+        "nomeEntrega",
+        "telefoneEntrega",
+        "ruaEntrega",
+        "cepEntrega",
+        "numeroEntrega",
+        "complementoEntrega",
+        "bairroEntrega",
+        "cidadeEntrega",
+        "estadoEntrega"
       ],
       base: "usuario",
       mutation: "UPDATE_USUARIO"
@@ -63,7 +82,7 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho,
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
-      order: state => state.order.order
+      usuario: state => state.usuario
     }),
     multiplicadorDeCaixas() {
       let produtosPorCaixa = 4;
@@ -79,14 +98,17 @@ export default {
     }
   },
   methods: {
-    preencherCep() {
-      const cep = this.cep.replace(/\D/g, ""); /* pegará apenas dígitos */
+    preencherCepEntrega() {
+      const cep = this.cepEntrega.replace(
+        /\D/g,
+        ""
+      ); /* pegará apenas dígitos */
       if (cep.length === 8) {
         getCep(cep).then(r => {
-          this.rua = r.data.logradouro;
-          this.bairro = r.data.bairro;
-          this.estado = r.data.uf;
-          this.cidade = r.data.localidade;
+          this.ruaEntrega = r.data.logradouro;
+          this.bairroEntrega = r.data.bairro;
+          this.estadoEntrega = r.data.uf;
+          this.cidadeEntrega = r.data.localidade;
         });
       }
     },
@@ -135,11 +157,11 @@ export default {
 
       let nCdEmpresa = `${process.env.VUE_APP_CORREIOS_NCD_EMRPESA}`;
       let sDsSenha = `${process.env.VUE_APP_CORREIOS_SDS_SENHA}`;
-      let nCdServico = "04014,04510"; //PAC 04596, SEDEX 04553
+      let nCdServico = "04596,04553"; //PAC 04596, SEDEX 04553
 
-      let cepOrigem = "29050300";
-      let cepDestino = this.order.shipping.postcode;
-      let nVlPeso = this.calcularPesoDeCadaCaixa;
+      let cepOrigem = "29163165";
+      let cepDestino = this.cepEntrega.replace(/\D/g, "");
+      let nVlPeso = this.calcularPesoDeCadaCaixa();
       let nCdFormato = 1; //int
       let nVlComprimento = 27; //decimal
       let nVlAltura = 9; //decimal
@@ -150,7 +172,9 @@ export default {
         this.valorTotalCarrinho / this.multiplicadorDeCaixas; //decimal
       let sCdAvisoRecebimento = "N";
 
-      let url = `${process.env.VUE_APP_SITE_PREFIX}/proxy.php?http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&nCdServico=${nCdServico}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=${nVlPeso}&nCdFormato=${nCdFormato}&nVlComprimento=${nVlComprimento}&nVlAltura=${nVlAltura}&nVlLargura=${nVlLargura}&nVlDiametro=${nVlDiametro}&sCdMaoPropria=${sCdMaoPropria}&nVlValorDeclarado=${nVlValorDeclarado}&sCdAvisoRecebimento=${sCdAvisoRecebimento}`;
+      let url = `${process.env.VUE_APP_SITE_PREFIX}/miniproxy.php?http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&nCdServico=${nCdServico}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=${nVlPeso}&nCdFormato=${nCdFormato}&nVlComprimento=${nVlComprimento}&nVlAltura=${nVlAltura}&nVlLargura=${nVlLargura}&nVlDiametro=${nVlDiametro}&sCdMaoPropria=${sCdMaoPropria}&nVlValorDeclarado=${nVlValorDeclarado}&sCdAvisoRecebimento=${sCdAvisoRecebimento}`;
+
+      console.log(url);
 
       axios
         .get(url)
@@ -162,15 +186,23 @@ export default {
           var xml = parser.parseFromString(xmlString, "text/xml");
           var obj = xmlToJson(xml);
 
-          this.pac.valor = obj.cResultado.Servicos.cServico[0].Valor["#text"];
-          this.pac.prazo =
-            Number(obj.cResultado.Servicos.cServico[0].PrazoEntrega["#text"]) +
-            1;
+          let valorPac = obj.cResultado.Servicos.cServico[0].Valor["#text"];
+          let prazoPac = Number(
+            obj.cResultado.Servicos.cServico[0].PrazoEntrega["#text"]
+          );
 
-          this.sedex.valor = obj.cResultado.Servicos.cServico[1].Valor["#text"];
+          let valorSedex = obj.cResultado.Servicos.cServico[1].Valor["#text"];
+          let prazoSedex = Number(
+            obj.cResultado.Servicos.cServico[1].PrazoEntrega["#text"]
+          );
+
+          let tempoDePostagem = 2;
+
+          this.pac.valor = valorPac !== "0,00" ? valorPac : 10;
+          this.pac.prazo = prazoPac !== 0 ? prazoPac + tempoDePostagem : 10;
+          this.sedex.valor = valorSedex !== "0,00" ? valorSedex : 10;
           this.sedex.prazo =
-            Number(obj.cResultado.Servicos.cServico[1].PrazoEntrega["#text"]) +
-            1;
+            prazoSedex !== 0 ? prazoSedex + tempoDePostagem : 10;
         })
         .catch(err => {
           console.log(err);
@@ -184,7 +216,18 @@ export default {
       });
 
       let pesoDeCadaCaixa = pesoTotalDoPedido / this.multiplicadorDeCaixas;
-      return pesoDeCadaCaixa.toString();
+      return pesoDeCadaCaixa;
+    },
+    igualarDados() {
+      this.nomeEntrega = this.usuario.nome;
+      this.telefoneEntrega = this.usuario.telefone;
+      this.ruaEntrega = this.usuario.rua;
+      this.cepEntrega = this.usuario.cep;
+      this.numeroEntrega = this.usuario.numero;
+      this.complementoEntrega = this.usuario.complemento;
+      this.bairroEntrega = this.usuario.bairro;
+      this.cidadeEntrega = this.usuario.cidade;
+      this.estadoEntrega = this.usuario.estado;
     }
   }
 };

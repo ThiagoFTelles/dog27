@@ -1,7 +1,26 @@
 <template>
   <section class="checkout">
     <h1>CHECKOUT</h1>
-    <h2>Frete:</h2>
+    <h2>Dados de Faturamento</h2>
+    <label for="name">Nome</label>
+    <input type="text" name="name" id="name" v-model="nome" />
+    <label for="phone">Telefone</label>
+    <input type="text" name="phone" id="phone" v-model="telefone" />
+    <label for="postcode">CEP</label>
+    <input type="text" name="postcode" id="postcode" v-model="cep" @keyup="preencherCep" />
+    <label for="address_1">RUA</label>
+    <input type="text" name="address_1" id="address_1" v-model="rua" />
+    <label for="numero">Número</label>
+    <input type="text" name="numero" id="numero" v-model="numero" />
+    <label for="complemento">Complemento</label>
+    <input type="text" name="complemento" id="complemento" v-model="complemento" />
+    <label for="address_2">Bairro</label>
+    <input type="text" name="address_2" id="address_2" v-model="bairro" />
+    <label for="city">Cidade</label>
+    <input type="text" name="city" id="city" v-model="cidade" />
+    <label for="state">Estado</label>
+    <input type="text" name="state" id="state" v-model="estado" />
+
     <CalcularFrete />
     <h2>Forma de Pagamento:</h2>
     <router-link
@@ -22,6 +41,8 @@
 <script>
 import CalcularFrete from "@/components/CalcularFrete.vue";
 import { mapState, mapActions } from "vuex";
+import { mapFields } from "@/helpers.js";
+import { getCep } from "@/services.js";
 
 export default {
   name: "Checkout",
@@ -32,7 +53,22 @@ export default {
     };
   },
   computed: {
-    ...mapState(["usuario"])
+    ...mapState(["usuario"]),
+    ...mapFields({
+      fields: [
+        "nome",
+        "telefone",
+        "rua",
+        "cep",
+        "numero",
+        "complemento",
+        "bairro",
+        "cidade",
+        "estado"
+      ],
+      base: "usuario",
+      mutation: "UPDATE_USUARIO"
+    })
   },
   methods: {
     ...mapActions(["setOrder"]),
@@ -91,6 +127,17 @@ export default {
         };
         this.line_items.push(cartItem);
       });
+    },
+    preencherCep() {
+      const cep = this.cep.replace(/\D/g, ""); /* pegará apenas dígitos */
+      if (cep.length === 8) {
+        getCep(cep).then(r => {
+          this.rua = r.data.logradouro;
+          this.bairro = r.data.bairro;
+          this.estado = r.data.uf;
+          this.cidade = r.data.localidade;
+        });
+      }
     }
   },
   created() {

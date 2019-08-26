@@ -23,6 +23,7 @@ export default new Vuex.Store({
     usuario: {
       id: "",
       nome: "",
+      telefone: "",
       email: "",
       senha: "",
       cep: "",
@@ -31,7 +32,19 @@ export default new Vuex.Store({
       complemento: "",
       bairro: "",
       cidade: "",
-      estado: ""
+      estado: "",
+
+      nomeEntrega: "",
+      telefoneEntrega: "",
+      emailEntrega: "",
+      senhaEntrega: "",
+      cepEntrega: "",
+      ruaEntrega: "",
+      numeroEntrega: "",
+      complementoEntrega: "",
+      bairroEntrega: "",
+      cidadeEntrega: "",
+      estadoEntrega: "",
     },
     usuario_produtos: null
   },
@@ -47,13 +60,6 @@ export default new Vuex.Store({
     },
     SET_CATEGORIA_SELECIONADA_ID(state, payload) {
       state.idCategoriaSelecionada = payload;
-    },
-    GET_BANNER_DATA(state, payload) {
-      state.categorias.forEach(item => {
-        if (item.id === payload) {
-          console.log(item);
-        }
-      });
     },
     UPDATE_LOGIN(state, payload) {
       state.login = payload;
@@ -77,9 +83,6 @@ export default new Vuex.Store({
     selecionarCategoria(context, payload) {
       context.commit("SET_CATEGORIA_SELECIONADA_ID", payload);
     },
-    getBanner(context) {
-      context.commit("GET_BANNER_DATA", context);
-    },
     getCategoriasProdutos(context) {
       var url = `/products/categories?`;
       return api.getApiWc(url).then(r => {
@@ -93,7 +96,6 @@ export default new Vuex.Store({
           });
         });
         context.commit("REMOVER_CARREGANDO");
-        console.log(this.state.categorias);
       });
     },
     getUsuarioProdutos(context) {
