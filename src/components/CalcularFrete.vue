@@ -1,7 +1,7 @@
 <template>
   <section>
     <p>endereço de entrega</p>
-    <button @click="calcularPrecoPrazo(2)">calcular preço</button>
+    <button @click="calcularPrecoPrazo">calcular preço</button>
 
     <p>PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</p>
     <p>SEDEX R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</p>
@@ -31,7 +31,6 @@ import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
 import axios from "axios";
 import { mapState } from "vuex";
-import { log } from "util";
 
 export default {
   name: "CalcularFrete",
@@ -60,7 +59,24 @@ export default {
       ],
       base: "usuario",
       mutation: "UPDATE_USUARIO"
-    })
+    }),
+    ...mapState({
+      carrinho: state => state.cart.carrinho,
+      valorTotalCarrinho: state => state.cart.carrinhoTotal,
+      order: state => state.order.order
+    }),
+    multiplicadorDeCaixas() {
+      let produtosPorCaixa = 4;
+      let itens = 0;
+
+      this.carrinho.forEach(item => {
+        let quantidadeDeItens = item.quantidade;
+        itens += quantidadeDeItens;
+      });
+
+      const totalCaixas = itens / produtosPorCaixa;
+      return totalCaixas !== Infinity ? Math.ceil(totalCaixas) : 1;
+    }
   },
   methods: {
     preencherCep() {
@@ -74,7 +90,7 @@ export default {
         });
       }
     },
-    calcularPrecoPrazo(data) {
+    calcularPrecoPrazo() {
       // Changes XML to JSON
       function xmlToJson(xml) {
         // Create the return object
@@ -169,25 +185,6 @@ export default {
 
       let pesoDeCadaCaixa = pesoTotalDoPedido / this.multiplicadorDeCaixas;
       return pesoDeCadaCaixa.toString();
-    }
-  },
-  computed: {
-    ...mapState({
-      carrinho: state => state.cart.carrinho,
-      valorTotalCarrinho: state => state.cart.carrinhoTotal,
-      order: state => state.order.order
-    }),
-    multiplicadorDeCaixas() {
-      let produtosPorCaixa = 4;
-      let itens = 0;
-
-      this.carrinho.forEach(item => {
-        let quantidadeDeItens = item.quantidade;
-        itens += quantidadeDeItens;
-      });
-
-      const caixas = itens / produtosPorCaixa;
-      return totalCaixas !== Infinity ? Math.ceil(totalCaixas) : 1;
     }
   }
 };
