@@ -36,8 +36,8 @@
 
     <button @click="calcularPrecoPrazo">calcular preço</button>
 
-    <p>PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</p>
-    <p>SEDEX R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</p>
+    <p v-if="pac.mostrar">PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</p>
+    <p v-if="sedex.mostrar">SEDEX R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</p>
 
     <p>valor do frete</p>
   </section>
@@ -55,11 +55,13 @@ export default {
     return {
       pac: {
         valor: null,
-        prazo: null
+        prazo: null,
+        mostrar: false
       },
       sedex: {
         valor: null,
-        prazo: null
+        prazo: null,
+        mostrar: false
       }
     };
   },
@@ -84,8 +86,8 @@ export default {
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
       usuario: state => state.usuario
     }),
-    multiplicadorDeCaixas() {
-      let produtosPorCaixa = 4;
+    quantidadeDeCaixas() {
+      let produtosPorCaixa = 6;
       let itens = 0;
 
       this.carrinho.forEach(item => {
@@ -161,15 +163,14 @@ export default {
 
       let cepOrigem = "29163165";
       let cepDestino = this.cepEntrega.replace(/\D/g, "");
-      let nVlPeso = this.calcularPesoDeCadaCaixa();
+      let nVlPeso = this.calcularPesoDaCaixa();
       let nCdFormato = 1; //int
-      let nVlComprimento = 27; //decimal
-      let nVlAltura = 9; //decimal
-      let nVlLargura = 18; //decimal
-      let nVlDiametro = 32.44; //decimal
+      let nVlComprimento = this.quantidadeDeCaixas === 1 ? 27 : 46; //decimal
+      let nVlAltura = this.quantidadeDeCaixas === 1 ? 9 : 9; //decimal
+      let nVlLargura = this.quantidadeDeCaixas === 1 ? 18 : 28; //decimal
+      let nVlDiametro = this.quantidadeDeCaixas === 1 ? 32.44 : 53.85; //decimal
       let sCdMaoPropria = "N";
-      let nVlValorDeclarado =
-        this.valorTotalCarrinho / this.multiplicadorDeCaixas; //decimal
+      let nVlValorDeclarado = this.valorTotalCarrinho; //decimal
       let sCdAvisoRecebimento = "N";
 
       let url = `${process.env.VUE_APP_SITE_PREFIX}/miniproxy.php?http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&nCdServico=${nCdServico}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=${nVlPeso}&nCdFormato=${nCdFormato}&nVlComprimento=${nVlComprimento}&nVlAltura=${nVlAltura}&nVlLargura=${nVlLargura}&nVlDiametro=${nVlDiametro}&sCdMaoPropria=${sCdMaoPropria}&nVlValorDeclarado=${nVlValorDeclarado}&sCdAvisoRecebimento=${sCdAvisoRecebimento}`;
@@ -198,25 +199,32 @@ export default {
 
           let tempoDePostagem = 2;
 
-          this.pac.valor = valorPac !== "0,00" ? valorPac : 10;
-          this.pac.prazo = prazoPac !== 0 ? prazoPac + tempoDePostagem : 10;
-          this.sedex.valor = valorSedex !== "0,00" ? valorSedex : 10;
+          this.pac.mostrar = false;
+          this.sedex.mostrar = false;
+
+          valorPac !== "0,00"
+            ? ((this.pac.valor = valorPac), (this.pac.mostrar = true))
+            : 100;
+          this.pac.prazo = prazoPac !== 0 ? prazoPac + tempoDePostagem : 100;
+
+          valorSedex !== "0,00"
+            ? ((this.sedex.valor = valorSedex), (this.sedex.mostrar = true))
+            : 10;
           this.sedex.prazo =
-            prazoSedex !== 0 ? prazoSedex + tempoDePostagem : 10;
+            prazoSedex !== 0 ? prazoSedex + tempoDePostagem : 100;
         })
         .catch(err => {
           console.log(err);
         });
     },
-    calcularPesoDeCadaCaixa() {
+    calcularPesoDaCaixa() {
       let pesoTotalDoPedido = 0;
       this.carrinho.forEach(item => {
         let pesoDoItem = Number(item.pesoTotal);
         pesoTotalDoPedido += pesoDoItem;
       });
 
-      let pesoDeCadaCaixa = pesoTotalDoPedido / this.multiplicadorDeCaixas;
-      return pesoDeCadaCaixa;
+      return pesoTotalDoPedido;
     },
     igualarDados() {
       this.nomeEntrega = this.usuario.nome;

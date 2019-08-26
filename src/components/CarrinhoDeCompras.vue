@@ -56,6 +56,7 @@ export default {
           total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
         });
       }
+      
       return total;
     }
   },
