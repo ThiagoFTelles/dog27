@@ -134,8 +134,6 @@ export default {
         for (i = 2; i <= paginas; i++) {
           page = i;
           url = `/products/${this.categoriaId}/variations?page=${page}&on_sale=true&stock_status=instock&status=publish&orderby=slug`;
-          console.log(url);
-          // api.getApiWc(url).then(r => {}
         }
         this.produtos = r.data;
         r.data.forEach(this.getProduto);

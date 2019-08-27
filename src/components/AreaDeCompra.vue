@@ -62,11 +62,11 @@
                   <div
                     v-if="quantidadeEscolhida > 0"
                     class="alterar-quantidade"
-                    @click="quantidadeEscolhida--"
+                    @click="reduzirQuantidadeEscolhida"
                   >-</div>
                   <div v-else class="alterar-quantidade">-</div>
                   <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
-                  <div class="alterar-quantidade" @click="quantidadeEscolhida++">+</div>
+                  <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
                 </div>
               </div>
               <div class="finalizar-compra-item">
@@ -74,6 +74,10 @@
                   v-show="quantidadeEscolhida >0"
                   class="valor-dos-itens"
                 >{{variacaoEscolhida.preco * quantidadeEscolhida | numeroPreco}}</p>
+                <p
+                  v-if="this.variacaoEscolhida.estoque <= 0 && this.quantidadeEscolhida==1"
+                >Última unidade!</p>
+                <p v-else-if="this.variacaoEscolhida.estoque <= 0">Estoque esgotado</p>
                 <button
                   v-if="quantidadeEscolhida >0"
                   class="adicionar-ao-carrinho"
@@ -135,14 +139,27 @@ export default {
         idProdutoPai: "",
         idDaVariacao: "",
         quantidade: 0
-      }
+      },
+      quantidadeDaVariacaoSelecionadaNoCarrinho: null
     };
   },
   computed: {
-    ...mapState(["idCategoriaSelecionada"])
+    ...mapState(["idCategoriaSelecionada", "cart"])
   },
   methods: {
     ...mapActions(["adicionarItemAoCarrinho"]),
+    aumentarQuantidadeEscolhida() {
+      if (this.variacaoEscolhida.estoque > 0) {
+        this.quantidadeEscolhida++;
+        this.variacaoEscolhida.estoque--;
+        console.log("estoque: " + this.variacaoEscolhida.estoque);
+      }
+    },
+    reduzirQuantidadeEscolhida() {
+      this.quantidadeEscolhida--;
+      this.variacaoEscolhida.estoque++;
+      console.log("estoque: " + this.variacaoEscolhida.estoque);
+    },
     getEstampas() {
       api
         .get(
@@ -173,7 +190,6 @@ export default {
         });
     },
     estampasDaCategoria(item) {
-      console.log(item.categories[0].name);
       let atributoDaEstampa = item.attributes.filter(chave => {
         return chave.name === "Estampa";
       });
@@ -226,7 +242,6 @@ export default {
       this.menuTamanhos = !this.menuTamanhos;
     },
     escolherEstampa(estampa) {
-      console.log("clicada: " + estampa.estampa + estampa.idProdutoPai);
       this.estampaEscolhida.nome = estampa.estampa;
       this.estampaEscolhida.nomeDoProduto =
         estampa.nomeDoProduto + " " + estampa.estampa;
@@ -243,7 +258,6 @@ export default {
         )
         .then(response => {
           this.variacoesDisponiveis = [];
-          console.log(response.data);
           response.data.forEach(this.variacoesDaEstampa);
         })
         .then(() => {
@@ -255,18 +269,48 @@ export default {
           this.escolherVariacao(primeiraVariacaoDisponivel);
         });
     },
-    escolherVariacao(variacao) {
-      console.log(variacao);
+    ajustarEstoqueComCarrinho(produtoNoCarrinho) {
+      return new Promise((resolve, reject) => {
+        let quantidade = this.quantidadeDaVariacaoSelecionadaNoCarrinho;
+        if (
+          produtoNoCarrinho.idDaVariacao === this.variacaoEscolhida.idDaVariacao
+        ) {
+          quantidade = quantidade + produtoNoCarrinho.quantidade;
+        }
+        this.quantidadeDaVariacaoSelecionadaNoCarrinho = quantidade;
+      }).catch(function(err) {
+        console.log(err);
+      });
+    },
+    async escolherVariacao(variacao) {
       this.variacaoEscolhida.tamanho = variacao.tamanho;
       this.variacaoEscolhida.preco = variacao.preco;
       this.variacaoEscolhida.precoPromocional = variacao.precoPromocional;
-      this.variacaoEscolhida.estoque = variacao.estoque;
       this.variacaoEscolhida.nomeDoProduto = this.estampaEscolhida.nomeDoProduto;
       this.variacaoEscolhida.valorUnitarioCobrado = variacao.preco;
       this.variacaoEscolhida.peso = variacao.peso;
       this.variacaoEscolhida.idProdutoPai = this.estampaEscolhida.idProdutoPai;
       this.variacaoEscolhida.idDaVariacao = variacao.id;
       this.variacaoEscolhida.quantidade = this.quantidadeEscolhida;
+
+      this.quantidadeDaVariacaoSelecionadaNoCarrinho = 0;
+      let estoqueNoCarrinho = this.cart.carrinho.forEach(
+        await this.ajustarEstoqueComCarrinho
+      );
+      estoqueNoCarrinho = this.quantidadeDaVariacaoSelecionadaNoCarrinho;
+      console.log("estoque inicial: " + variacao.estoque);
+      this.variacaoEscolhida.estoque = variacao.estoque - estoqueNoCarrinho;
+      if (this.variacaoEscolhida.estoque > 0) {
+        this.quantidadeEscolhida = 1;
+        this.variacaoEscolhida.estoque =
+          this.variacaoEscolhida.estoque - this.quantidadeEscolhida;
+      } else {
+        this.quantidadeEscolhida = 0;
+      }
+
+      console.log("quantidadeEscolhida: " + this.quantidadeEscolhida);
+      console.log("estoqueNoCarrinho: " + estoqueNoCarrinho);
+      console.log("estoque final: " + this.variacaoEscolhida.estoque);
     },
     colocarNoCarrinho(item) {
       const itemDoCarrinho = {
@@ -277,12 +321,10 @@ export default {
         idDaVariacao: item.idDaVariacao,
         quantidade: item.quantidade
       };
-
+      this.quantidadeEscolhida = 0;
       this.adicionarItemAoCarrinho(itemDoCarrinho);
     },
     variacoesDaEstampa(item) {
-      console.log("Peso:");
-      console.log(item);
       let atributoDoTamanho = item.attributes.filter(chave => {
         return chave.name === "Tamanho";
       });

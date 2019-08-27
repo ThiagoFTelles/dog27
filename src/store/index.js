@@ -54,9 +54,6 @@ export default new Vuex.Store({
     },
     ADD_CATEGORIA(state, payload) {
       state.categorias.push(payload);
-      // state.categorias.forEach(item => {
-      //   console.log(item.nome)
-      // })
     },
     SET_CATEGORIA_SELECIONADA_ID(state, payload) {
       state.idCategoriaSelecionada = payload;
