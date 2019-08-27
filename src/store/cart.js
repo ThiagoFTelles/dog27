@@ -1,7 +1,3 @@
-import {
-  isContext
-} from "vm";
-
 export default {
   strict: true,
   state: {
@@ -47,6 +43,7 @@ export default {
   },
   watch: {
     carrinho() {
+      // eslint-disable-next-line
       window.localStorage.carrinho = JSON.stringify(state.carrinho); //(...).carrinho significa que estou salvando com o nome de "carrinho"
       // JSON.stringify é para passar o objeto carrinho para string, que é a forma que o localStorage trabalha
     }

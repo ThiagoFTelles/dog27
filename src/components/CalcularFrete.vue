@@ -34,12 +34,20 @@
       <input type="text" name="stateEntrega" id="stateEntrega" v-model="estadoEntrega" />
     </section>
 
-    <button @click="calcularPrecoPrazo">calcular preço</button>
+    <button v-if="habilitarBtn" @click="calcularPrecoPrazo" :disabled="!habilitarBtn">calcular preço</button>
 
-    <p v-if="pac.mostrar">PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</p>
-    <p v-if="sedex.mostrar">SEDEX R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</p>
-
-    <p>valor do frete</p>
+    <div class="opcoesDeFrete" v-if="!calculando">
+      <p v-if="freteErrado">Verifique o CEP de entrega informado e tente novamente</p>
+      <section v-if="pac.mostrar">
+        <label for="pac">PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</label>
+        <input type="radio" name="opcaoDeFrete" id="pac" @click="freteEscolhido='pac'" />
+      </section>
+      <section v-if="sedex.mostrar">
+        <label for="sedex">Sedex R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</label>
+        <input type="radio" name="opcaoDeFrete" id="sedex" @click="freteEscolhido='sedex'" />
+      </section>
+    </div>
+    <div class="calculando" v-else>Aguarde, calculando...</div>
   </section>
 </template>
 
@@ -62,7 +70,11 @@ export default {
         valor: null,
         prazo: null,
         mostrar: false
-      }
+      },
+      freteEscolhido: null,
+      habilitarBtn: false,
+      calculando: false,
+      freteErrado: false
     };
   },
   computed: {
@@ -105,7 +117,7 @@ export default {
         /\D/g,
         ""
       ); /* pegará apenas dígitos */
-      if (cep.length === 8) {
+      if (cep.length >= 8) {
         getCep(cep).then(r => {
           this.ruaEntrega = r.data.logradouro;
           this.bairroEntrega = r.data.bairro;
@@ -115,6 +127,8 @@ export default {
       }
     },
     calcularPrecoPrazo() {
+      this.habilitarBtn = false;
+      this.calculando = true;
       // Changes XML to JSON
       function xmlToJson(xml) {
         // Create the return object
@@ -175,32 +189,49 @@ export default {
 
       let url = `${process.env.VUE_APP_SITE_PREFIX}/miniproxy.php?http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&nCdServico=${nCdServico}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=${nVlPeso}&nCdFormato=${nCdFormato}&nVlComprimento=${nVlComprimento}&nVlAltura=${nVlAltura}&nVlLargura=${nVlLargura}&nVlDiametro=${nVlDiametro}&sCdMaoPropria=${sCdMaoPropria}&nVlValorDeclarado=${nVlValorDeclarado}&sCdAvisoRecebimento=${sCdAvisoRecebimento}`;
 
-      console.log(url);
-
       axios
         .get(url)
         .then(res => {
-          console.log(res.data);
+          const resposta = res.data;
+          // eslint-disable-next-line
 
-          var xmlString = res.data;
+          var xmlString =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? // eslint-disable-next-line
+                $(resposta).find("cResultado").prevObject[11].innerHTML
+              : resposta; //res.data;
+
           var parser = new DOMParser();
           var xml = parser.parseFromString(xmlString, "text/xml");
           var obj = xmlToJson(xml);
 
-          let valorPac = obj.cResultado.Servicos.cServico[0].Valor["#text"];
-          let prazoPac = Number(
-            obj.cResultado.Servicos.cServico[0].PrazoEntrega["#text"]
-          );
+          let valorPac =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? obj.servicos.cservico[0].valor["#text"]
+              : obj.cResultado.Servicos.cServico[0].Valor["#text"];
+          let prazoPac =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? Number(obj.servicos.cservico[0].prazoentrega["#text"])
+              : Number(
+                  obj.cResultado.Servicos.cServico[0].PrazoEntrega["#text"]
+                );
 
-          let valorSedex = obj.cResultado.Servicos.cServico[1].Valor["#text"];
-          let prazoSedex = Number(
-            obj.cResultado.Servicos.cServico[1].PrazoEntrega["#text"]
-          );
+          let valorSedex =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? obj.servicos.cservico[1].valor["#text"]
+              : obj.cResultado.Servicos.cServico[1].Valor["#text"];
+          let prazoSedex =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? Number(obj.servicos.cservico[1].prazoentrega["#text"])
+              : Number(
+                  obj.cResultado.Servicos.cServico[1].PrazoEntrega["#text"]
+                );
 
           let tempoDePostagem = 2;
 
           this.pac.mostrar = false;
           this.sedex.mostrar = false;
+          this.freteErrado = false;
 
           valorPac !== "0,00"
             ? ((this.pac.valor = valorPac), (this.pac.mostrar = true))
@@ -212,8 +243,13 @@ export default {
             : 10;
           this.sedex.prazo =
             prazoSedex !== 0 ? prazoSedex + tempoDePostagem : 100;
+          if (this.pac.mostrar == false && this.sedex.mostrar == false) {
+            this.freteErrado = true;
+          }
+          this.calculando = false;
         })
         .catch(err => {
+          // eslint-disable-next-line
           console.log(err);
         });
     },
@@ -237,9 +273,24 @@ export default {
       this.cidadeEntrega = this.usuario.cidade;
       this.estadoEntrega = this.usuario.estado;
     }
+  },
+  watch: {
+    cepEntrega() {
+      if (this.cepEntrega.length >= 8) {
+        this.habilitarBtn = true;
+      } else {
+        this.habilitarBtn = false;
+      }
+      this.pac.mostrar = false;
+      this.sedex.mostrar = false;
+      this.freteEscolhido = null;
+    }
   }
 };
 </script>
 
-<style>
+<style scoped>
+input[type="radio"] {
+  width: auto;
+}
 </style>
