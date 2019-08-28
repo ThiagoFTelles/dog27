@@ -96,14 +96,19 @@ export default {
           phone: this.usuario.telefone
         },
         shipping: {
-          first_name: "John",
+          first_name: this.usuario.nomeEntrega,
           last_name: "",
-          address_1: "969 Market",
-          address_2: "",
-          city: "San Francisco",
-          state: "CA",
-          postcode: "94103",
-          country: "US"
+          address_1:
+            this.usuario.ruaEntrega +
+            ", Nº: " +
+            this.usuario.numeroEntrega +
+            ", Comp.: " +
+            this.usuario.complementoEntrega,
+          address_2: this.usuario.bairroEntrega,
+          city: this.usuario.cidadeEntrega,
+          state: this.usuario.estadoEntrega,
+          postcode: this.usuario.cepEntrega,
+          country: this.usuario.paisEntrega
         },
         line_items: this.line_items,
         shipping_lines: [

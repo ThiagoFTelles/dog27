@@ -30,11 +30,6 @@ export default {
       );
       xhr.setRequestHeader("Accept", "*/*");
       xhr.setRequestHeader("Cache-Control", "no-cache");
-      xhr.setRequestHeader(
-        "Postman-Token",
-        "e484d2ef-8424-4dd9-b515-3c8776c16fc6,ebbffaa7-8e31-4875-8c7e-233bcf31f837"
-      );
-      xhr.setRequestHeader("cache-control", "no-cache");
 
       xhr.send(data);
     }
