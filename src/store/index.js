@@ -5,13 +5,15 @@ import {
 } from "@/services.js";
 import cart from '@/store/cart.js'
 import order from '@/store/order.js'
+import areaDeCompra from '@/store/areaDeCompra.js'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     cart,
-    order
+    order,
+    areaDeCompra
   },
   strict: true,
   /* strict não deixa o objeto ser modificado por fora, apenas via mutation */

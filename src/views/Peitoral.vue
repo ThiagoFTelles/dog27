@@ -1,7 +1,7 @@
 <template>
   <section>
     <transition mode="out-in">
-      <div class="call-to-buy" v-if="!areaDeCompra" key="header-compra">
+      <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
         <div>
           <p>Peitoral Híbrido</p>
         </div>
@@ -12,7 +12,7 @@
       </div>
     </transition>
     <transition mode="out-in">
-      <AreaDeCompra v-show="areaDeCompra" key="area-de-compra"></AreaDeCompra>
+      <AreaDeCompra v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
     </transition>
     <div class="peitoral-container">
       <div class="texto-box">
@@ -115,15 +115,14 @@ export default {
       estampa: null,
       tamanho: null,
       estoque: null,
-      areaDeCompra: false,
       categoriaId: 16,
       idCategoriaCombo: 35
     };
   },
   methods: {
-    ...mapActions(["selecionarCategoria"]),
+    ...mapActions(["selecionarCategoria", "switchAreaDeCompra"]),
     vaiComprar() {
-      this.areaDeCompra = true;
+      this.switchAreaDeCompra(true);
     },
     getProdutos() {
       var page = 1;
@@ -178,6 +177,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      mostrarAreaDeCompra: state => state.areaDeCompra.mostrarAreaDeCompra
+    }),
     ...mapState(["idCategoriaSelecionada"])
   },
   created() {
@@ -185,7 +187,7 @@ export default {
     // this.getProdutos();
   },
   watch: {
-    areaDeCompra() {
+    mostrarAreaDeCompra() {
       this.scrollBehavior();
     }
   }

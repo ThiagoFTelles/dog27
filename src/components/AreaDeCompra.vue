@@ -144,10 +144,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["idCategoriaSelecionada", "cart"])
+    ...mapState({
+      carrinho: state => state.cart.carrinho
+    }),
+    ...mapState(["idCategoriaSelecionada"])
   },
   methods: {
-    ...mapActions(["adicionarItemAoCarrinho"]),
+    ...mapActions(["adicionarItemAoCarrinho", "switchAreaDeCompra"]),
     aumentarQuantidadeEscolhida() {
       if (this.variacaoEscolhida.estoque > 0) {
         this.quantidadeEscolhida++;
@@ -294,7 +297,7 @@ export default {
       this.variacaoEscolhida.quantidade = this.quantidadeEscolhida;
 
       this.quantidadeDaVariacaoSelecionadaNoCarrinho = 0;
-      let estoqueNoCarrinho = this.cart.carrinho.forEach(
+      let estoqueNoCarrinho = this.carrinho.forEach(
         await this.ajustarEstoqueComCarrinho
       );
       estoqueNoCarrinho = this.quantidadeDaVariacaoSelecionadaNoCarrinho;
@@ -314,7 +317,7 @@ export default {
     },
     colocarNoCarrinho(item) {
       const itemDoCarrinho = {
-        nomeDoProduto: item.nomeDoProduto,
+        nomeDoProduto: item.nomeDoProduto + " " + item.tamanho,
         valorUnitarioCobrado: item.valorUnitarioCobrado,
         pesoTotal: item.peso * item.quantidade,
         idProdutoPai: item.idProdutoPai,
@@ -323,6 +326,7 @@ export default {
       };
       this.quantidadeEscolhida = 0;
       this.adicionarItemAoCarrinho(itemDoCarrinho);
+      this.switchAreaDeCompra(false);
     },
     variacoesDaEstampa(item) {
       let atributoDoTamanho = item.attributes.filter(chave => {
@@ -347,6 +351,9 @@ export default {
       this.variacaoEscolhida.quantidade = this.quantidadeEscolhida;
     },
     url() {
+      this.getEstampas();
+    },
+    carrinho() {
       this.getEstampas();
     }
   },
