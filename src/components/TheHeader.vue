@@ -16,7 +16,7 @@
               to="/produtos"
             >
               Produtos
-              <span :class="{ active: hoverLinkProdutos }" class="menu-link-arrow"></span>
+              <span v-if="hoverLinkProdutos" class="menu-link-arrow"></span>
             </router-link>
 
             <router-link
@@ -27,11 +27,7 @@
               to="/estampas"
             >
               Estampas
-              <span
-                :class="{ active: hoverLinkEstampas }"
-                v-if="hoverLinkEstampas"
-                class="menu-link-arrow arrow-estampas"
-              ></span>
+              <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
             </router-link>
             <router-link
               @mouseover.native="hoverLinkContato = true"
@@ -41,24 +37,29 @@
               to="/contato"
             >
               Fale Conosco
-              <span
-                :class="{ active: hoverLinkContato }"
-                v-if="hoverLinkContato"
-                class="menu-link-arrow"
-              ></span>
+              <span v-if="hoverLinkContato" class="menu-link-arrow"></span>
             </router-link>
             <router-link class="menu-link" tag="li" to="/blog">Blog</router-link>
           </ul>
         </nav>
-        <router-link to="/" class="icon">
+        <a class="icon lupa">
           <img id="lupa" src="@/assets/search.svg" />
-        </router-link>
-        <router-link to="/" class="icon login-profile">
+        </a>
+        <a
+          class="icon login-profile"
+          @mouseover="hoverLinkLogin = true"
+          @mouseleave="hoverLinkLogin = false"
+        >
           <img src="@/assets/person.svg" alt="login-dog27" @click.prevent="logar" />
-        </router-link>
-        <router-link to="/" class="icon">
-          <img src="@/assets/bag.svg" alt />
-        </router-link>
+        </a>
+        <a
+          class="icon bag"
+          :data-badge="quantidadeDeItensNoCarrinho > 0 ? quantidadeDeItensNoCarrinho : null"
+          @mouseover="hoverLinkBag = true"
+          @mouseleave="hoverLinkBag = false"
+        >
+          <img src="@/assets/bag.svg" />
+        </a>
       </section>
     </header>
     <transition mode="out-in">
@@ -82,7 +83,20 @@
         v-show="hoverLinkContato"
       />
     </transition>
-    <CarrinhoDeCompras />
+    <transition mode="out-in">
+      <CarrinhoDeCompras
+        v-show="hoverLinkBag"
+        @mouseover.native="hoverLinkBag = true"
+        @mouseleave.native="hoverLinkBag = false"
+      />
+    </transition>
+    <transition mode="out-in">
+      <Login
+        v-show="hoverLinkLogin"
+        @mouseover.native="hoverLinkLogin = true"
+        @mouseleave.native="hoverLinkLogin = false"
+      />
+    </transition>
   </section>
 </template>
 
@@ -92,6 +106,7 @@ import SubMenuProdutos from "@/components/SubMenuProdutos.vue";
 import SubMenuEstampas from "@/components/SubMenuEstampas.vue";
 import SubMenuContato from "@/components/SubMenuContato.vue";
 import CarrinhoDeCompras from "@/components/CarrinhoDeCompras.vue";
+import Login from "@/views/Login.vue";
 
 export default {
   name: "TheHeader",
@@ -104,7 +119,10 @@ export default {
       erros: [],
       hoverLinkProdutos: false,
       hoverLinkEstampas: false,
-      hoverLinkContato: false
+      hoverLinkContato: false,
+      hoverLinkBag: false,
+      hoverLinkLogin: false,
+      mostrarBadgeCarrinho: false
     };
   },
   components: {
@@ -112,7 +130,8 @@ export default {
     SubMenuProdutos,
     SubMenuEstampas,
     SubMenuContato,
-    CarrinhoDeCompras
+    CarrinhoDeCompras,
+    Login
   },
   methods: {
     logar() {
@@ -129,6 +148,15 @@ export default {
     nome() {
       return this.$store.state.usuario.nome.replace(/ */, "");
       /* .replace(/ 'asterisco'/, ""); Significa que tudo que vier depois do espaço será apagado para evitar nomes muito grandes */
+    },
+    quantidadeDeItensNoCarrinho() {
+      let quantidade = this.$store.state.cart.carrinho.length;
+      if (quantidade === 0) {
+        this.mostrarBadgeCarrinho = false;
+      } else {
+        this.mostrarBadgeCarrinho = true;
+      }
+      return quantidade;
     }
   }
 };
@@ -190,8 +218,24 @@ section {
   border-bottom: 9px solid #f3f3f3;
 }
 
-.active {
-  visibility: visible;
+.bag {
+  position: relative;
+}
+
+.bag[data-badge]:after {
+  content: attr(data-badge);
+  position: absolute;
+  top: 30px;
+  right: -8px;
+  font-size: 0.7em;
+  background: rgb(59, 177, 212);
+  color: white;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  line-height: 18px;
+  border-radius: 50%;
+  box-shadow: 0 0 1px #333;
 }
 
 .menu-link.router-link-exact-active,

@@ -117,27 +117,65 @@ export default {
         "POST",
         "https://apisandbox.cieloecommerce.cielo.com.br/1/sales",
         data
-      ).then(function(e) {
-        let resposta = JSON.parse(e.target.response);
+      )
+        .then(function(e) {
+          let resposta = JSON.parse(e.target.response);
+          let statusDaResposta = JSON.parse(e.target.status);
 
-        let links = resposta.Payment.Links;
-        let objLinkCaptura = links.filter(element => element.Rel === "capture");
-        let linkCaptura = objLinkCaptura[0].Href;
+          console.log("e");
+          console.log(e);
 
-        return linkCaptura;
-      });
+          if (statusDaResposta != 200 && statusDaResposta != 201) {
+            let erro = resposta[0].Message;
+            console.log("erro: ");
+            console.log(erro);
+            return {
+              status: resposta[0].Code,
+              resposta: "Erro de preenchimento - " + resposta[0].Message
+            };
+          } else if (resposta.Payment.Status === 1) {
+            let links = resposta.Payment.Links;
+            let objLinkCaptura = links.filter(
+              element => element.Rel === "capture"
+            );
+            let linkCaptura = objLinkCaptura[0].Href;
+
+            return { status: resposta.Payment.Status, resposta: linkCaptura };
+          } else {
+            return {
+              status: resposta.Payment.Status,
+              resposta: resposta.Payment.ReturnMessage
+            };
+          }
+        })
+        .catch(e => {
+          console.log("erro3: ");
+          console.log(e);
+        });
     },
     capturarCielo(oderPayment) {
       this.solicitarAutorizacaoCielo(oderPayment).then(r => {
-        console.log("oi :)");
-        console.log(r);
+        let autorizacaoStatus = r.status;
+        let autorizacaoResposta = r.resposta;
 
-        this.requestCielo("PUT", r).then(function(e) {
-          let resposta = JSON.parse(e.target.response);
+        if (autorizacaoStatus === 1) {
+          this.requestCielo("PUT", autorizacaoResposta).then(function(
+            respostaCaptura
+          ) {
+            let resposta = JSON.parse(respostaCaptura.target.response);
 
-          console.log(e);
-          console.log(resposta);
-        });
+            console.log("respostaCaptura");
+            console.log(respostaCaptura);
+            console.log("resposta");
+            console.log(resposta);
+          });
+        } else {
+          console.log(
+            "Houve um problema com o pagamento: " +
+              autorizacaoResposta +
+              " por favor, verifique o cartão e tente novamente."
+          );
+        }
       });
     },
     capturarPagamentoCielo(PaymentId) {

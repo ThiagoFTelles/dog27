@@ -3,7 +3,7 @@
     <TheHeader />
     <main id="main">
       <transition mode="out-in">
-        <router-view />
+        <router-view :key="componentKey" />
       </transition>
     </main>
     <TheFooter />
@@ -20,6 +20,11 @@ export default {
     TheHeader,
     TheFooter
   },
+  data() {
+    return {
+      componentKey: 1
+    };
+  },
   created() {
     if (window.localStorage.token) {
       api
@@ -29,6 +34,7 @@ export default {
         })
         .catch(() => {
           window.localStorage.removeItem("token");
+          this.componentKey += 1; // mudar a key faz o vue re-renderizar o componente.
         });
     }
   }
