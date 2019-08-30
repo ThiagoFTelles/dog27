@@ -83,19 +83,7 @@ export default new Vuex.Store({
       context.commit("SET_CATEGORIA_SELECIONADA_ID", payload);
     },
     getCategoriasProdutos(context) {
-      var url = `/products/categories?`;
-      return api.getApiWc(url).then(r => {
-        r.data.forEach(item => {
-          context.commit("ADD_CATEGORIA", {
-            nome: item.name,
-            id: item.id,
-            descricao: item.description,
-            quantidadeDeProdutos: item.count,
-            imagemSrc: item.image ? item.image.src : ""
-          });
-        });
-        context.commit("REMOVER_CARREGANDO");
-      });
+      context.commit("REMOVER_CARREGANDO");
     },
     getUsuarioProdutos(context) {
       return api

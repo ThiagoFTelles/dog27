@@ -3,9 +3,9 @@
     <h1>Login</h1>
     <form>
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" v-model="login.email" />
+      <input type="email" name="email" id="loginEmail" v-model="login.email" />
       <label for="senha">Senha</label>
-      <input type="password" name="senha" id="senha" v-model="login.senha" />
+      <input type="password" name="senha" id="loginSenha" v-model="login.senha" />
       <button class="btn" @click.prevent="logar">Logar</button>
       <ErroNotificacao :erros="erros" />
     </form>
@@ -66,7 +66,7 @@ h1 {
   text-align: center;
   font-size: 2rem;
   margin-top: 40px;
-  color: #87f;
+  color: #24a9de;
 }
 
 form {
@@ -86,7 +86,7 @@ form {
 }
 
 .perdeu a:hover {
-  color: #87f;
+  color: #24a9de;
   text-decoration: underline;
 }
 </style> 

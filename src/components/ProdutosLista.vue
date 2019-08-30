@@ -2,7 +2,7 @@
   <section class="produtos-container">
     <transition mode="out-in">
       <!-- Quando quero animar diferentes itens com a mesma tag (ex: div), preciso definir uma key para cada item -->
-      <div v-if="produtos && produtos.length" class="produtos" key="produtos">
+      <div class="produtos" key="produtos">
         <div class="produto duplo">
           <div class="banner-imagem">
             <img src="../assets/coleira.png" alt="coleira" />
@@ -102,10 +102,6 @@
         </div>
         <ProdutosPaginar :produtosTotal="produtosTotal" :produtosPorPagina="produtosPorPagina" />
       </div>
-      <div v-else-if="produtos && produtos.length === 0" key="sem-resultados">
-        <p class="sem-resultados">Busca sem resultados. Tente buscar outro termo.</p>
-      </div>
-      <PaginaCarregando v-else key="carregando" />
     </transition>
   </section>
 </template>

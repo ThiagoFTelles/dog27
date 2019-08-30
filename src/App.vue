@@ -96,7 +96,7 @@ img {
 .btn {
   display: block;
   padding: 10px 30px;
-  background: #87f;
+  background: #24a9de;
   border-radius: 4px;
   color: #fff;
   text-align: center;
@@ -152,7 +152,7 @@ textarea:hover,
 textarea:focus {
   outline: none;
   box-shadow: 0 6px 12px rgba(30, 60, 90, 0.2);
-  border-color: #87f;
+  border-color: #24a9de;
 }
 
 .v-enter,

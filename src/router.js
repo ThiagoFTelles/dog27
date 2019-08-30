@@ -8,9 +8,6 @@ import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
 import Login from "@/views/Login.vue";
 import Peitoral from "@/views/Peitoral.vue";
 import Usuario from "@/views/usuario/Usuario.vue";
-import UsuarioProdutos from "@/views/usuario/UsuarioProdutos.vue";
-import UsuarioVendas from "@/views/usuario/UsuarioVendas.vue";
-import UsuarioCompras from "@/views/usuario/UsuarioCompras.vue";
 import UsuarioEditar from "@/views/usuario/UsuarioEditar.vue";
 import PaginaNaoEncontrada from "@/views/PaginaNaoEncontrada.vue";
 
@@ -70,18 +67,13 @@ const router = new Router({
       children: [{
           path: "",
           name: "usuario",
-          component: UsuarioProdutos
+          component: UsuarioEditar
         },
-        {
-          path: "vendas",
-          name: "vendas",
-          component: UsuarioVendas
-        },
-        {
-          path: "compras", //Não precisa da barra "/"
-          name: "compras",
-          component: UsuarioCompras
-        },
+        // {
+        //   path: "compras", //Não precisa da barra "/"
+        //   name: "compras",
+        //   component: UsuarioCompras
+        // },
         {
           path: "editar",
           name: "usuario-editar",

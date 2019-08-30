@@ -40,11 +40,11 @@
       <p v-if="freteErrado">Verifique o CEP de entrega informado e tente novamente</p>
       <section v-if="pac.mostrar">
         <label for="pac">PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</label>
-        <input type="radio" name="opcaoDeFrete" id="pac" @click="freteEscolhido='pac'" />
+        <input type="radio" name="opcaoDeFrete" id="pac" @click="escolherFrete('pac')" />
       </section>
       <section v-if="sedex.mostrar">
         <label for="sedex">Sedex R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</label>
-        <input type="radio" name="opcaoDeFrete" id="sedex" @click="freteEscolhido='sedex'" />
+        <input type="radio" name="opcaoDeFrete" id="sedex" @click="escolherFrete('sedex')" />
       </section>
     </div>
     <div class="calculando" v-else>Aguarde, calculando...</div>
@@ -71,7 +71,10 @@ export default {
         prazo: null,
         mostrar: false
       },
-      freteEscolhido: null,
+      freteEscolhido: {
+        nome: "",
+        valor: ""
+      },
       habilitarBtn: false,
       calculando: false,
       freteErrado: false
@@ -272,6 +275,15 @@ export default {
       this.bairroEntrega = this.usuario.bairro;
       this.cidadeEntrega = this.usuario.cidade;
       this.estadoEntrega = this.usuario.estado;
+    },
+    escolherFrete(frete) {
+      if (frete === "pac") {
+        this.freteEscolhido.nome = "pac";
+        this.freteEscolhido.valor = this.pac.valor;
+      } else if (frete === "sedex") {
+        this.freteEscolhido.nome = "sedex";
+        this.freteEscolhido.valor = this.sedex.valor;
+      }
     }
   },
   watch: {
@@ -283,7 +295,8 @@ export default {
       }
       this.pac.mostrar = false;
       this.sedex.mostrar = false;
-      this.freteEscolhido = null;
+      this.freteEscolhido.nome = "";
+      this.freteEscolhido.valor = "";
     }
   }
 };

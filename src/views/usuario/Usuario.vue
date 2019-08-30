@@ -3,16 +3,7 @@
     <nav class="sidenav">
       <ul>
         <li>
-          <router-link :to="{name: 'usuario'}">Produtos</router-link>
-        </li>
-        <li>
-          <router-link :to="{name: 'compras'}">Compras</router-link>
-        </li>
-        <li>
-          <router-link :to="{name: 'vendas'}">Vendas</router-link>
-        </li>
-        <li>
-          <router-link :to="{name: 'usuario-editar'}">Editar Usuário</router-link>
+          <router-link :to="{name: 'usuario'}">Editar Usuário</router-link>
         </li>
         <li>
           <button @click="deslogar">Deslogar</button>
@@ -35,7 +26,7 @@ export default {
     }
   },
   created() {
-    document.title = "Meus Produtos";
+    document.title = "Editar Conta";
   }
 };
 </script>
@@ -78,9 +69,9 @@ export default {
 .sidenav button {
   border: none;
   width: 100%;
-  font-size: 1rem;
+  font-size: 1.2rem;
   text-align: left;
-  font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
   cursor: pointer;
   color: #345;
 }
@@ -88,7 +79,7 @@ export default {
 .sidenav a.router-link-exact-active,
 .sidenav a:hover,
 .sidenav button:hover {
-  background: #87f;
+  background: #24a9de;
   color: #fff;
 }
 </style>

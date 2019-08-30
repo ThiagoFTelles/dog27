@@ -45,13 +45,14 @@
         <a class="icon lupa">
           <img id="lupa" src="@/assets/search.svg" />
         </a>
-        <a
-          class="icon login-profile"
-          @mouseover="hoverLinkLogin = true"
-          @mouseleave="hoverLinkLogin = false"
-        >
-          <img src="@/assets/person.svg" alt="login-dog27" @click.prevent="logar" />
-        </a>
+        <router-link to="/usuario" tag="a" class="icon login-profile">
+          <img
+            src="@/assets/person.svg"
+            alt="login-dog27"
+            @mouseover="hoverLinkLogin = true"
+            @mouseleave="hoverLinkLogin = false"
+          />
+        </router-link>
         <a
           class="icon bag"
           :data-badge="quantidadeDeItensNoCarrinho > 0 ? quantidadeDeItensNoCarrinho : null"
@@ -92,7 +93,7 @@
     </transition>
     <transition mode="out-in">
       <Login
-        v-show="hoverLinkLogin"
+        v-if="hoverLinkLogin"
         @mouseover.native="hoverLinkLogin = true"
         @mouseleave.native="hoverLinkLogin = false"
       />
@@ -107,14 +108,15 @@ import SubMenuEstampas from "@/components/SubMenuEstampas.vue";
 import SubMenuContato from "@/components/SubMenuContato.vue";
 import CarrinhoDeCompras from "@/components/CarrinhoDeCompras.vue";
 import Login from "@/views/Login.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "TheHeader",
   data() {
     return {
       login: {
-        email: "admin",
-        senha: "admin"
+        email: "",
+        senha: ""
       },
       erros: [],
       hoverLinkProdutos: false,
@@ -144,18 +146,27 @@ export default {
         });
     }
   },
-  computed: {
-    nome() {
-      return this.$store.state.usuario.nome.replace(/ */, "");
-      /* .replace(/ 'asterisco'/, ""); Significa que tudo que vier depois do espaço será apagado para evitar nomes muito grandes */
-    },
-    quantidadeDeItensNoCarrinho() {
-      let quantidade = this.$store.state.cart.carrinho.length;
+  watch: {
+    carrinho() {
+      let quantidade = this.quantidadeDeItensNoCarrinho;
       if (quantidade === 0) {
         this.mostrarBadgeCarrinho = false;
       } else {
         this.mostrarBadgeCarrinho = true;
       }
+      return quantidade;
+    }
+  },
+  computed: {
+    ...mapState({
+      carrinho: state => state.cart.carrinho
+    }),
+    nome() {
+      return this.$store.state.usuario.nome.replace(/ */, "");
+      /* .replace(/ 'asterisco'/, ""); Significa que tudo que vier depois do espaço será apagado para evitar nomes muito grandes */
+    },
+    quantidadeDeItensNoCarrinho() {
+      let quantidade = this.carrinho.length;
       return quantidade;
     }
   }

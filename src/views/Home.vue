@@ -30,7 +30,7 @@ export default {
 
 <style scoped>
 h1 {
-  color: #87f;
+  color: #24a9de;
   margin-top: 40px;
   font-size: 2rem;
   text-align: center;

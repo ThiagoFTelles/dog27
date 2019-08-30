@@ -6,7 +6,15 @@
       <label for="email">Email</label>
       <input type="email" id="email" name="email" v-model="email" />
       <label for="senha">Senha</label>
-      <input type="password" id="senha" name="senha" v-model="senha" />
+      <input
+        type="password"
+        id="senha"
+        name="senha"
+        v-model="senha"
+        placeholder="deixe em branco para não alterar"
+      />
+      <label for="telefone">Telefone</label>
+      <input type="text" id="telefone" name="telefone" v-model="telefone" />
     </div>
     <label for="cep">Cep</label>
     <input type="text" id="cep" name="cep" v-model="cep" @keyup="preencherCep" />
@@ -14,6 +22,8 @@
     <input type="text" id="rua" name="rua" v-model="rua" />
     <label for="numero">Número</label>
     <input type="text" id="numero" name="numero" v-model="numero" />
+    <label for="complemento">Comp.</label>
+    <input type="text" id="complemento" name="complemento" v-model="complemento" />
     <label for="bairro">Bairro</label>
     <input type="text" id="bairro" name="bairro" v-model="bairro" />
     <label for="cidade">Cidade</label>
@@ -37,9 +47,11 @@ export default {
         "nome",
         "email",
         "senha",
+        "telefone",
         "rua",
         "cep",
         "numero",
+        "complemento",
         "bairro",
         "cidade",
         "estado"
@@ -48,7 +60,7 @@ export default {
       mutation: "UPDATE_USUARIO"
     }),
     mostrarDadosLogin() {
-      return !this.$store.state.login || this.$route.name === "usuario-editar";
+      return !this.$store.state.login || this.$route.name === "usuario";
     }
   },
   methods: {

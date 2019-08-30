@@ -78,7 +78,7 @@ li a {
 
 li a.router-link-exact-active,
 li a:hover {
-  background: #87f;
+  background: #24a9de;
   color: #fff;
 }
 </style>
