@@ -7,6 +7,8 @@
       <input type="text" name="nameEntrega" id="nameEntrega" v-model="nomeEntrega" />
       <label for="phoneEntrega">Telefone</label>
       <input type="text" name="phoneEntrega" id="phoneEntrega" v-model="telefoneEntrega" />
+      <label for="emailEntrega">e-mail</label>
+      <input type="text" name="emailEntrega" id="emailEntrega" v-model="emailEntrega" />
       <label for="postcodeEntrega">CEP</label>
       <input
         type="text"
@@ -40,11 +42,11 @@
       <p v-if="freteErrado">Verifique o CEP de entrega informado e tente novamente</p>
       <section v-if="pac.mostrar">
         <label for="pac">PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</label>
-        <input type="radio" name="opcaoDeFrete" id="pac" @click="escolherFrete('pac')" />
+        <input type="radio" name="opcaoDeFrete" id="pac" @click="selecionarFrete('pac')" />
       </section>
       <section v-if="sedex.mostrar">
         <label for="sedex">Sedex R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</label>
-        <input type="radio" name="opcaoDeFrete" id="sedex" @click="escolherFrete('sedex')" />
+        <input type="radio" name="opcaoDeFrete" id="sedex" @click="selecionarFrete('sedex')" />
       </section>
     </div>
     <div class="calculando" v-else>Aguarde, calculando...</div>
@@ -55,7 +57,7 @@
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
 import axios from "axios";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "CalcularFrete",
@@ -71,10 +73,6 @@ export default {
         prazo: null,
         mostrar: false
       },
-      freteEscolhido: {
-        nome: "",
-        valor: ""
-      },
       habilitarBtn: false,
       calculando: false,
       freteErrado: false
@@ -85,6 +83,7 @@ export default {
       fields: [
         "nomeEntrega",
         "telefoneEntrega",
+        "emailEntrega",
         "ruaEntrega",
         "cepEntrega",
         "numeroEntrega",
@@ -99,7 +98,8 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho,
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
-      usuario: state => state.usuario
+      usuario: state => state.usuario,
+      freteEscolhido: state => state.freteEscolhido
     }),
     quantidadeDeCaixas() {
       let produtosPorCaixa = 6;
@@ -115,6 +115,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["escolherFrete"]),
     preencherCepEntrega() {
       const cep = this.cepEntrega.replace(
         /\D/g,
@@ -268,6 +269,7 @@ export default {
     igualarDados() {
       this.nomeEntrega = this.usuario.nome;
       this.telefoneEntrega = this.usuario.telefone;
+      this.emailEntrega = this.usuario.email;
       this.ruaEntrega = this.usuario.rua;
       this.cepEntrega = this.usuario.cep;
       this.numeroEntrega = this.usuario.numero;
@@ -276,13 +278,20 @@ export default {
       this.cidadeEntrega = this.usuario.cidade;
       this.estadoEntrega = this.usuario.estado;
     },
-    escolherFrete(frete) {
-      if (frete === "pac") {
-        this.freteEscolhido.nome = "pac";
-        this.freteEscolhido.valor = this.pac.valor;
-      } else if (frete === "sedex") {
-        this.freteEscolhido.nome = "sedex";
-        this.freteEscolhido.valor = this.sedex.valor;
+    selecionarFrete(tipoDeFrete) {
+      let freteEscolhido = {
+        nome: "",
+        valor: ""
+      };
+
+      if (tipoDeFrete === "pac") {
+        freteEscolhido.nome = "pac";
+        freteEscolhido.valor = this.pac.valor;
+        this.escolherFrete(freteEscolhido);
+      } else if (tipoDeFrete === "sedex") {
+        freteEscolhido.nome = "sedex";
+        freteEscolhido.valor = this.sedex.valor;
+        this.escolherFrete(freteEscolhido);
       }
     }
   },
@@ -295,8 +304,12 @@ export default {
       }
       this.pac.mostrar = false;
       this.sedex.mostrar = false;
-      this.freteEscolhido.nome = "";
-      this.freteEscolhido.valor = "";
+
+      let freteEmBranco = {
+        nome: "",
+        valor: ""
+      };
+      this.escolherFrete(freteEmBranco);
     }
   }
 };

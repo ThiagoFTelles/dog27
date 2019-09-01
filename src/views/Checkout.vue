@@ -1,11 +1,19 @@
 <template>
   <section class="checkout">
     <h1>CHECKOUT</h1>
+    <p>
+      Preencha os dados abaixo ou
+      <router-link :to="{name: 'login'}" class="link">
+        <b>faça o login.</b>
+      </router-link>
+    </p>
     <h2>Dados de Faturamento</h2>
     <label for="name">Nome</label>
     <input type="text" name="name" id="name" v-model="nome" />
     <label for="phone">Telefone</label>
     <input type="text" name="phone" id="phone" v-model="telefone" />
+    <label for="email">e-mail</label>
+    <input type="text" name="email" id="email" v-model="email" />
     <label for="postcode">CEP</label>
     <input type="text" name="postcode" id="postcode" v-model="cep" @keyup="preencherCep" />
     <label for="address_1">RUA</label>
@@ -53,10 +61,16 @@ export default {
     };
   },
   computed: {
-    ...mapState(["usuario"]),
+    ...mapState({
+      carrinho: state => state.cart.carrinho,
+      valorTotalCarrinho: state => state.cart.carrinhoTotal,
+      usuario: state => state.usuario,
+      freteEscolhido: state => state.freteEscolhido
+    }),
     ...mapFields({
       fields: [
         "nome",
+        "email",
         "telefone",
         "rua",
         "cep",
@@ -73,6 +87,14 @@ export default {
   methods: {
     ...mapActions(["setOrder"]),
     newOrder(payment) {
+      let shipping_lines = {
+        method_id: this.freteEscolhido.nome,
+        method_title: this.freteEscolhido.nome,
+        total: this.freteEscolhido.valor
+      };
+
+      shipping_lines = [shipping_lines];
+
       let order = {
         payment_method: payment.payment_method,
         payment_method_title: payment.payment_method_title,
@@ -91,8 +113,7 @@ export default {
           state: this.usuario.estado,
           postcode: this.usuario.cep,
           country: this.usuario.pais,
-          // email: this.usuario.email,
-          email: "atendimento.telles@gmail.com",
+          email: this.usuario.email,
           phone: this.usuario.telefone
         },
         shipping: {
@@ -111,13 +132,7 @@ export default {
           country: this.usuario.paisEntrega
         },
         line_items: this.line_items,
-        shipping_lines: [
-          {
-            method_id: "flat_rate",
-            method_title: "Flat Rate",
-            total: "10"
-          }
-        ]
+        shipping_lines: shipping_lines
       };
       this.setOrder(order);
     },

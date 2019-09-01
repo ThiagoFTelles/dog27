@@ -22,6 +22,10 @@ export default new Vuex.Store({
     categorias: [],
     idCategoriaSelecionada: "",
     login: false,
+    freteEscolhido: {
+      nome: "",
+      valor: ""
+    },
     usuario: {
       id: "",
       nome: "",
@@ -35,6 +39,7 @@ export default new Vuex.Store({
       bairro: "",
       cidade: "",
       estado: "",
+      pais: "BR",
 
       nomeEntrega: "",
       telefoneEntrega: "",
@@ -47,6 +52,7 @@ export default new Vuex.Store({
       bairroEntrega: "",
       cidadeEntrega: "",
       estadoEntrega: "",
+      paisEntrega: "BR"
     },
     usuario_produtos: null
   },
@@ -76,11 +82,17 @@ export default new Vuex.Store({
     ADD_USUARIO_PRODUTOS(state, payload) {
       state.usuario_produtos.unshift(payload);
       // unshift() acrescenta o item no começo da array, ao contrário de push() que add no final
+    },
+    UPDATE_FRETE_ESCOLHIDO(state, payload) {
+      state.freteEscolhido = payload;
     }
   },
   actions: {
     selecionarCategoria(context, payload) {
       context.commit("SET_CATEGORIA_SELECIONADA_ID", payload);
+    },
+    escolherFrete(context, payload) {
+      context.commit("UPDATE_FRETE_ESCOLHIDO", payload);
     },
     getCategoriasProdutos(context) {
       context.commit("REMOVER_CARREGANDO");
