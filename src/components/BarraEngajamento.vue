@@ -35,20 +35,20 @@ export default {
   },
   methods: {
     calculatePercentage(valorDoCarrinho) {
-      var metaMenor = 169;
-      var metaMaior = 300;
+      var metaMenor = this.metaMenor;
+      var metaMaior = this.metaMaior;
 
       var metaAtual = metaMenor;
       var freteGratis = false;
       var ganhouPresente = false;
       var corDaBarra = "#fffb00";
 
-      if (valorDoCarrinho > metaMaior) {
+      if (valorDoCarrinho >= metaMaior) {
         freteGratis = true;
         ganhouPresente = true;
         progresso = 1;
         corDaBarra = "#00d13f";
-      } else if (valorDoCarrinho > metaMenor) {
+      } else if (valorDoCarrinho >= metaMenor) {
         metaAtual = metaMaior;
         freteGratis = true;
         corDaBarra = "#4bd6ff";
@@ -74,7 +74,9 @@ export default {
   },
   computed: {
     ...mapState({
-      carrinho: state => state.cart.carrinho
+      carrinho: state => state.cart.carrinho,
+      metaMenor: state => state.order.metaMenor,
+      metaMaior: state => state.order.metaMaior
     }),
     carrinhoTotal() {
       let total = 0;

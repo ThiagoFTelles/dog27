@@ -9,13 +9,26 @@
     </p>
     <h2>Dados de Faturamento</h2>
     <label for="name">Nome</label>
-    <input type="text" name="name" id="name" v-model="nome" />
+    <input type="text" name="name" id="name" v-model="nome" maxlength="40" />
     <label for="phone">Telefone</label>
-    <input type="text" name="phone" id="phone" v-model="telefone" />
+    <input
+      type="text"
+      name="phone"
+      id="phone"
+      v-model="telefone"
+      v-mask="['(##) ####-####', '(##) #-####-####']"
+    />
     <label for="email">e-mail</label>
     <input type="text" name="email" id="email" v-model="email" />
     <label for="postcode">CEP</label>
-    <input type="text" name="postcode" id="postcode" v-model="cep" @keyup="preencherCep" />
+    <input
+      type="text"
+      name="postcode"
+      id="postcode"
+      v-model="cep"
+      @keyup="preencherCep"
+      v-mask="'#####-###'"
+    />
     <label for="address_1">RUA</label>
     <input type="text" name="address_1" id="address_1" v-model="rua" />
     <label for="numero">Número</label>
@@ -167,5 +180,8 @@ export default {
 };
 </script>
 <style scoped>
+input {
+  text-transform: uppercase;
+}
 </style> 
  

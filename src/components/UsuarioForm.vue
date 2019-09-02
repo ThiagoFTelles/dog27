@@ -2,7 +2,7 @@
   <form>
     <div v-if="mostrarDadosLogin" class="usuario">
       <label for="nome">Nome</label>
-      <input type="text" id="nome" name="nome" v-model="nome" />
+      <input type="text" id="nome" name="nome" v-model="nome" maxlength="40" />
       <label for="email">Email</label>
       <input type="email" id="email" name="email" v-model="email" />
       <label for="senha">Senha</label>
@@ -14,10 +14,16 @@
         placeholder="deixe em branco para não alterar"
       />
       <label for="telefone">Telefone</label>
-      <input type="text" id="telefone" name="telefone" v-model="telefone" />
+      <input
+        type="text"
+        id="telefone"
+        name="telefone"
+        v-model="telefone"
+        v-mask="['(##) ####-####', '(##) #-####-####']"
+      />
     </div>
     <label for="cep">Cep</label>
-    <input type="text" id="cep" name="cep" v-model="cep" @keyup="preencherCep" />
+    <input type="text" id="cep" name="cep" v-model="cep" @keyup="preencherCep" v-mask="'#####-###'" />
     <label for="rua">Rua</label>
     <input type="text" id="rua" name="rua" v-model="rua" />
     <label for="numero">Número</label>
@@ -29,7 +35,7 @@
     <label for="cidade">Cidade</label>
     <input type="text" id="cidade" name="cidade" v-model="cidade" />
     <label for="estado">Estado</label>
-    <input type="text" id="estado" name="estado" v-model="estado" />
+    <input type="text" id="estado" name="estado" v-model="estado" v-mask="'AA'" />
     <div class="button">
       <slot></slot>
     </div>
@@ -94,5 +100,9 @@ form,
 .button {
   grid-column: 2;
   margin-top: 10px;
+}
+
+input {
+  text-transform: uppercase;
 }
 </style>

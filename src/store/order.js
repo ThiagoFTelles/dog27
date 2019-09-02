@@ -6,6 +6,8 @@ export default {
   strict: true,
   state: {
     order: null,
+    metaMenor: 169,
+    metaMaior: 269
   },
   mutations: {
     CRIAR_ORDER(state, payload) {

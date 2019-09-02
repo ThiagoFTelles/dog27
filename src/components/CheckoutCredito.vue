@@ -27,26 +27,26 @@
         name="SecurityCode"
         id="SecurityCode"
         v-model="SecurityCode"
-        v-mask="'###'"
+        v-mask="'####'"
       />
       <label for="Holder">Nome Impresso no Cartão</label>
       <input type="text" name="Holder" id="Holder" v-model="Holder" maxlength="40" />
       <label for="Installments">Parcelas</label>
-      <!-- Parcela mínima R$50, pode parcelar em até 4x sem juros -->
       <select name="Installments" id="Installments" v-model="Installments">
-        <option value="1">1</option>
-        <option v-if="this.valorTotalCarrinho>=100" value="2">2</option>
-        <option v-if="this.valorTotalCarrinho>=150" value="3">3</option>
-        <option v-if="this.valorTotalCarrinho>=200" value="4">4</option>
+        <option
+          v-for="parcela in parcelasDisponiveis"
+          :value="parcela.numero"
+          :key="`parcela-${parcela.numero}`"
+        >{{ parcela.numero }}</option>
       </select>
-      <!-- <input type="text" name="Installments" id="Installments" v-model="Installments" /> -->
+      <p>Parcela mínima R$50, pode parcelar em até 4x sem juros</p>
       <button @click="abrirOrdem">Pagar</button>
     </section>
   </section>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { api } from "@/services.js";
 
 export default {
@@ -211,10 +211,11 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      valorTotalCarrinho: state => state.cart.carrinhoTotal
-    }),
-    ...mapState(["order"])
+    ...mapState(["order"]),
+    ...mapGetters(["parcelasDisponiveis"])
+    // ...mapGetters({
+    //   parcelasDisponiveis: state => state.cart.parcelasDisponiveis
+    // })
   },
   watch: {
     CardNumber() {
@@ -231,7 +232,10 @@ export default {
       }
     }
   },
-  created() {}
+  created() {
+    console.log("parcelasDisponiveis");
+    console.log(this.parcelasDisponiveis);
+  }
 };
 </script>
 <style scoped>

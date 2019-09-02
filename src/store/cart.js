@@ -1,7 +1,8 @@
 export default {
   strict: true,
   state: {
-    carrinho: []
+    carrinho: [],
+    carrinhoTotal: 0
   },
   mutations: {
     ATUALIZAR_CART(state, payload) {
@@ -40,6 +41,51 @@ export default {
     removerItemDoCarrinho(context, payload) {
       context.commit("REMOVE_CART_ITEM", payload);
     },
+  },
+  getters: {
+    parcelasDisponiveis(state) {
+
+      if (state.carrinhoTotal >= 200) {
+        return [{
+            numero: 1
+          },
+          {
+            numero: 2
+          },
+          {
+            numero: 3
+          },
+          {
+            numero: 4
+          }
+        ];
+      }
+      if (state.carrinhoTotal >= 150) {
+        return [{
+            numero: 1
+          },
+          {
+            numero: 2
+          },
+          {
+            numero: 3
+          }
+        ];
+      }
+      if (state.carrinhoTotal >= 100) {
+        return [{
+            numero: 1
+          },
+          {
+            numero: 2
+          }
+        ];
+      } else {
+        return [{
+          numero: 1
+        }];
+      }
+    }
   },
   watch: {
     carrinho() {

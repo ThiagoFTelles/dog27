@@ -4,11 +4,17 @@
     <button @click="igualarDados">Copiar do faturamento</button>
     <section id="dadosDaEntrega">
       <label for="nameEntrega">Nome</label>
-      <input type="text" name="nameEntrega" id="nameEntrega" v-model="nomeEntrega" />
+      <input type="text" name="nameEntrega" id="nameEntrega" v-model="nomeEntrega" maxlength="40" />
       <label for="phoneEntrega">Telefone</label>
-      <input type="text" name="phoneEntrega" id="phoneEntrega" v-model="telefoneEntrega" />
+      <input
+        type="text"
+        name="phoneEntrega"
+        id="phoneEntrega"
+        v-model="telefoneEntrega"
+        v-mask="['(##) ####-####', '(##) #-####-####']"
+      />
       <label for="emailEntrega">e-mail</label>
-      <input type="text" name="emailEntrega" id="emailEntrega" v-model="emailEntrega" />
+      <input type="email" name="emailEntrega" id="emailEntrega" v-model="emailEntrega" />
       <label for="postcodeEntrega">CEP</label>
       <input
         type="text"
@@ -16,6 +22,7 @@
         id="postcodeEntrega"
         v-model="cepEntrega"
         @keyup="preencherCepEntrega"
+        v-mask="'#####-###'"
       />
       <label for="address_1Entrega">RUA</label>
       <input type="text" name="address_1Entrega" id="address_1Entrega" v-model="ruaEntrega" />
@@ -33,7 +40,13 @@
       <label for="cityEntrega">Cidade</label>
       <input type="text" name="cityEntrega" id="cityEntrega" v-model="cidadeEntrega" />
       <label for="stateEntrega">Estado</label>
-      <input type="text" name="stateEntrega" id="stateEntrega" v-model="estadoEntrega" />
+      <input
+        type="text"
+        name="stateEntrega"
+        id="stateEntrega"
+        v-model="estadoEntrega"
+        v-mask="'AA'"
+      />
     </section>
 
     <button v-if="habilitarBtn" @click="calcularPrecoPrazo" :disabled="!habilitarBtn">calcular preço</button>
@@ -75,7 +88,8 @@ export default {
       },
       habilitarBtn: false,
       calculando: false,
-      freteErrado: false
+      freteErrado: false,
+      tempoDePostagem: 2 //dias úteis
     };
   },
   computed: {
@@ -99,7 +113,8 @@ export default {
       carrinho: state => state.cart.carrinho,
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
       usuario: state => state.usuario,
-      freteEscolhido: state => state.freteEscolhido
+      freteEscolhido: state => state.freteEscolhido,
+      metaFreteGratis: state => state.order.metaMenor
     }),
     quantidadeDeCaixas() {
       let produtosPorCaixa = 6;
@@ -112,6 +127,14 @@ export default {
 
       const totalCaixas = itens / produtosPorCaixa;
       return totalCaixas !== Infinity ? Math.ceil(totalCaixas) : 1;
+    },
+    freteGratis() {
+      let resposta = false;
+      if (this.valorTotalCarrinho >= this.metaFreteGratis) {
+        resposta = true;
+      }
+
+      return resposta;
     }
   },
   methods: {
@@ -197,12 +220,10 @@ export default {
         .get(url)
         .then(res => {
           const resposta = res.data;
-          // eslint-disable-next-line
 
           var xmlString =
             process.env.VUE_APP_NODE_ENV === "test"
-              ? // eslint-disable-next-line
-                $(resposta).find("cResultado").prevObject[11].innerHTML
+              ? $(resposta).find("cResultado").prevObject[11].innerHTML
               : resposta; //res.data;
 
           var parser = new DOMParser();
@@ -231,31 +252,62 @@ export default {
                   obj.cResultado.Servicos.cServico[1].PrazoEntrega["#text"]
                 );
 
-          let tempoDePostagem = 2;
-
           this.pac.mostrar = false;
           this.sedex.mostrar = false;
           this.freteErrado = false;
 
-          valorPac !== "0,00"
-            ? ((this.pac.valor = valorPac), (this.pac.mostrar = true))
-            : 100;
-          this.pac.prazo = prazoPac !== 0 ? prazoPac + tempoDePostagem : 100;
-
-          valorSedex !== "0,00"
-            ? ((this.sedex.valor = valorSedex), (this.sedex.mostrar = true))
-            : 10;
-          this.sedex.prazo =
-            prazoSedex !== 0 ? prazoSedex + tempoDePostagem : 100;
-          if (this.pac.mostrar == false && this.sedex.mostrar == false) {
-            this.freteErrado = true;
-          }
-          this.calculando = false;
+          this.freteGratis
+            ? this.mostrarValoresDeFreteGratis(
+                valorPac,
+                valorSedex,
+                prazoPac,
+                prazoSedex
+              )
+            : this.mostrarValoresDeFrete(
+                valorPac,
+                valorSedex,
+                prazoPac,
+                prazoSedex
+              );
         })
         .catch(err => {
           // eslint-disable-next-line
           console.log(err);
         });
+    },
+    mostrarValoresDeFrete(valorPac, valorSedex, prazoPac, prazoSedex) {
+      valorPac !== "0,00"
+        ? ((this.pac.valor = valorPac), (this.pac.mostrar = true))
+        : 100;
+      this.pac.prazo = prazoPac !== 0 ? prazoPac + this.tempoDePostagem : 100;
+
+      valorSedex !== "0,00"
+        ? ((this.sedex.valor = valorSedex), (this.sedex.mostrar = true))
+        : 10;
+      this.sedex.prazo =
+        prazoSedex !== 0 ? prazoSedex + this.tempoDePostagem : 100;
+
+      this.verificaSeFreteEstaErrado();
+    },
+    mostrarValoresDeFreteGratis(valorPac, valorSedex, prazoPac, prazoSedex) {
+      valorSedex !== "0,00"
+        ? ((this.sedex.valor = valorSedex), (this.sedex.mostrar = true))
+        : "10";
+      this.sedex.prazo =
+        prazoSedex !== 0 ? prazoSedex + this.tempoDePostagem : 100;
+
+      valorPac !== "0,00"
+        ? ((this.pac.valor = "0"), (this.pac.mostrar = true))
+        : ((this.pac.mostrar = false), (this.sedex.valor = "0"));
+      this.pac.prazo = prazoPac !== 0 ? prazoPac + this.tempoDePostagem : 100;
+
+      this.verificaSeFreteEstaErrado();
+    },
+    verificaSeFreteEstaErrado() {
+      if (this.pac.mostrar == false && this.sedex.mostrar == false) {
+        this.freteErrado = true;
+      }
+      this.calculando = false;
     },
     calcularPesoDaCaixa() {
       let pesoTotalDoPedido = 0;
@@ -318,9 +370,15 @@ export default {
       this.resetarFrete();
     },
     carrinho() {
+      this.pac.mostrar = false;
+      this.sedex.mostrar = false;
       this.verificarFrete();
       this.resetarFrete();
     }
+  },
+  created() {
+    this.resetarFrete();
+    this.habilitarBtn = true;
   }
 };
 </script>
@@ -328,5 +386,9 @@ export default {
 <style scoped>
 input[type="radio"] {
   width: auto;
+}
+
+input {
+  text-transform: uppercase;
 }
 </style>
