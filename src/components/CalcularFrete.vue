@@ -293,23 +293,33 @@ export default {
         freteEscolhido.valor = this.sedex.valor;
         this.escolherFrete(freteEscolhido);
       }
-    }
-  },
-  watch: {
-    cepEntrega() {
-      if (this.cepEntrega.length >= 8) {
-        this.habilitarBtn = true;
-      } else {
-        this.habilitarBtn = false;
-      }
-      this.pac.mostrar = false;
-      this.sedex.mostrar = false;
-
+    },
+    resetarFrete() {
       let freteEmBranco = {
         nome: "",
         valor: ""
       };
       this.escolherFrete(freteEmBranco);
+    },
+    verificarFrete() {
+      if (this.cepEntrega.length >= 8) {
+        this.habilitarBtn = true;
+      } else {
+        this.habilitarBtn = false;
+      }
+    }
+  },
+  watch: {
+    cepEntrega() {
+      this.verificarFrete();
+      this.pac.mostrar = false;
+      this.sedex.mostrar = false;
+
+      this.resetarFrete();
+    },
+    carrinho() {
+      this.verificarFrete();
+      this.resetarFrete();
     }
   }
 };

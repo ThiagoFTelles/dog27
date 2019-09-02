@@ -33,14 +33,19 @@
       <input type="text" name="Holder" id="Holder" v-model="Holder" maxlength="40" />
       <label for="Installments">Parcelas</label>
       <!-- Parcela mínima R$50, pode parcelar em até 4x sem juros -->
-      <input type="text" name="Installments" id="Installments" v-model="Installments" />
+      <select name="Installments" id="Installments" v-model="Installments">
+        <option value="1">1</option>
+        <option v-if="this.valorTotalCarrinho>=100" value="2">2</option>
+        <option v-if="this.valorTotalCarrinho>=150" value="3">3</option>
+        <option v-if="this.valorTotalCarrinho>=200" value="4">4</option>
+      </select>
+      <!-- <input type="text" name="Installments" id="Installments" v-model="Installments" /> -->
       <button @click="abrirOrdem">Pagar</button>
     </section>
   </section>
 </template>
 
 <script>
-import AutorizacaoCieloCredito from "@/components/AutorizacaoCieloCredito.vue";
 import { mapState } from "vuex";
 import { api } from "@/services.js";
 
@@ -56,9 +61,7 @@ export default {
       Brand: ""
     };
   },
-  components: {
-    AutorizacaoCieloCredito
-  },
+  components: {},
   methods: {
     abrirOrdem() {
       if (this.order) {
@@ -203,10 +206,14 @@ export default {
 
       xhr.setRequestHeader("cache-control", "no-cache");
 
-      xhr.send(data);
+      xhr.send();
     }
   },
+
   computed: {
+    ...mapState({
+      valorTotalCarrinho: state => state.cart.carrinhoTotal
+    }),
     ...mapState(["order"])
   },
   watch: {
