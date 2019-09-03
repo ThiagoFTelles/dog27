@@ -177,9 +177,13 @@
         </div>
         <div class="combo-conteudo">
           <h1 class="combo-titulo">Aproveite e compre junto</h1>
-          <p class="preco-antigo">de R$159</p>
-          <p class="preco-combo">por R$140</p>
-          <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
+          <p class="preco-antigo">de R${{precoCombo.antigo}}</p>
+          <p class="preco-combo">por R${{precoCombo.novo}}</p>
+          <button
+            v-if="quantidadeEscolhida >0"
+            class="adicionar-ao-carrinho"
+            @click="colocarComboNoCarrinho(comboEscolhido)"
+          >Comprar</button>
           <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
         </div>
       </div>
@@ -232,7 +236,65 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho
     }),
-    ...mapState(["idCategoriaSelecionada", "idCategoriaCombo"])
+    ...mapState(["idCategoriaSelecionada", "idCategoriaCombo"]),
+    precoCombo() {
+      let precoCombo = {
+        antigo: null,
+        novo: null
+      };
+
+      let valorSemCombo =
+        Number(this.variacaoEscolhida.preco) + Number(this.produtoCombo.preco);
+      let valorComCombo =
+        Number(this.variacaoEscolhida.precoPromocional) +
+        Number(this.produtoCombo.precoPromocional);
+
+      precoCombo.antigo = this.quantidadeEscolhida * valorSemCombo;
+      precoCombo.novo = this.quantidadeEscolhida * valorComCombo;
+
+      return precoCombo;
+    },
+    comboEscolhido() {
+      let produto_1 = {
+        tamanho: this.variacaoEscolhida.tamanho,
+        sku: this.variacaoEscolhida.sku,
+        preco: this.variacaoEscolhida.preco,
+        precoPromocional: this.variacaoEscolhida.precoPromocional,
+        estoque: this.variacaoEscolhida.estoque,
+        nomeDoProduto: this.variacaoEscolhida.nomeDoProduto,
+        valorUnitarioCobrado: this.variacaoEscolhida.precoPromocional,
+        peso: this.variacaoEscolhida.peso,
+        idProdutoPai: this.variacaoEscolhida.idProdutoPai,
+        idDaVariacao: this.variacaoEscolhida.idDaVariacao,
+        quantidade: this.variacaoEscolhida.quantidade,
+        comboInicial: true,
+        comboFinal: false
+      };
+
+      let produto_2 = {
+        tamanho: this.produtoCombo.tamanho,
+        sku: this.produtoCombo.sku,
+        preco: this.produtoCombo.preco,
+        precoPromocional: this.produtoCombo.precoPromocional,
+        estoque: this.produtoCombo.estoque,
+        nomeDoProduto:
+          this.nomeDoProdutoCombo +
+          " " +
+          this.estampaEscolhida.nome +
+          " " +
+          this.produtoCombo.tamanho,
+        valorUnitarioCobrado: this.produtoCombo.precoPromocional,
+        peso: this.produtoCombo.pesoUnitario,
+        idProdutoPai: this.produtoCombo.idProdutoPai,
+        idDaVariacao: this.produtoCombo.idDaVariacao,
+        quantidade: this.variacaoEscolhida.quantidade,
+        comboInicial: false,
+        comboFinal: true
+      };
+
+      let combo = [produto_1, produto_2];
+      return combo;
+    }
   },
   methods: {
     ...mapActions(["adicionarItemAoCarrinho", "switchAreaDeCompra"]),
@@ -328,6 +390,8 @@ export default {
       this.menuTamanhos = !this.menuTamanhos;
     },
     escolherEstampa(estampa) {
+      this.produtoCombo = null;
+
       this.estampaEscolhida.nome = estampa.estampa;
       this.estampaEscolhida.nomeDoProduto =
         estampa.nomeDoProduto + " " + estampa.estampa;
@@ -369,6 +433,8 @@ export default {
       });
     },
     async escolherVariacao(variacao) {
+      this.produtoCombo = null;
+
       this.variacaoEscolhida.tamanho = variacao.tamanho;
       this.variacaoEscolhida.sku = variacao.sku;
       this.variacaoEscolhida.preco = variacao.preco;
@@ -394,7 +460,6 @@ export default {
         this.getSkuProdutoCombo(this.variacaoEscolhida.sku);
       } else {
         this.quantidadeEscolhida = 0;
-        this.produtoCombo = null;
       }
     },
     getSkuProdutoCombo(sku) {
@@ -427,7 +492,7 @@ export default {
           `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/?sku=${sku}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
-          console.log("response.data");
+          console.log("combo response.data");
           console.log(response.data);
 
           if (response.data.length === 0) {
@@ -440,10 +505,13 @@ export default {
               nomeDoProduto:
                 this.nomeDoProdutoCombo + " " + this.estampaEscolhida.nome,
               tamanho: this.variacaoEscolhida.tamanho,
-              preco: resposta.price,
+              preco: resposta.regular_price,
               precoPromocional: resposta.sale_price,
               idDaVariacao: resposta.id,
-              pesoUnitario: resposta.weight
+              pesoUnitario: resposta.weight,
+              sku: resposta.sku,
+              estoque: resposta.stock_quantity,
+              idProdutoPai: resposta.parent_id
             };
             this.produtoCombo = produtoCombo;
             this.mostrarComboArea = true;
@@ -457,10 +525,46 @@ export default {
         pesoTotal: item.peso * item.quantidade,
         idProdutoPai: item.idProdutoPai,
         idDaVariacao: item.idDaVariacao,
-        quantidade: item.quantidade
+        quantidade: item.quantidade,
+        isCombo: false,
+        comboInicial: false,
+        comboFinal: false
       };
       this.quantidadeEscolhida = 0;
       this.adicionarItemAoCarrinho(itemDoCarrinho);
+      this.switchAreaDeCompra(false);
+    },
+    async colocarComboNoCarrinho(combo) {
+      let item = combo[0];
+
+      let itemDoCarrinho = {
+        nomeDoProduto: item.nomeDoProduto + " " + item.tamanho,
+        valorUnitarioCobrado: item.valorUnitarioCobrado,
+        pesoTotal: item.peso * item.quantidade,
+        idProdutoPai: item.idProdutoPai,
+        idDaVariacao: item.idDaVariacao,
+        quantidade: item.quantidade,
+        isCombo: true,
+        comboInicial: item.comboInicial,
+        comboFinal: item.comboFinal
+      };
+      await this.adicionarItemAoCarrinho(itemDoCarrinho);
+
+      item = combo[1];
+
+      itemDoCarrinho = {
+        nomeDoProduto: item.nomeDoProduto + " " + item.tamanho,
+        valorUnitarioCobrado: item.valorUnitarioCobrado,
+        pesoTotal: item.peso * item.quantidade,
+        idProdutoPai: item.idProdutoPai,
+        idDaVariacao: item.idDaVariacao,
+        quantidade: item.quantidade,
+        isCombo: true,
+        comboInicial: item.comboInicial,
+        comboFinal: item.comboFinal
+      };
+      await this.adicionarItemAoCarrinho(itemDoCarrinho);
+      this.quantidadeEscolhida = 0;
       this.switchAreaDeCompra(false);
     },
     variacoesDaEstampa(item) {

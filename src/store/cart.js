@@ -12,7 +12,17 @@ export default {
       state.carrinho.push(payload)
     },
     REMOVE_CART_ITEM(state, payload) {
-      state.carrinho.splice(payload, 1); //aqui o payload recebe o index do item no carrinho[]
+      let cortar = 1;
+      let index = payload.index;
+
+      if (payload.isCombo === true) {
+        cortar = 2;
+      }
+      if (payload.comboFinal) {
+        index = index - 1;
+      }
+
+      state.carrinho.splice(index, cortar); //aqui o payload recebe o index do item no carrinho[]
     },
     TOTAL_CART(state) {
       let total = 0;

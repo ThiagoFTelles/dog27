@@ -12,8 +12,16 @@
           >
             <p>x {{item.quantidade}}</p>
             <p>{{item.nomeDoProduto}}</p>
-            <p class="carrinho_preco">{{item.valorUnitarioCobrado | numeroPreco}}</p>
-            <button class="carrinho_remover" @click="removerItemDoCarrinho(index)">X</button>
+            <p
+              v-if="item.isCombo"
+              style="color:green"
+              class="carrinho_preco"
+            >{{item.valorUnitarioCobrado | numeroPreco}}</p>
+            <p v-else class="carrinho_preco">{{item.valorUnitarioCobrado | numeroPreco}}</p>
+            <button
+              class="carrinho_remover"
+              @click="removerItemDoCarrinho({index:index, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
+            >X</button>
             <p></p>
           </li>
         </ul>
@@ -56,7 +64,7 @@ export default {
           total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
         });
       }
-      
+
       return total;
     }
   },
