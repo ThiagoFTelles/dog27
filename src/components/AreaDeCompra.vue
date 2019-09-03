@@ -92,9 +92,85 @@
     </div>
     <div class="combo">
       <div class="combo-produtos">
-        <div class="combo-produto"></div>
+        <div class="combo-produto">
+          <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
+          <h1
+            class="combo-banner-titulo"
+          >PEITORAL PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
+
+          <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+          <div class="tamanho-area-combo">
+            <div class="selecionar-tamanho">
+              <div
+                class="tamanhos-disponiveis"
+                @click="mostrarTamanhos"
+                v-if="!menuTamanhos"
+              >{{variacaoEscolhida.tamanho}}</div>
+              <ul
+                v-else
+                @click="mostrarTamanhos"
+                name="tamanhos-disponiveis"
+                class="tamanhos-disponiveis"
+              >
+                <li
+                  v-for="variacao in variacoesDisponiveis"
+                  :value="variacao.tamanho"
+                  :key="variacao.tamanho"
+                  @click="escolherVariacao(variacao)"
+                >{{variacao.tamanho}}</li>
+              </ul>
+            </div>
+            <div class="selecionar-quantidade">
+              <div
+                v-if="quantidadeEscolhida > 0"
+                class="alterar-quantidade"
+                @click="reduzirQuantidadeEscolhida"
+              >-</div>
+              <div v-else class="alterar-quantidade">-</div>
+              <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+              <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+            </div>
+          </div>
+        </div>
         <h1 class="banner-titulo">+</h1>
-        <div class="combo-produto"></div>
+        <div class="combo-produto">
+          <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
+          <h1 class="combo-banner-titulo">GUIA PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
+
+          <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+          <div class="tamanho-area-combo">
+            <div class="selecionar-tamanho">
+              <div
+                class="tamanhos-disponiveis"
+                @click="mostrarTamanhos"
+                v-if="!menuTamanhos"
+              >{{variacaoEscolhida.tamanho}}</div>
+              <ul
+                v-else
+                @click="mostrarTamanhos"
+                name="tamanhos-disponiveis"
+                class="tamanhos-disponiveis"
+              >
+                <li
+                  v-for="variacao in variacoesDisponiveis"
+                  :value="variacao.tamanho"
+                  :key="variacao.tamanho"
+                  @click="escolherVariacao(variacao)"
+                >{{variacao.tamanho}}</li>
+              </ul>
+            </div>
+            <div class="selecionar-quantidade">
+              <div
+                v-if="quantidadeEscolhida > 0"
+                class="alterar-quantidade"
+                @click="reduzirQuantidadeEscolhida"
+              >-</div>
+              <div v-else class="alterar-quantidade">-</div>
+              <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+              <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="combo-conteudo">
         <h1 class="combo-titulo">Aproveite e compre junto</h1>
@@ -147,7 +223,7 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho
     }),
-    ...mapState(["idCategoriaSelecionada"])
+    ...mapState(["idCategoriaSelecionada", "idCategoriaCombo"])
   },
   methods: {
     ...mapActions(["adicionarItemAoCarrinho", "switchAreaDeCompra"]),
@@ -382,6 +458,15 @@ export default {
   color: black;
 }
 
+.combo-banner-titulo {
+  margin: 10px;
+  font-family: "Fira Sans", sans-serif;
+  text-align: center;
+  font-size: 1em;
+  font-style: italic;
+  color: black;
+}
+
 .area-de-compra-imagens {
   text-align: center;
 }
@@ -401,6 +486,11 @@ export default {
 .area-de-compra-container div img.principal {
   max-height: 300px;
   max-width: 90%;
+  margin: 0 auto;
+}
+
+.img-combo {
+  max-width: 200px;
   margin: 0 auto;
 }
 
@@ -463,10 +553,19 @@ export default {
   display: flex;
   align-items: center;
   height: 50px;
-
   padding: 0;
   text-align: center;
   width: 100%;
+  justify-content: space-between;
+}
+
+.tamanho-area-combo {
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0;
+  text-align: center;
   justify-content: space-between;
 }
 

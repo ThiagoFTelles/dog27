@@ -21,6 +21,7 @@ export default new Vuex.Store({
     carregando: true,
     categorias: [],
     idCategoriaSelecionada: "",
+    idCategoriaCombo: "",
     login: false,
     freteEscolhido: {
       nome: "",
@@ -64,7 +65,8 @@ export default new Vuex.Store({
       state.categorias.push(payload);
     },
     SET_CATEGORIA_SELECIONADA_ID(state, payload) {
-      state.idCategoriaSelecionada = payload;
+      state.idCategoriaSelecionada = payload.categoriaId;
+      state.idCategoriaCombo = payload.categoriaComboId;
     },
     UPDATE_LOGIN(state, payload) {
       state.login = payload;

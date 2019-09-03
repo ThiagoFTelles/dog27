@@ -183,8 +183,11 @@ export default {
     ...mapState(["idCategoriaSelecionada"])
   },
   created() {
-    this.selecionarCategoria(this.categoriaId);
-    // this.getProdutos();
+    let categorias = {
+      categoriaId: this.categoriaId,
+      categoriaComboId: this.idCategoriaCombo
+    };
+    this.selecionarCategoria(categorias);
   },
   watch: {
     mostrarAreaDeCompra() {

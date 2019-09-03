@@ -24,6 +24,10 @@ Vue.filter("numeroPreco", valor => {
   }
 });
 
+Vue.filter('uppercase', function (value) {
+  return value.toUpperCase()
+})
+
 new Vue({
   router,
   store,
