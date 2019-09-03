@@ -90,96 +90,101 @@
         </div>
       </div>
     </div>
-    <div class="combo">
-      <div class="combo-produtos">
-        <div class="combo-produto">
-          <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
-          <h1
-            class="combo-banner-titulo"
-          >PEITORAL PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
+    <section v-if="mostrarComboArea">
+      <div class="combo" v-if="produtoCombo">
+        <div class="combo-produtos">
+          <div class="combo-produto">
+            <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
+            <h1
+              class="combo-banner-titulo"
+            >PEITORAL PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
 
-          <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
-          <div class="tamanho-area-combo">
-            <div class="selecionar-tamanho">
-              <div
-                class="tamanhos-disponiveis"
-                @click="mostrarTamanhos"
-                v-if="!menuTamanhos"
-              >{{variacaoEscolhida.tamanho}}</div>
-              <ul
-                v-else
-                @click="mostrarTamanhos"
-                name="tamanhos-disponiveis"
-                class="tamanhos-disponiveis"
-              >
-                <li
-                  v-for="variacao in variacoesDisponiveis"
-                  :value="variacao.tamanho"
-                  :key="variacao.tamanho"
-                  @click="escolherVariacao(variacao)"
-                >{{variacao.tamanho}}</li>
-              </ul>
+            <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+            <div class="tamanho-area-combo">
+              <div class="selecionar-tamanho">
+                <div
+                  class="tamanhos-disponiveis"
+                  @click="mostrarTamanhos"
+                  v-if="!menuTamanhos"
+                >{{variacaoEscolhida.tamanho}}</div>
+                <ul
+                  v-else
+                  @click="mostrarTamanhos"
+                  name="tamanhos-disponiveis"
+                  class="tamanhos-disponiveis"
+                >
+                  <li
+                    v-for="variacao in variacoesDisponiveis"
+                    :value="variacao.tamanho"
+                    :key="variacao.tamanho"
+                    @click="escolherVariacao(variacao)"
+                  >{{variacao.tamanho}}</li>
+                </ul>
+              </div>
+              <div class="selecionar-quantidade">
+                <div
+                  v-if="quantidadeEscolhida > 0"
+                  class="alterar-quantidade"
+                  @click="reduzirQuantidadeEscolhida"
+                >-</div>
+                <div v-else class="alterar-quantidade">-</div>
+                <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+              </div>
             </div>
-            <div class="selecionar-quantidade">
-              <div
-                v-if="quantidadeEscolhida > 0"
-                class="alterar-quantidade"
-                @click="reduzirQuantidadeEscolhida"
-              >-</div>
-              <div v-else class="alterar-quantidade">-</div>
-              <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
-              <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+          </div>
+          <h1 class="banner-titulo">+</h1>
+          <div class="combo-produto indicado">
+            <img :src="produtoCombo.imgUrl" alt="Dog27" class="img-combo" />
+            <h1
+              class="combo-banner-titulo"
+            >{{nomeDoProdutoCombo}} {{estampaEscolhida.nome | uppercase}}</h1>
+
+            <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+            <div class="tamanho-area-combo">
+              <div class="selecionar-tamanho">
+                <div
+                  class="tamanhos-disponiveis"
+                  @click="mostrarTamanhos"
+                  v-if="!menuTamanhos"
+                >{{variacaoEscolhida.tamanho}}</div>
+                <ul
+                  v-else
+                  @click="mostrarTamanhos"
+                  name="tamanhos-disponiveis"
+                  class="tamanhos-disponiveis"
+                >
+                  <li
+                    v-for="variacao in variacoesDisponiveis"
+                    :value="variacao.tamanho"
+                    :key="variacao.tamanho"
+                    @click="escolherVariacao(variacao)"
+                  >{{variacao.tamanho}}</li>
+                </ul>
+              </div>
+              <div class="selecionar-quantidade">
+                <div
+                  v-if="quantidadeEscolhida > 0"
+                  class="alterar-quantidade"
+                  @click="reduzirQuantidadeEscolhida"
+                >-</div>
+                <div v-else class="alterar-quantidade">-</div>
+                <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+              </div>
             </div>
           </div>
         </div>
-        <h1 class="banner-titulo">+</h1>
-        <div class="combo-produto">
-          <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
-          <h1 class="combo-banner-titulo">GUIA PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
-
-          <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
-          <div class="tamanho-area-combo">
-            <div class="selecionar-tamanho">
-              <div
-                class="tamanhos-disponiveis"
-                @click="mostrarTamanhos"
-                v-if="!menuTamanhos"
-              >{{variacaoEscolhida.tamanho}}</div>
-              <ul
-                v-else
-                @click="mostrarTamanhos"
-                name="tamanhos-disponiveis"
-                class="tamanhos-disponiveis"
-              >
-                <li
-                  v-for="variacao in variacoesDisponiveis"
-                  :value="variacao.tamanho"
-                  :key="variacao.tamanho"
-                  @click="escolherVariacao(variacao)"
-                >{{variacao.tamanho}}</li>
-              </ul>
-            </div>
-            <div class="selecionar-quantidade">
-              <div
-                v-if="quantidadeEscolhida > 0"
-                class="alterar-quantidade"
-                @click="reduzirQuantidadeEscolhida"
-              >-</div>
-              <div v-else class="alterar-quantidade">-</div>
-              <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
-              <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
-            </div>
-          </div>
+        <div class="combo-conteudo">
+          <h1 class="combo-titulo">Aproveite e compre junto</h1>
+          <p class="preco-antigo">de R$159</p>
+          <p class="preco-combo">por R$140</p>
+          <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
+          <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
         </div>
       </div>
-      <div class="combo-conteudo">
-        <h1 class="combo-titulo">Aproveite e compre junto</h1>
-        <p class="preco-antigo">de R$159</p>
-        <p class="preco-combo">por R$140</p>
-        <button v-if="quantidadeEscolhida >0" class="adicionar-ao-carrinho">Comprar</button>
-        <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
-      </div>
-    </div>
+      <PaginaCarregando v-else />
+    </section>
   </section>
 </template>
 
@@ -206,6 +211,7 @@ export default {
       variacoesDisponiveis: [],
       variacaoEscolhida: {
         tamanho: "",
+        sku: "",
         preco: "",
         precoPromocional: "",
         estoque: null,
@@ -216,6 +222,9 @@ export default {
         idDaVariacao: "",
         quantidade: 0
       },
+      produtoCombo: null,
+      nomeDoProdutoCombo: "",
+      mostrarComboArea: true,
       quantidadeDaVariacaoSelecionadaNoCarrinho: null
     };
   },
@@ -231,13 +240,11 @@ export default {
       if (this.variacaoEscolhida.estoque > 0) {
         this.quantidadeEscolhida++;
         this.variacaoEscolhida.estoque--;
-        console.log("estoque: " + this.variacaoEscolhida.estoque);
       }
     },
     reduzirQuantidadeEscolhida() {
       this.quantidadeEscolhida--;
       this.variacaoEscolhida.estoque++;
-      console.log("estoque: " + this.variacaoEscolhida.estoque);
     },
     getEstampas() {
       api
@@ -333,7 +340,7 @@ export default {
     getVariacoes(idProdutoPai) {
       api
         .get(
-          `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           this.variacoesDisponiveis = [];
@@ -363,6 +370,7 @@ export default {
     },
     async escolherVariacao(variacao) {
       this.variacaoEscolhida.tamanho = variacao.tamanho;
+      this.variacaoEscolhida.sku = variacao.sku;
       this.variacaoEscolhida.preco = variacao.preco;
       this.variacaoEscolhida.precoPromocional = variacao.precoPromocional;
       this.variacaoEscolhida.nomeDoProduto = this.estampaEscolhida.nomeDoProduto;
@@ -377,19 +385,70 @@ export default {
         await this.ajustarEstoqueComCarrinho
       );
       estoqueNoCarrinho = this.quantidadeDaVariacaoSelecionadaNoCarrinho;
-      console.log("estoque inicial: " + variacao.estoque);
+
       this.variacaoEscolhida.estoque = variacao.estoque - estoqueNoCarrinho;
       if (this.variacaoEscolhida.estoque > 0) {
         this.quantidadeEscolhida = 1;
         this.variacaoEscolhida.estoque =
           this.variacaoEscolhida.estoque - this.quantidadeEscolhida;
+        this.getSkuProdutoCombo(this.variacaoEscolhida.sku);
       } else {
         this.quantidadeEscolhida = 0;
+        this.produtoCombo = null;
+      }
+    },
+    getSkuProdutoCombo(sku) {
+      let prefix = sku.slice(0, 2);
+      let sufix = sku.slice(2);
+      let newPrefix = "";
+      this.nomeDoProdutoCombo = "";
+      this.produtoCombo = null;
+      if (prefix == "CO") {
+        newPrefix = "LE";
+        this.nomeDoProdutoCombo = "GUIA PARA CACHORROS ";
+      } else if (prefix == "LE") {
+        newPrefix = "HA";
+        this.nomeDoProdutoCombo = "PEITORAL PARA CACHORROS ";
+      } else if (prefix == "HA") {
+        newPrefix = "LE";
+        this.nomeDoProdutoCombo = "GUIA PARA CACHORROS ";
+      } else {
+        newPrefix = "LE";
+        this.nomeDoProdutoCombo = "GUIA PARA CACHORROS ";
       }
 
-      console.log("quantidadeEscolhida: " + this.quantidadeEscolhida);
-      console.log("estoqueNoCarrinho: " + estoqueNoCarrinho);
-      console.log("estoque final: " + this.variacaoEscolhida.estoque);
+      let skuProdutoCombo = newPrefix + sufix;
+
+      this.getProdutoCombo(skuProdutoCombo);
+    },
+    getProdutoCombo(sku) {
+      api
+        .get(
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/?sku=${sku}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+        )
+        .then(response => {
+          console.log("response.data");
+          console.log(response.data);
+
+          if (response.data.length === 0) {
+            console.log("deu erro no combo");
+            this.mostrarComboArea = false;
+          } else {
+            let resposta = response.data[0];
+            let produtoCombo = {
+              imgUrl: resposta.images[0].src,
+              nomeDoProduto:
+                this.nomeDoProdutoCombo + " " + this.estampaEscolhida.nome,
+              tamanho: this.variacaoEscolhida.tamanho,
+              preco: resposta.price,
+              precoPromocional: resposta.sale_price,
+              idDaVariacao: resposta.id,
+              pesoUnitario: resposta.weight
+            };
+            this.produtoCombo = produtoCombo;
+            this.mostrarComboArea = true;
+          }
+        });
     },
     colocarNoCarrinho(item) {
       const itemDoCarrinho = {
@@ -412,6 +471,7 @@ export default {
 
       this.variacoesDisponiveis.push({
         id: item.id,
+        sku: item.sku,
         tamanho: tamanho,
         preco: item.regular_price,
         peso: item.weight,
