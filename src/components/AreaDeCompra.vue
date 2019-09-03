@@ -140,27 +140,10 @@
               class="combo-banner-titulo"
             >{{nomeDoProdutoCombo}} {{estampaEscolhida.nome | uppercase}}</h1>
 
-            <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+            <p class="label-estampa">Tamanho: {{produtoCombo.tamanho}}</p>
             <div class="tamanho-area-combo">
               <div class="selecionar-tamanho">
-                <div
-                  class="tamanhos-disponiveis"
-                  @click="mostrarTamanhos"
-                  v-if="!menuTamanhos"
-                >{{variacaoEscolhida.tamanho}}</div>
-                <ul
-                  v-else
-                  @click="mostrarTamanhos"
-                  name="tamanhos-disponiveis"
-                  class="tamanhos-disponiveis"
-                >
-                  <li
-                    v-for="variacao in variacoesDisponiveis"
-                    :value="variacao.tamanho"
-                    :key="variacao.tamanho"
-                    @click="escolherVariacao(variacao)"
-                  >{{variacao.tamanho}}</li>
-                </ul>
+                <div class="tamanhos-disponiveis" v-if="!menuTamanhos">{{produtoCombo.tamanho}}</div>
               </div>
               <div class="selecionar-quantidade">
                 <div
@@ -466,23 +449,26 @@ export default {
       let prefix = sku.slice(0, 2);
       let sufix = sku.slice(2);
       let newPrefix = "";
+      let tamanho = sku.slice(-2);
+      let newSufix = sufix;
+
       this.nomeDoProdutoCombo = "";
       this.produtoCombo = null;
-      if (prefix == "CO") {
-        newPrefix = "LE";
-        this.nomeDoProdutoCombo = "GUIA PARA CACHORROS ";
-      } else if (prefix == "LE") {
+
+      if (prefix == "LE") {
         newPrefix = "HA";
         this.nomeDoProdutoCombo = "PEITORAL PARA CACHORROS ";
-      } else if (prefix == "HA") {
-        newPrefix = "LE";
-        this.nomeDoProdutoCombo = "GUIA PARA CACHORROS ";
       } else {
         newPrefix = "LE";
         this.nomeDoProdutoCombo = "GUIA PARA CACHORROS ";
       }
 
-      let skuProdutoCombo = newPrefix + sufix;
+      // OBS: Guia não tem tamanho M
+      if (tamanho == "_M") {
+        newSufix = sufix.slice(0, -2);
+        newSufix = newSufix + "_G";
+      }
+      let skuProdutoCombo = newPrefix + newSufix;
 
       this.getProdutoCombo(skuProdutoCombo);
     },
@@ -504,7 +490,10 @@ export default {
               imgUrl: resposta.images[0].src,
               nomeDoProduto:
                 this.nomeDoProdutoCombo + " " + this.estampaEscolhida.nome,
-              tamanho: this.variacaoEscolhida.tamanho,
+              tamanho:
+                this.variacaoEscolhida.tamanho == "M"
+                  ? "G"
+                  : this.variacaoEscolhida.tamanho,
               preco: resposta.regular_price,
               precoPromocional: resposta.sale_price,
               idDaVariacao: resposta.id,
