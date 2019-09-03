@@ -174,9 +174,9 @@ export default {
           });
         } else {
           console.log(
-            "Houve um problema com o pagamento: " +
+            "Houve um problema com o pagamento (" +
               autorizacaoResposta +
-              " por favor, verifique o cartão e tente novamente."
+              ") por favor, verifique o cartão e tente novamente."
           );
         }
       });

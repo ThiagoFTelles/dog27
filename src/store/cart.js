@@ -2,9 +2,23 @@ export default {
   strict: true,
   state: {
     carrinho: [],
-    carrinhoTotal: 0
+    carrinhoTotal: 0,
+    presente: {
+      product_id: 175, //Durval (preto)
+      variation_id: 176, //tamanho único
+      quantity: 1,
+      total: "0"
+    },
+    nomeDoPresente: "Presente: Cinto de segurança Dog27",
+    ganhouPresente: false,
   },
   mutations: {
+    DAR_PRESENTE(state) {
+      state.ganhouPresente = true;
+    },
+    TIRAR_PRESENTE(state) {
+      state.ganhouPresente = false;
+    },
     ATUALIZAR_CART(state, payload) {
       state.carrinho = payload;
     },
@@ -40,6 +54,13 @@ export default {
       if (window.localStorage.carrinho) {
         let carrinhoLocal = JSON.parse(window.localStorage.carrinho); // JSON.parse = passar a string de volta para objeto
         context.commit("ATUALIZAR_CART", carrinhoLocal)
+      }
+    },
+    atualizarPresente(context, payload) {
+      if (payload === true) {
+        context.commit("DAR_PRESENTE")
+      } else {
+        context.commit("TIRAR_PRESENTE")
       }
     },
     atualizarCarrinhoTotal(context) {

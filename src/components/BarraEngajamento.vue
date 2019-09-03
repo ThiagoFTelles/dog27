@@ -21,19 +21,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "BarraEngajamento",
   data() {
     return {
       freteGratis: false,
-      ganhouPresente: false,
       valorQueFalta: 0,
       corDaBarra: ""
     };
   },
   methods: {
+    ...mapActions(["atualizarPresente"]),
     calculatePercentage(valorDoCarrinho) {
       var metaMenor = this.metaMenor;
       var metaMaior = this.metaMaior;
@@ -54,7 +54,7 @@ export default {
         corDaBarra = "#4bd6ff";
       }
 
-      this.ganhouPresente = ganhouPresente;
+      this.atualizarPresente(ganhouPresente);
       this.freteGratis = freteGratis;
       this.corDaBarra = corDaBarra;
 
@@ -76,20 +76,10 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho,
       metaMenor: state => state.order.metaMenor,
-      metaMaior: state => state.order.metaMaior
+      metaMaior: state => state.order.metaMaior,
+      carrinhoTotal: state => state.cart.carrinhoTotal,
+      ganhouPresente: state => state.cart.ganhouPresente
     }),
-    carrinhoTotal() {
-      let total = 0;
-      if (this.carrinho.length) {
-        this.carrinho.forEach(item => {
-          //esta propriedade sempre será atualizada reativamente quando Carrinho mudar
-          let valorDoItem =
-            Number(item.valorUnitarioCobrado) * Number(item.quantidade);
-          total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
-        });
-      }
-      return total;
-    },
     preenchimentoStyle() {
       let style = {
         width: this.calculatePercentage(this.carrinhoTotal),

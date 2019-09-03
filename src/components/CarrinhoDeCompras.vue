@@ -5,6 +5,12 @@
       <h2 class="carrinho_titulo">Carrinho</h2>
       <div v-if="carrinho.length > 0">
         <ul class="carrinho_lista">
+          <li v-if="ganhouPresente" class="carrinho_item">
+            <p>x 1</p>
+            <p style="color:green">{{nomeDoPresente}}</p>
+            <p class="carrinho_preco">{{0 | numeroPreco}}</p>
+            <br />
+          </li>
           <li
             class="carrinho_item"
             v-for="(item, index) in carrinho"
@@ -52,21 +58,25 @@ export default {
   },
   computed: {
     ...mapState({
-      carrinho: state => state.cart.carrinho
-    }),
-    carrinhoTotal() {
-      let total = 0;
-      if (this.carrinho.length) {
-        this.carrinho.forEach(item => {
-          //esta propriedade sempre será atualizada reativamente quando Carrinho mudar
-          let valorDoItem =
-            Number(item.valorUnitarioCobrado) * Number(item.quantidade);
-          total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
-        });
-      }
+      carrinho: state => state.cart.carrinho,
+      ganhouPresente: state => state.cart.ganhouPresente,
+      nomeDoPresente: state => state.cart.nomeDoPresente,
+      metaMaior: state => state.order.metaMaior,
+      carrinhoTotal: state => state.cart.carrinhoTotal
+    })
+    // carrinhoTotal() {
+    //   let total = 0;
+    //   if (this.carrinho.length) {
+    //     this.carrinho.forEach(item => {
+    //       //esta propriedade sempre será atualizada reativamente quando Carrinho mudar
+    //       let valorDoItem =
+    //         Number(item.valorUnitarioCobrado) * Number(item.quantidade);
+    //       total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
+    //     });
+    //   }
 
-      return total;
-    }
+    //   return total;
+    // }
   },
   filters: {
     numeroPreco(valor) {

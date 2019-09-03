@@ -77,8 +77,10 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho,
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
+      metaMaior: state => state.order.metaMaior,
       usuario: state => state.usuario,
-      freteEscolhido: state => state.freteEscolhido
+      freteEscolhido: state => state.freteEscolhido,
+      presente: state => state.cart.presente
     }),
     ...mapFields({
       fields: [
@@ -160,6 +162,9 @@ export default {
         };
         this.line_items.push(cartItem);
       });
+      if (this.valorTotalCarrinho >= this.metaMaior) {
+        this.line_items.push(this.presente);
+      }
     },
     preencherCep() {
       const cep = this.cep.replace(/\D/g, ""); /* pegará apenas dígitos */
