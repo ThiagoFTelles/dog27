@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import { api } from "@/services.js";
 
 export default {
@@ -73,6 +73,7 @@ export default {
   },
   components: {},
   methods: {
+    ...mapActions(["esvaziarCarrinho"]),
     abrirOrdem() {
       let data = {
         endpoint: "/orders",
@@ -170,9 +171,7 @@ export default {
         });
     },
     capturarCielo(oderPayment) {
-      let self = this;
-      console.log("self 1");
-      console.log(self);
+      let self = this; //preciso desta variável para acessar o "this." nas funções inferiores
       this.erros = [];
       this.solicitarAutorizacaoCielo(oderPayment).then(r => {
         let autorizacaoStatus = r.status;
@@ -184,7 +183,7 @@ export default {
           ) {
             let resposta = JSON.parse(respostaCaptura.target.response);
             self.vendaConcluida = resposta.Status === 2 ? true : false;
-            resposta.Status === 2 ? window.localStorage.removeItem("carrinho") : "";
+            resposta.Status === 2 ? self.esvaziarCarrinho() : "";
           });
         } else {
           this.erroNoPagamentoCielo(autorizacaoResposta);

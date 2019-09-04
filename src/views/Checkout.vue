@@ -53,12 +53,12 @@
         @click.native="newOrder({payment_method: 'cielo_credit',
         payment_method_title: 'Cartão de crédito'})"
       >Cartão de Crédito</router-link>
-      <router-link
+      <!-- <router-link
         :to="{name: 'checkoutboleto'}"
         class="opcao_de_pagamento"
         @click.native="newOrder({payment_method: 'woo-moip-official',
         payment_method_title: 'Boleto'})"
-      >Boleto</router-link>
+      >Boleto</router-link>-->
     </section>
   </section>
 </template>

@@ -386,8 +386,12 @@ export default {
     }
   },
   created() {
-    this.resetarFrete();
-    this.habilitarBtn = true;
+    if (this.valorTotalCarrinho > 0) {
+      this.resetarFrete();
+      this.habilitarBtn = true;
+    } else {
+      this.$router.push({ name: "home" });
+    }
   }
 };
 </script>

@@ -22,6 +22,9 @@ export default {
     ATUALIZAR_CART(state, payload) {
       state.carrinho = payload;
     },
+    ZERAR_CART(state) {
+      state.carrinho = [];
+    },
     ADD_CART_ITEM(state, payload) {
       state.carrinho.push(payload)
     },
@@ -50,6 +53,11 @@ export default {
     }
   },
   actions: {
+    esvaziarCarrinho(context) {
+      window.localStorage.removeItem("carrinho");
+      context.commit("ZERAR_CART");
+
+    },
     checarLocalStorage(context) {
       if (window.localStorage.carrinho) {
         let carrinhoLocal = JSON.parse(window.localStorage.carrinho); // JSON.parse = passar a string de volta para objeto
