@@ -1,8 +1,9 @@
 <template>
   <section class="checkout">
     <section v-if="vendaConcluida">
-      <h1>Parabéns! A sua compra foi concluída!</h1>
-      <h2>Verifique o e-mail informado para mais detalhes</h2>
+      <h2>Parabéns! A sua compra foi concluída!</h2>
+      <h3>Verifique o e-mail informado para mais detalhes.</h3>
+      <h3>Se não encontrou nosso e-mail, não se esqueça de olhar na caixa de spam.</h3>
     </section>
 
     <section v-else class="checkout">
@@ -56,6 +57,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import { api } from "@/services.js";
+import { requestCielo } from "@/helpers.js";
 
 export default {
   name: "CheckoutCredito",
@@ -73,7 +75,7 @@ export default {
   },
   components: {},
   methods: {
-    ...mapActions(["esvaziarCarrinho"]),
+    ...mapActions(["esvaziarCarrinho", "setOrderId"]),
     abrirOrdem() {
       let data = {
         endpoint: "/orders",
@@ -96,37 +98,37 @@ export default {
             }
           }
         };
-
+        this.setOrderId(cobranca.MerchantOrderId);
         this.capturarCielo(cobranca);
       });
     },
-    requestCielo(method, url, data) {
-      return new Promise(function(resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, url);
-        xhr.setRequestHeader(
-          "MerchantId",
-          process.env.VUE_APP_MERCHANT_ID_CIELO
-        );
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader(
-          "MerchantKey",
-          process.env.VUE_APP_MERCHANT_KEY_CIELO
-        );
-        xhr.setRequestHeader("Accept", "*/*");
-        xhr.setRequestHeader("Cache-Control", "no-cache");
-        xhr.onload = resolve;
-        xhr.onerror = reject;
-        xhr.send(data);
-      });
-    },
+    // requestCielo(method, url, data) {
+    //   return new Promise(function(resolve, reject) {
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.open(method, url);
+    //     xhr.setRequestHeader(
+    //       "MerchantId",
+    //       process.env.VUE_APP_MERCHANT_ID_CIELO
+    //     );
+    //     xhr.setRequestHeader("Content-Type", "application/json");
+    //     xhr.setRequestHeader(
+    //       "MerchantKey",
+    //       process.env.VUE_APP_MERCHANT_KEY_CIELO
+    //     );
+    //     xhr.setRequestHeader("Accept", "*/*");
+    //     xhr.setRequestHeader("Cache-Control", "no-cache");
+    //     xhr.onload = resolve;
+    //     xhr.onerror = reject;
+    //     xhr.send(data);
+    //   });
+    // },
     solicitarAutorizacaoCielo(oderPayment) {
       this.erros = [];
       var data = JSON.stringify(oderPayment);
 
-      return this.requestCielo(
+      return requestCielo(
         "POST",
-        "https://apisandbox.cieloecommerce.cielo.com.br/1/sales",
+        `${process.env.VUE_APP_REQUISICOES_API_CIELO}/1/sales`,
         data
       )
         .then(function(e) {
@@ -178,12 +180,12 @@ export default {
         let autorizacaoResposta = r.resposta;
 
         if (autorizacaoStatus === 1) {
-          this.requestCielo("PUT", autorizacaoResposta).then(function(
+          requestCielo("PUT", autorizacaoResposta).then(function(
             respostaCaptura
           ) {
             let resposta = JSON.parse(respostaCaptura.target.response);
-            self.vendaConcluida = resposta.Status === 2 ? true : false;
             resposta.Status === 2 ? self.esvaziarCarrinho() : "";
+            resposta.Status === 2 ? self.atualizarOrder(resposta.Status) : "";
           });
         } else {
           this.erroNoPagamentoCielo(autorizacaoResposta);
@@ -195,14 +197,34 @@ export default {
         "Houve um problema com o pagamento. Por favor, verifique o cartão e tente novamente. " +
         resposta;
       this.erros.push(erro);
+    },
+    atualizarOrder(statusCaptura) {
+      if (statusCaptura === 2) {
+        const data = {
+          endpoint: `/orders/${this.idOrdemAberta}`,
+          body: {
+            status: "processing"
+          }
+        };
+
+        api
+          .putApiWc(data)
+          .then(r => {
+            this.vendaConcluida = true;
+            this.setOrderId(null);
+          })
+          .catch(error => {
+            this.erros.push(error.response.data);
+          });
+      }
     }
   },
   computed: {
-    ...mapState(["order"]),
+    ...mapState({
+      idOrdemAberta: state => state.order.idOrdemAberta,
+      order: state => state.order
+    }),
     ...mapGetters(["parcelasDisponiveis"])
-    // ...mapGetters({
-    //   parcelasDisponiveis: state => state.cart.parcelasDisponiveis
-    // })
   },
   watch: {
     CardNumber() {

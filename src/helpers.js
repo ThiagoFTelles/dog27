@@ -33,3 +33,25 @@ export function mapFields(options) {
   }
   return object;
 }
+
+
+export function requestCielo(method, url, data) {
+  return new Promise(function (resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.setRequestHeader(
+      "MerchantId",
+      process.env.VUE_APP_MERCHANT_ID_CIELO
+    );
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader(
+      "MerchantKey",
+      process.env.VUE_APP_MERCHANT_KEY_CIELO
+    );
+    xhr.setRequestHeader("Accept", "*/*");
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.onload = resolve;
+    xhr.onerror = reject;
+    xhr.send(data);
+  });
+}

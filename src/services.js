@@ -48,6 +48,9 @@ export const api = {
   postApiWc(data) {
     return axiosInstance.post(`${prefixUrlApi}/wc/v3${data.endpoint}`, data.body);
   },
+  putApiWc(data) {
+    return axiosInstance.put(`${prefixUrlApi}/wc/v3${data.endpoint}`, data.body);
+  },
 };
 
 export function getCep(cep) {
