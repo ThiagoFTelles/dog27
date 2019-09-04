@@ -49,16 +49,22 @@
       />
     </section>
 
-    <button v-if="habilitarBtn" @click="calcularPrecoPrazo" :disabled="!habilitarBtn">calcular preço</button>
+    <button
+      class="btn"
+      v-if="habilitarBtn"
+      @click="calcularPrecoPrazo"
+      :disabled="!habilitarBtn"
+    >Calcular Frete</button>
+    <br />
 
     <div class="opcoesDeFrete" v-if="!calculando">
       <p v-if="freteErrado">Verifique o CEP de entrega informado e tente novamente</p>
       <section v-if="pac.mostrar">
-        <label for="pac">PAC R$ {{pac.valor}} - {{pac.prazo}} dias úteis</label>
+        <label for="pac">PAC {{pac.valor | numeroPreco}} - {{pac.prazo}} dias úteis</label>
         <input type="radio" name="opcaoDeFrete" id="pac" @click="selecionarFrete('pac')" />
       </section>
       <section v-if="sedex.mostrar">
-        <label for="sedex">Sedex R$ {{sedex.valor}} - {{sedex.prazo}} dias úteis</label>
+        <label for="sedex">Sedex {{sedex.valor | numeroPreco}} - {{sedex.prazo}} dias úteis</label>
         <input type="radio" name="opcaoDeFrete" id="sedex" @click="selecionarFrete('sedex')" />
       </section>
     </div>
@@ -277,12 +283,14 @@ export default {
     },
     mostrarValoresDeFrete(valorPac, valorSedex, prazoPac, prazoSedex) {
       valorPac !== "0,00"
-        ? ((this.pac.valor = valorPac), (this.pac.mostrar = true))
+        ? ((this.pac.valor = Number(valorPac.replace(",", "."))),
+          (this.pac.mostrar = true))
         : 100;
       this.pac.prazo = prazoPac !== 0 ? prazoPac + this.tempoDePostagem : 100;
 
       valorSedex !== "0,00"
-        ? ((this.sedex.valor = valorSedex), (this.sedex.mostrar = true))
+        ? ((this.sedex.valor = Number(valorSedex.replace(",", "."))),
+          (this.sedex.mostrar = true))
         : 10;
       this.sedex.prazo =
         prazoSedex !== 0 ? prazoSedex + this.tempoDePostagem : 100;
@@ -291,14 +299,15 @@ export default {
     },
     mostrarValoresDeFreteGratis(valorPac, valorSedex, prazoPac, prazoSedex) {
       valorSedex !== "0,00"
-        ? ((this.sedex.valor = valorSedex), (this.sedex.mostrar = true))
+        ? ((this.sedex.valor = Number(valorSedex.replace(",", "."))),
+          (this.sedex.mostrar = true))
         : "10";
       this.sedex.prazo =
         prazoSedex !== 0 ? prazoSedex + this.tempoDePostagem : 100;
 
       valorPac !== "0,00"
-        ? ((this.pac.valor = "0"), (this.pac.mostrar = true))
-        : ((this.pac.mostrar = false), (this.sedex.valor = "0"));
+        ? ((this.pac.valor = 0.0), (this.pac.mostrar = true))
+        : ((this.pac.mostrar = false), (this.sedex.valor = 0.0));
       this.pac.prazo = prazoPac !== 0 ? prazoPac + this.tempoDePostagem : 100;
 
       this.verificaSeFreteEstaErrado();

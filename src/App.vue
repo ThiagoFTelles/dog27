@@ -88,6 +88,10 @@ img {
   display: block;
 }
 
+.green {
+  color: green;
+}
+
 .arrow,
 .produto-icone {
   cursor: pointer;

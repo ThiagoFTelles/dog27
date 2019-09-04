@@ -43,31 +43,35 @@
     <input type="text" name="state" id="state" v-model="estado" />
 
     <CalcularFrete />
-    <h2>Forma de Pagamento:</h2>
-    <router-link
-      :to="{name: 'checkoutcredito'}"
-      class="opcao_de_pagamento"
-      @click.native="newOrder({payment_method: 'cielo_credit',
+    <ResumoDoPedido />
+    <section v-if="freteEscolhido.nome">
+      <h2>Forma de Pagamento:</h2>
+      <router-link
+        :to="{name: 'checkoutcredito'}"
+        class="opcao_de_pagamento"
+        @click.native="newOrder({payment_method: 'cielo_credit',
         payment_method_title: 'Cartão de crédito'})"
-    >Cartão de Crédito</router-link>
-    <router-link
-      :to="{name: 'checkoutboleto'}"
-      class="opcao_de_pagamento"
-      @click.native="newOrder({payment_method: 'woo-moip-official',
+      >Cartão de Crédito</router-link>
+      <router-link
+        :to="{name: 'checkoutboleto'}"
+        class="opcao_de_pagamento"
+        @click.native="newOrder({payment_method: 'woo-moip-official',
         payment_method_title: 'Boleto'})"
-    >Boleto</router-link>
+      >Boleto</router-link>
+    </section>
   </section>
 </template>
 
 <script>
 import CalcularFrete from "@/components/CalcularFrete.vue";
+import ResumoDoPedido from "@/components/ResumoDoPedido.vue";
 import { mapState, mapActions } from "vuex";
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
 
 export default {
   name: "Checkout",
-  components: { CalcularFrete },
+  components: { CalcularFrete, ResumoDoPedido },
   data() {
     return {
       line_items: []

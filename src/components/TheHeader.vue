@@ -46,12 +46,7 @@
           <img id="lupa" src="@/assets/search.svg" />
         </a>
         <router-link to="/usuario" tag="a" class="icon login-profile">
-          <img
-            src="@/assets/person.svg"
-            alt="login-dog27"
-            @mouseover="hoverLinkLogin = true"
-            @mouseleave="hoverLinkLogin = false"
-          />
+          <img src="@/assets/person.svg" alt="login-dog27" />
         </router-link>
         <a
           class="icon bag"

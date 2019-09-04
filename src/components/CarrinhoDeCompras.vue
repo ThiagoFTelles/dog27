@@ -7,7 +7,7 @@
         <ul class="carrinho_lista">
           <li v-if="ganhouPresente" class="carrinho_item">
             <p>x 1</p>
-            <p style="color:green">{{nomeDoPresente}}</p>
+            <p class="green">{{nomeDoPresente}}</p>
             <p class="carrinho_preco">{{0 | numeroPreco}}</p>
             <br />
           </li>
@@ -19,16 +19,14 @@
             <p>x {{item.quantidade}}</p>
             <p>{{item.nomeDoProduto}}</p>
             <p
-              v-if="item.isCombo"
-              style="color:green"
+              :class="{ green: item.isCombo }"
               class="carrinho_preco"
-            >{{item.valorUnitarioCobrado | numeroPreco}}</p>
-            <p v-else class="carrinho_preco">{{item.valorUnitarioCobrado | numeroPreco}}</p>
+            >{{item.valorUnitarioCobrado * item.quantidade | numeroPreco}}</p>
             <button
               class="carrinho_remover"
               @click="removerItemDoCarrinho({index:index, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
             >X</button>
-            <p></p>
+            <br />
           </li>
         </ul>
         <p class="carrinho_total">{{carrinhoTotal | numeroPreco}}</p>

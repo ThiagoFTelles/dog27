@@ -28,6 +28,14 @@ Vue.filter('uppercase', function (value) {
   return value.toUpperCase()
 })
 
+Vue.filter('numeroPreco', function (valor) {
+  //return `R$ ${valor},00`;
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+})
+
 new Vue({
   router,
   store,

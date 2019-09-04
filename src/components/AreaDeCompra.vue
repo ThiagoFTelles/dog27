@@ -160,8 +160,8 @@
         </div>
         <div class="combo-conteudo">
           <h1 class="combo-titulo">Aproveite e compre junto</h1>
-          <p class="preco-antigo">de R${{precoCombo.antigo}}</p>
-          <p class="preco-combo">por R${{precoCombo.novo}}</p>
+          <p class="preco-antigo">de {{precoCombo.antigo | numeroPreco}}</p>
+          <p class="preco-combo">por {{precoCombo.novo | numeroPreco}}</p>
           <button
             v-if="quantidadeEscolhida >0"
             class="adicionar-ao-carrinho"
