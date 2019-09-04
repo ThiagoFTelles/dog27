@@ -12,6 +12,13 @@ Vue.config.productionTip = false;
 Vue.component("PaginaCarregando", PaginaCarregando);
 Vue.component("ErroNotificacao", ErroNotificacao);
 
+Vue.filter('capitalize', function (value) {
+  //primeira letra maiúscula
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
+})
+
 Vue.filter("numeroPreco", valor => {
   valor = Number(valor);
   if (!isNaN(valor)) {

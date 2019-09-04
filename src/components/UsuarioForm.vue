@@ -2,7 +2,14 @@
   <form>
     <div v-if="mostrarDadosLogin" class="usuario">
       <label for="nome">Nome</label>
-      <input type="text" id="nome" name="nome" v-model="nome" maxlength="40" />
+      <input
+        type="text"
+        id="nome"
+        name="nome"
+        v-model="nome"
+        maxlength="40"
+        placeholder="seu nome completo"
+      />
       <label for="email">Email</label>
       <input type="email" id="email" name="email" v-model="email" />
       <label for="senha">Senha</label>

@@ -1,12 +1,13 @@
 <template>
   <section class="checkout">
     <h1>CHECKOUT</h1>
-    <p>
+    <p v-if="!login">
       Preencha os dados abaixo ou
       <router-link :to="{name: 'login'}" class="link">
         <b>faça o login.</b>
       </router-link>
     </p>
+    <p v-else>Olá {{primeiroNome | capitalize}}</p>
     <h2>Dados de Faturamento</h2>
     <label for="name">Nome</label>
     <input type="text" name="name" id="name" v-model="nome" maxlength="40" />
@@ -84,7 +85,8 @@ export default {
       metaMaior: state => state.order.metaMaior,
       usuario: state => state.usuario,
       freteEscolhido: state => state.freteEscolhido,
-      presente: state => state.cart.presente
+      presente: state => state.cart.presente,
+      login: state => state.login
     }),
     ...mapFields({
       fields: [
@@ -101,7 +103,10 @@ export default {
       ],
       base: "usuario",
       mutation: "UPDATE_USUARIO"
-    })
+    }),
+    primeiroNome() {
+      return this.usuario.nome.replace(/ .*/, "");
+    }
   },
   methods: {
     ...mapActions(["setOrder"]),
@@ -109,7 +114,7 @@ export default {
       let shipping_lines = {
         method_id: this.freteEscolhido.nome,
         method_title: this.freteEscolhido.nome,
-        total: this.freteEscolhido.valor
+        total: this.freteEscolhido.valor.toString()
       };
 
       shipping_lines = [shipping_lines];

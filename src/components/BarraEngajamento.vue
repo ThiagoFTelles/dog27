@@ -63,15 +63,6 @@ export default {
       return progresso * 100 + "%";
     }
   },
-  filters: {
-    numeroPreco(valor) {
-      //return `R$ ${valor},00`;
-      return valor.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-      });
-    }
-  },
   computed: {
     ...mapState({
       carrinho: state => state.cart.carrinho,

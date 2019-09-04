@@ -43,7 +43,8 @@ export default {
         .dispatch("logarUsuario", this.login)
         .then(() => {
           this.$store.dispatch("getUsuario");
-          this.$router.push({ name: "usuario" });
+          // this.$router.push({ name: "usuario" });
+          this.$router.go(-1);
         })
         .catch(e => {
           this.erros.push(e.response.data.message);

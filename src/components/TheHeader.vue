@@ -130,17 +130,7 @@ export default {
     CarrinhoDeCompras,
     Login
   },
-  methods: {
-    logar() {
-      this.erros = [];
-      this.$store
-        .dispatch("logarUsuario", this.login)
-        .then(() => {})
-        .catch(e => {
-          this.erros.push(e.response.data.message);
-        });
-    }
-  },
+  methods: {},
   watch: {
     carrinho() {
       let quantidade = this.quantidadeDeItensNoCarrinho;
@@ -156,10 +146,6 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho
     }),
-    nome() {
-      return this.$store.state.usuario.nome.replace(/ */, "");
-      /* .replace(/ 'asterisco'/, ""); Significa que tudo que vier depois do espaço será apagado para evitar nomes muito grandes */
-    },
     quantidadeDeItensNoCarrinho() {
       let quantidade = this.carrinho.length;
       return quantidade;

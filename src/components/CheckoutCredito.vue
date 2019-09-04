@@ -1,46 +1,54 @@
 <template>
   <section class="checkout">
-    <p v-if="Brand">Bandeira: {{Brand}}</p>
-    <p v-if="!Brand">Aceitamos: Visa, Master e AMEX</p>
+    <section v-if="vendaConcluida">
+      <h1>Parabéns! A sua compra foi concluída!</h1>
+      <h2>Verifique o e-mail informado para mais detalhes</h2>
+    </section>
 
-    <label for="CardNumber">Número do Cartão</label>
-    <input
-      type="text"
-      v-mask="'####.####.####.####'"
-      name="CardNumber"
-      id="CardNumber"
-      v-model="CardNumber"
-    />
-    <section v-if="Brand">
-      <label for="ExpirationDate">Válido até</label>
+    <section v-else class="checkout">
+      <p v-if="Brand">Bandeira: {{Brand}}</p>
+      <p v-if="!Brand">Aceitamos: Visa, Master e AMEX</p>
+
+      <label for="CardNumber">Número do Cartão</label>
       <input
         type="text"
-        name="ExpirationDate"
-        id="ExpirationDate"
-        placeholder="MM/AAAA"
-        v-mask="'##/####'"
-        v-model="ExpirationDate"
+        v-mask="'####.####.####.####'"
+        name="CardNumber"
+        id="CardNumber"
+        v-model="CardNumber"
       />
-      <label for="SecurityCode">CVV</label>
-      <input
-        type="text"
-        name="SecurityCode"
-        id="SecurityCode"
-        v-model="SecurityCode"
-        v-mask="'####'"
-      />
-      <label for="Holder">Nome Impresso no Cartão</label>
-      <input type="text" name="Holder" id="Holder" v-model="Holder" maxlength="40" />
-      <label for="Installments">Parcelas</label>
-      <select name="Installments" id="Installments" v-model="Installments">
-        <option
-          v-for="parcela in parcelasDisponiveis"
-          :value="parcela.numero"
-          :key="`parcela-${parcela.numero}`"
-        >{{ parcela.numero }}</option>
-      </select>
-      <p>Parcela mínima R$50, pode parcelar em até 4x sem juros</p>
-      <button @click="abrirOrdem">Pagar</button>
+      <section v-if="Brand">
+        <label for="ExpirationDate">Válido até</label>
+        <input
+          type="text"
+          name="ExpirationDate"
+          id="ExpirationDate"
+          placeholder="MM/AAAA"
+          v-mask="'##/####'"
+          v-model="ExpirationDate"
+        />
+        <label for="SecurityCode">CVV</label>
+        <input
+          type="text"
+          name="SecurityCode"
+          id="SecurityCode"
+          v-model="SecurityCode"
+          v-mask="'####'"
+        />
+        <label for="Holder">Nome Impresso no Cartão</label>
+        <input type="text" name="Holder" id="Holder" v-model="Holder" maxlength="40" />
+        <label for="Installments">Parcelas</label>
+        <select name="Installments" id="Installments" v-model="Installments">
+          <option
+            v-for="parcela in parcelasDisponiveis"
+            :value="parcela.numero"
+            :key="`parcela-${parcela.numero}`"
+          >{{ parcela.numero }}</option>
+        </select>
+        <p>Parcela mínima R$50, pode parcelar em até 4x sem juros</p>
+        <ErroNotificacao :erros="erros" />
+        <button @click="abrirOrdem" class="btn">Pagar</button>
+      </section>
     </section>
   </section>
 </template>
@@ -58,40 +66,38 @@ export default {
       Holder: "",
       ExpirationDate: "",
       SecurityCode: "",
-      Brand: ""
+      Brand: "",
+      erros: [],
+      vendaConcluida: false
     };
   },
   components: {},
   methods: {
     abrirOrdem() {
-      if (this.order) {
-        let data = {
-          endpoint: "/orders",
-          body: this.order.order
-        };
-        api.postApiWc(data).then(r => {
-          let cobranca = {
-            MerchantOrderId: r.data.id,
-            Payment: {
-              Type: "CreditCard",
-              Amount: Number(r.data.total),
-              Installments: this.Installments,
-              SoftDescriptor: "DOG27-" + r.data.id,
-              CreditCard: {
-                CardNumber: this.CardNumber,
-                Holder: this.Holder,
-                ExpirationDate: this.ExpirationDate,
-                SecurityCode: this.SecurityCode,
-                Brand: this.Brand
-              }
+      let data = {
+        endpoint: "/orders",
+        body: this.order.order
+      };
+      api.postApiWc(data).then(r => {
+        let cobranca = {
+          MerchantOrderId: r.data.id,
+          Payment: {
+            Type: "CreditCard",
+            Amount: Number(r.data.total),
+            Installments: this.Installments,
+            SoftDescriptor: "DOG27-" + r.data.id,
+            CreditCard: {
+              CardNumber: this.CardNumber,
+              Holder: this.Holder,
+              ExpirationDate: this.ExpirationDate,
+              SecurityCode: this.SecurityCode,
+              Brand: this.Brand
             }
-          };
+          }
+        };
 
-          this.capturarCielo(cobranca);
-        });
-      } else {
-        this.$router.push({ name: "home" });
-      }
+        this.capturarCielo(cobranca);
+      });
     },
     requestCielo(method, url, data) {
       return new Promise(function(resolve, reject) {
@@ -114,6 +120,7 @@ export default {
       });
     },
     solicitarAutorizacaoCielo(oderPayment) {
+      this.erros = [];
       var data = JSON.stringify(oderPayment);
 
       return this.requestCielo(
@@ -125,13 +132,14 @@ export default {
           let resposta = JSON.parse(e.target.response);
           let statusDaResposta = JSON.parse(e.target.status);
 
-          console.log("e");
-          console.log(e);
-
-          if (statusDaResposta != 200 && statusDaResposta != 201) {
+          if (statusDaResposta == 400) {
+            return {
+              status: resposta[0].Code,
+              resposta: "Erro de preenchimento: " + resposta[0].Message
+            };
+          } else if (statusDaResposta != 200 && statusDaResposta != 201) {
             let erro = resposta[0].Message;
-            console.log("erro: ");
-            console.log(erro);
+            this.erros.push(erro);
             return {
               status: resposta[0].Code,
               resposta: "Erro de preenchimento - " + resposta[0].Message
@@ -151,12 +159,21 @@ export default {
             };
           }
         })
-        .catch(e => {
-          console.log("erro3: ");
-          console.log(e);
+        .catch(erro => {
+          console.log("erro");
+          console.log(erro);
+
+          return {
+            status: "00",
+            resposta: "erro no cartão."
+          };
         });
     },
     capturarCielo(oderPayment) {
+      let self = this;
+      console.log("self 1");
+      console.log(self);
+      this.erros = [];
       this.solicitarAutorizacaoCielo(oderPayment).then(r => {
         let autorizacaoStatus = r.status;
         let autorizacaoResposta = r.resposta;
@@ -166,50 +183,21 @@ export default {
             respostaCaptura
           ) {
             let resposta = JSON.parse(respostaCaptura.target.response);
-
-            console.log("respostaCaptura");
-            console.log(respostaCaptura);
-            console.log("resposta");
-            console.log(resposta);
+            self.vendaConcluida = resposta.Status === 2 ? true : false;
+            resposta.Status === 2 ? window.localStorage.removeItem("carrinho") : "";
           });
         } else {
-          console.log(
-            "Houve um problema com o pagamento (" +
-              autorizacaoResposta +
-              ") por favor, verifique o cartão e tente novamente."
-          );
+          this.erroNoPagamentoCielo(autorizacaoResposta);
         }
       });
     },
-    capturarPagamentoCielo(PaymentId) {
-      var xhr = new XMLHttpRequest();
-
-      xhr.addEventListener("readystatechange", function() {
-        if (this.readyState === 4) {
-          console.log("resposta:");
-          console.log(this.responseText);
-        }
-      });
-
-      xhr.open(
-        "PUT",
-        `https://apisandbox.cieloecommerce.cielo.com.br/1/sales/${PaymentId}/capture`
-      );
-      xhr.setRequestHeader("MerchantId", process.env.VUE_APP_MERCHANT_ID_CIELO);
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.setRequestHeader(
-        "MerchantKey",
-        process.env.VUE_APP_MERCHANT_KEY_CIELO
-      );
-      xhr.setRequestHeader("Accept", "*/*");
-      xhr.setRequestHeader("Cache-Control", "no-cache");
-
-      xhr.setRequestHeader("cache-control", "no-cache");
-
-      xhr.send();
+    erroNoPagamentoCielo(resposta) {
+      let erro =
+        "Houve um problema com o pagamento. Por favor, verifique o cartão e tente novamente. " +
+        resposta;
+      this.erros.push(erro);
     }
   },
-
   computed: {
     ...mapState(["order"]),
     ...mapGetters(["parcelasDisponiveis"])
@@ -233,8 +221,10 @@ export default {
     }
   },
   created() {
-    console.log("parcelasDisponiveis");
-    console.log(this.parcelasDisponiveis);
+    this.vendaConcluida = false;
+    if (!this.order.order) {
+      this.$router.push({ name: "checkout" });
+    }
   }
 };
 </script>

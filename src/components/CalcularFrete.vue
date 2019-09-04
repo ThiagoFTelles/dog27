@@ -1,7 +1,7 @@
 <template>
   <section>
     <h2>Dados da Entrega</h2>
-    <button @click="igualarDados">Copiar do faturamento</button>
+    <button class="btn" @click="igualarDados">Copiar do faturamento</button>
     <section id="dadosDaEntrega">
       <label for="nameEntrega">Nome</label>
       <input type="text" name="nameEntrega" id="nameEntrega" v-model="nomeEntrega" maxlength="40" />
@@ -399,5 +399,9 @@ input[type="radio"] {
 
 input {
   text-transform: uppercase;
+}
+
+.btn {
+  margin: 15px 0;
 }
 </style>

@@ -62,28 +62,6 @@ export default {
       metaMaior: state => state.order.metaMaior,
       carrinhoTotal: state => state.cart.carrinhoTotal
     })
-    // carrinhoTotal() {
-    //   let total = 0;
-    //   if (this.carrinho.length) {
-    //     this.carrinho.forEach(item => {
-    //       //esta propriedade sempre será atualizada reativamente quando Carrinho mudar
-    //       let valorDoItem =
-    //         Number(item.valorUnitarioCobrado) * Number(item.quantidade);
-    //       total += valorDoItem; //para + ou para - porque tudo que está em 'data' é reativo
-    //     });
-    //   }
-
-    //   return total;
-    // }
-  },
-  filters: {
-    numeroPreco(valor) {
-      //return `R$ ${valor},00`;
-      return valor.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-      });
-    }
   },
   watch: {
     carrinho() {
