@@ -8,38 +8,32 @@
         </router-link>
         <nav>
           <ul class="menu">
-            <router-link
-              @mouseover.native="hoverLinkProdutos = true"
-              @mouseleave.native="hoverLinkProdutos = false"
+            <li
+              @mouseover="hoverLinkProdutos = true"
+              @mouseleave="hoverLinkProdutos = false"
               class="menu-link"
-              tag="li"
-              to="/produtos"
             >
               Produtos
               <span v-if="hoverLinkProdutos" class="menu-link-arrow"></span>
-            </router-link>
+            </li>
 
-            <router-link
-              @mouseover.native="hoverLinkEstampas = true"
-              @mouseleave.native="hoverLinkEstampas = false"
+            <li
+              @mouseover="hoverLinkEstampas = true"
+              @mouseleave="hoverLinkEstampas = false"
               class="menu-link"
-              tag="li"
-              to="/estampas"
             >
               Estampas
               <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
-            </router-link>
-            <router-link
-              @mouseover.native="hoverLinkContato = true"
-              @mouseleave.native="hoverLinkContato = false"
+            </li>
+            <li
+              @mouseover="hoverLinkContato = true"
+              @mouseleave="hoverLinkContato = false"
               class="menu-link"
-              tag="li"
-              to="/contato"
             >
               Fale Conosco
               <span v-if="hoverLinkContato" class="menu-link-arrow"></span>
-            </router-link>
-            <router-link class="menu-link" tag="li" to="/blog">Blog</router-link>
+            </li>
+            <li class="menu-link">Blog</li>
           </ul>
         </nav>
         <a class="icon lupa">
