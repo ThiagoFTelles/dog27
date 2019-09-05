@@ -6,10 +6,15 @@ import Checkout from "@/views/Checkout.vue";
 import CheckoutCredito from "@/components/CheckoutCredito.vue";
 import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
 import Login from "@/views/Login.vue";
-import Peitoral from "@/views/Peitoral.vue";
 import Usuario from "@/views/usuario/Usuario.vue";
 import UsuarioEditar from "@/views/usuario/UsuarioEditar.vue";
 import PaginaNaoEncontrada from "@/views/PaginaNaoEncontrada.vue";
+import Peitoral from "@/views/Peitoral.vue";
+import Coleira from "@/views/Coleira.vue";
+import Cinto from "@/views/Cinto.vue";
+import Comedouro from "@/views/Comedouro.vue";
+import Gravata from "@/views/Gravata.vue";
+import Guia from "@/views/Guia.vue";
 
 Vue.use(Router);
 
@@ -27,9 +32,39 @@ const router = new Router({
       component: Home
     },
     {
-      path: "/peitoral/:id",
+      path: "/peitoral-para-cachorros-dog27",
       name: "peitoral",
       component: Peitoral,
+      props: true
+    },
+    {
+      path: "/coleira-para-cachorros-dog27",
+      name: "coleira",
+      component: Coleira,
+      props: true
+    },
+    {
+      path: "/guia-para-cachorros-dog27",
+      name: "guia",
+      component: Guia,
+      props: true
+    },
+    {
+      path: "/cinto-de-seguranca-para-cachorros-dog27",
+      name: "cinto",
+      component: Cinto,
+      props: true
+    },
+    {
+      path: "/gravata-para-cachorros-dog27",
+      name: "gravata",
+      component: Gravata,
+      props: true
+    },
+    {
+      path: "/comedouro-para-cachorros-dog27",
+      name: "comedouro",
+      component: Comedouro,
       props: true
     },
     {

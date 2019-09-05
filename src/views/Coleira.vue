@@ -3,7 +3,7 @@
     <transition mode="out-in">
       <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
         <div>
-          <p>Peitoral Híbrido</p>
+          <p>Coleira</p>
         </div>
         <div>
           <p class="medidas">Medidas</p>
@@ -14,77 +14,36 @@
     <transition mode="out-in">
       <AreaDeCompra :produto="produtoNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
     </transition>
-    <div class="peitoral-container">
+    <div class="produto-container">
       <div class="texto-box">
-        <h1 class="saiba-mais-titulo">PEITORAL HÍBRIDO</h1>
+        <h1 class="saiba-mais-titulo">COLEIRAS</h1>
         <p
           class="saiba-mais-paragrafo"
-        >O único peitoral híbrido do mercado. onde o funcional encontra beleza e conforto.</p>
+        >Nossas coleiras oferecem uma sensação de qualidade e estilo, bem como uma série de outras adições para manter você e seu cão felizes.</p>
       </div>
 
       <img
-        src="@/assets/peitoral-para-cachorro-dog27.jpg"
-        alt="Peitoral para cahorro dog27"
-        class="peitoral-detalhe"
+        src="@/assets/coleira/pagina de coleiras-01.jpg"
+        alt="Coleira para cahorro dog27"
+        class="produto-detalhe"
       />
-      <div class="texto-box">
-        <h1 class="saiba-mais-titulo">COMO ASSIM "HÍBRIDO"?</h1>
-        <p class="saiba-mais-paragrafo maior">Basta desengatar, virar, ajustar e pronto.</p>
-        <p
-          class="saiba-mais-paragrafo maior"
-        >Do peitoral Anti-puxão ao convencional em poucos segundos</p>
-      </div>
-      <img
-        src="@/assets/peitoral-para-cachorro-dog27-demonstracao.jpg"
-        alt="Peitoral para cahorro dog27"
-        class="peitoral-demonstracao"
-      />
-      <h1 class="saiba-mais-subtitulo">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
-      <img src="@/assets/wide.jpg" alt="Peitoral para cahorro dog27" class="peitoral-estampa" />
+
       <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
-      <div class="peitoral-tamanhos-container">
+      <div class="produto-tamanhos-container">
         <img
-          src="@/assets/peitoral/pagina do peitoral-03.jpg"
-          alt="Peitoral para cahorro dog27"
-          class="peitoral-tamanhos"
+          src="@/assets/coleira/pagina de coleiras-02.jpg"
+          alt="Coleira para cahorro dog27"
+          class="produto-tamanhos"
         />
         <img
           src="@/assets/4 tamanhos diferentes.jpg"
-          alt="Peitoral para cahorro dog27"
-          class="peitoral-tamanhos"
+          alt="Coleira para cahorro dog27"
+          class="produto-tamanhos"
         />
       </div>
-      <h2 class="saiba-mais-titulo">UM DESIGN PERFEITO</h2>
-      <div class="design-info-container">
-        <div class="design-info left">
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>DESIGN HÍBRIDO INOVADOR</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>RESISTENTE AO CLIMA E POEIRA</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>ESTAMPAS DESENHADAS A MÃO</p>
-          </div>
-        </div>
-        <div class="design-info right">
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>AJUSTÁVEL: CABE EM QUALQUER DOG</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>FECHO SUPER RESISTENTE</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>TIRA SUPER RESISTENTE</p>
-          </div>
-        </div>
-      </div>
+      <h1 class="saiba-mais-subtitulo wide">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
+      <img src="@/assets/wide.jpg" alt="Coleira para cahorro dog27" class="produto-estampa" />
+
       <div class="comprar-agora">
         <h2 class="saiba-mais-subtitulo">a segurança e o conforto que o seu dog merece!</h2>
         <div class="btn-vazado">
@@ -101,18 +60,18 @@ import AreaDeCompra from "@/components/AreaDeCompra.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
-  name: "Peitoral",
+  name: "Coleira",
   props: { comprar: Boolean },
   components: { AreaDeCompra },
   data() {
     return {
+      produtoNome: "coleira",
       produtos: null,
       produto: null,
-      produtoNome: "Peitoral",
       estampa: null,
       tamanho: null,
       estoque: null,
-      categoriaId: 16,
+      categoriaId: 34,
       idCategoriaCombo: 35
     };
   },
@@ -235,7 +194,8 @@ section {
 }
 
 .texto-box {
-  margin-bottom: 50px;
+  margin: 0 auto 50px auto;
+  max-width: 800px;
 }
 
 .saiba-mais-titulo {
@@ -260,6 +220,10 @@ section {
   padding-bottom: 50px;
 }
 
+.wide {
+  padding-top: 150px;
+}
+
 .saiba-mais-paragrafo {
   font-family: "Fira Sans", sans-serif;
   color: black;
@@ -276,21 +240,21 @@ img {
   margin: 0 auto;
 }
 
-.peitoral-demonstracao {
+.produto-demonstracao {
   max-width: 800px;
   padding: 50px;
 }
 
-.peitoral-estampa {
+.produto-estampa {
   margin: 0;
   width: 100%;
 }
 
-.peitoral-tamanhos-container {
+.produto-tamanhos-container {
   text-align: center;
 }
 
-.peitoral-tamanhos {
+.produto-tamanhos {
   display: inline-block;
 }
 
@@ -334,9 +298,7 @@ img {
   grid-template-rows: 175px 1fr 1fr;
   background: url("../assets/coleira/pagina de coleiras-05.jpg") no-repeat
     center center;
-  width: 600px;
-  height: 400px;
-  margin: auto;
+  margin: 10px auto;
   text-align: center;
 }
 

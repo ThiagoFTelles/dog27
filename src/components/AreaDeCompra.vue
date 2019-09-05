@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="area-de-compra-opcoes">
-        <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
+        <h1 class="banner-titulo">{{produto | uppercase}}</h1>
         <p class="label-estampa">Escolha a estampa: {{estampaEscolhida.nome}}</p>
         <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
           <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
@@ -97,7 +97,7 @@
             <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
             <h1
               class="combo-banner-titulo"
-            >PEITORAL PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
+            >{{produto | uppercase}} PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
 
             <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
             <div class="tamanho-area-combo">
@@ -215,6 +215,7 @@ export default {
       quantidadeDaVariacaoSelecionadaNoCarrinho: null
     };
   },
+  props: ["produto"],
   computed: {
     ...mapState({
       carrinho: state => state.cart.carrinho
@@ -282,7 +283,7 @@ export default {
   methods: {
     ...mapActions(["adicionarItemAoCarrinho", "switchAreaDeCompra"]),
     aumentarQuantidadeEscolhida() {
-      if (this.variacaoEscolhida.estoque > 0) {
+      if (this.variacaoEscolhida.estoque > 0 && this.quantidadeEscolhida < 5) {
         this.quantidadeEscolhida++;
         this.variacaoEscolhida.estoque--;
       }
@@ -403,6 +404,7 @@ export default {
         });
     },
     ajustarEstoqueComCarrinho(produtoNoCarrinho) {
+      // eslint-disable-next-line
       return new Promise((resolve, reject) => {
         let quantidade = this.quantidadeDaVariacaoSelecionadaNoCarrinho;
         if (
@@ -412,6 +414,7 @@ export default {
         }
         this.quantidadeDaVariacaoSelecionadaNoCarrinho = quantidade;
       }).catch(function(err) {
+        // eslint-disable-next-line
         console.log(err);
       });
     },
@@ -478,10 +481,8 @@ export default {
           `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/?sku=${sku}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
-          console.log("combo response.data");
-          console.log(response.data);
-
           if (response.data.length === 0) {
+            // eslint-disable-next-line
             console.log("deu erro no combo");
             this.mostrarComboArea = false;
           } else {

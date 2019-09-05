@@ -12,7 +12,7 @@
       </div>
     </transition>
     <transition mode="out-in">
-      <AreaDeCompra :produto="produtoNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
+      <AreaDeCompra v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
     </transition>
     <div class="peitoral-container">
       <div class="texto-box">
@@ -40,11 +40,15 @@
         class="peitoral-demonstracao"
       />
       <h1 class="saiba-mais-subtitulo">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
-      <img src="@/assets/wide.jpg" alt="Peitoral para cahorro dog27" class="peitoral-estampa" />
+      <img
+        src="@/assets/wide.jpg"
+        alt="Peitoral para cahorro dog27"
+        class="peitoral-estampa"
+      />
       <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
       <div class="peitoral-tamanhos-container">
         <img
-          src="@/assets/peitoral/pagina do peitoral-03.jpg"
+          src="@/assets/peitoral-para-cachorro-dog27-tamanhos-1.jpg"
           alt="Peitoral para cahorro dog27"
           class="peitoral-tamanhos"
         />
@@ -101,14 +105,13 @@ import AreaDeCompra from "@/components/AreaDeCompra.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
-  name: "Peitoral",
+  name: "Gravata",
   props: { comprar: Boolean },
   components: { AreaDeCompra },
   data() {
     return {
       produtos: null,
       produto: null,
-      produtoNome: "Peitoral",
       estampa: null,
       tamanho: null,
       estoque: null,
@@ -332,8 +335,8 @@ img {
 .comprar-agora {
   display: grid;
   grid-template-rows: 175px 1fr 1fr;
-  background: url("../assets/coleira/pagina de coleiras-05.jpg") no-repeat
-    center center;
+  background: url("../assets/bg-comprar-agora-peitoral.jpg") no-repeat center
+    center;
   width: 600px;
   height: 400px;
   margin: auto;

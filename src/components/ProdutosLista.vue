@@ -8,19 +8,13 @@
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
           <div class="banner-textos">
-            <h1 class="banner-titulo">Peitoral Híbrido</h1>
+            <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
             <h2
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <router-link
-                :to="{name: 'peitoral', params: {id: 'peitoral-hibrido'}}"
-                class="banner-link left-link"
-              >Saiba mais >></router-link>
-              <router-link
-                :to="{name: 'peitoral', params: {id: 'peitoral-hibrido'}}"
-                class="banner-link"
-              >Comprar >></router-link>
+              <router-link :to="{name: 'peitoral'}" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'peitoral'}" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -34,8 +28,8 @@
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <a class="banner-link left-link">Saiba mais >></a>
-              <a class="banner-link">Comprar >></a>
+              <router-link :to="{name: 'coleira'}" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'coleira'}" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -44,18 +38,18 @@
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
           <div class="banner-textos">
-            <h1 class="banner-titulo">COLEIRAS</h1>
+            <h1 class="banner-titulo">GUIAS</h1>
             <h2
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <a class="banner-link left-link">Saiba mais >></a>
-              <a class="banner-link">Comprar >></a>
+              <router-link :to="{name: 'guia'}" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'guia'}" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
 
-        <div class="produto duplo">
+        <!-- <div class="produto duplo">
           <div class="banner-imagem">
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
@@ -65,8 +59,8 @@
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <a class="banner-link left-link">Saiba mais >></a>
-              <a class="banner-link">Comprar >></a>
+              <router-link :to="{name: 'comedouro'}" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'comedouro'}" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -75,13 +69,13 @@
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
           <div class="banner-textos">
-            <h1 class="banner-titulo">COLEIRAS</h1>
+            <h1 class="banner-titulo">GRAVATAS</h1>
             <h2
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <a class="banner-link left-link">Saiba mais >></a>
-              <a class="banner-link">Comprar >></a>
+              <router-link :to="{name: 'gravata'}" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'gravata'}" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -90,16 +84,16 @@
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
           <div class="banner-textos">
-            <h1 class="banner-titulo">COLEIRAS</h1>
+            <h1 class="banner-titulo">CINTOS</h1>
             <h2
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <a class="banner-link left-link">Saiba mais >></a>
-              <a class="banner-link">Comprar >></a>
+              <router-link :to="{name: 'cinto'}" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'cinto'}" class="banner-link">Comprar >></router-link>
             </div>
           </div>
-        </div>
+        </div>-->
         <ProdutosPaginar :produtosTotal="produtosTotal" :produtosPorPagina="produtosPorPagina" />
       </div>
     </transition>

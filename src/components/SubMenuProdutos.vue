@@ -1,50 +1,55 @@
 <template>
   <div class="submenu-container">
     <div class="submenu-mensagem">
-      <p>Alguma coisa está escrita aqui.</p>
+      <p>Os melhores produtos paras o seu Dog</p>
     </div>
-    <div class="arrow">
-      <img src="@/assets/arrow-left.svg" alt="Dog27" />
+    <div class="arrow" @click="swapLeft()">
+      <img class="arrow-img" src="@/assets/arrow-left.svg" alt="Dog27" />
     </div>
     <div class="produtos-icones">
-      <div class="produto-icone">
-        <img src="@/assets/imagem-submenu.png" alt="Coleiras dog27" />
-        <P class="submenu-produto-legenda">Coleiras</P>
-      </div>
-      <div class="produto-icone">
-        <img src="@/assets/imagem-submenu.png" alt="Peitorais dog27" />
-        <P class="submenu-produto-legenda">Peitorais</P>
-      </div>
-      <div class="produto-icone">
-        <img src="@/assets/imagem-submenu.png" alt="Cintos dog27" />
-        <P class="submenu-produto-legenda">Cintos</P>
-      </div>
-      <div class="produto-icone">
-        <img src="@/assets/imagem-submenu.png" alt="Guias dog27" />
-        <P class="submenu-produto-legenda">Guias</P>
-      </div>
-      <div class="produto-icone">
-        <img src="@/assets/imagem-submenu.png" alt="Comedouros dog27" />
-        <P class="submenu-produto-legenda">Comedouros</P>
-      </div>
-      <div class="produto-icone">
-        <img src="@/assets/imagem-submenu.png" alt="Gravatas dog27" />
-        <P class="submenu-produto-legenda">Gravatas</P>
-      </div>
-      <div class="produto-icone">
-        <img src="@/assets/imagem-submenu.png" alt="Tapete Higiênico dog27" />
-        <P class="submenu-produto-legenda">Tapete Higiênico</P>
+      <div class="produto-icone" v-for="categoria in categorias" :key="`${categoria}-dog27`">
+        <img :src="getImgUrl(categoria)" :alt="`${categoria} dog27`" />
+        <P class="submenu-produto-legenda">{{categoria | capitalize}}</P>
       </div>
     </div>
-    <div class="arrow">
-      <img src="@/assets/arrow-right.svg" alt="Dog27" />
+    <div class="arrow" @click="swapRight()">
+      <img class="arrow-img" src="@/assets/arrow-right.svg" alt="Dog27" />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SubMenuProdutos"
+  name: "SubMenuProdutos",
+  data() {
+    return {
+      categorias: [
+        "coleiras",
+        "peitorais",
+        "cintos",
+        "guias"
+        // "comedouros",
+        // "gravatas",
+        // "tapetes higiênicos"
+      ]
+    };
+  },
+  methods: {
+    swapRight() {
+      let first = this.categorias[0];
+      this.categorias.push(first);
+      this.categorias.shift();
+    },
+    swapLeft() {
+      let lastIndex = this.categorias.length - 1;
+      let last = this.categorias[lastIndex];
+      this.categorias.unshift(last);
+      this.categorias.pop();
+    },
+    getImgUrl(categoria) {
+      return require("../assets/submenu-produtos/" + categoria + ".png");
+    }
+  }
 };
 </script>
 
@@ -79,15 +84,16 @@ export default {
 
 .produtos-icones {
   overflow: hidden;
+  min-width: 150px;
   display: flex;
   flex: 1 0 80px;
   margin: 0 10px;
 }
 
 .produto-icone {
+  margin: 0 auto;
   display: flex;
-  flex: 1 0 200px;
-  margin: 0 10px;
+  flex: 0 0 auto;
   flex-wrap: wrap;
 }
 

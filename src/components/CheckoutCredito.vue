@@ -102,26 +102,6 @@ export default {
         this.capturarCielo(cobranca);
       });
     },
-    // requestCielo(method, url, data) {
-    //   return new Promise(function(resolve, reject) {
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.open(method, url);
-    //     xhr.setRequestHeader(
-    //       "MerchantId",
-    //       process.env.VUE_APP_MERCHANT_ID_CIELO
-    //     );
-    //     xhr.setRequestHeader("Content-Type", "application/json");
-    //     xhr.setRequestHeader(
-    //       "MerchantKey",
-    //       process.env.VUE_APP_MERCHANT_KEY_CIELO
-    //     );
-    //     xhr.setRequestHeader("Accept", "*/*");
-    //     xhr.setRequestHeader("Cache-Control", "no-cache");
-    //     xhr.onload = resolve;
-    //     xhr.onerror = reject;
-    //     xhr.send(data);
-    //   });
-    // },
     solicitarAutorizacaoCielo(oderPayment) {
       this.erros = [];
       var data = JSON.stringify(oderPayment);
@@ -163,12 +143,9 @@ export default {
           }
         })
         .catch(erro => {
-          console.log("erro");
-          console.log(erro);
-
           return {
             status: "00",
-            resposta: "erro no cartão."
+            resposta: "erro no cartão. " + erro
           };
         });
     },
@@ -209,7 +186,7 @@ export default {
 
         api
           .putApiWc(data)
-          .then(r => {
+          .then(() => {
             this.vendaConcluida = true;
             this.setOrderId(null);
           })
@@ -222,7 +199,8 @@ export default {
   computed: {
     ...mapState({
       idOrdemAberta: state => state.order.idOrdemAberta,
-      order: state => state.order
+      order: state => state.order,
+      carrinho: state => state.cart.carrinho
     }),
     ...mapGetters(["parcelasDisponiveis"])
   },
@@ -239,6 +217,9 @@ export default {
           this.Brand = "";
         }
       }
+    },
+    carrinho() {
+      this.$router.push({ name: "checkout" });
     }
   },
   created() {
