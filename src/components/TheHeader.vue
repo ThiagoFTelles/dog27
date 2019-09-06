@@ -33,7 +33,7 @@
               Fale Conosco
               <span v-if="hoverLinkContato" class="menu-link-arrow"></span>
             </li>
-            <li class="menu-link">Blog</li>
+            <a target="_blank" href="https://blog.dog27.com.br" class="menu-link">Blog</a>
           </ul>
         </nav>
         <a class="icon lupa">

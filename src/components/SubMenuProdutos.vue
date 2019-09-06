@@ -7,10 +7,16 @@
       <img class="arrow-img" src="@/assets/arrow-left.svg" alt="Dog27" />
     </div>
     <div class="produtos-icones">
-      <div class="produto-icone" v-for="categoria in categorias" :key="`${categoria}-dog27`">
-        <img :src="getImgUrl(categoria)" :alt="`${categoria} dog27`" />
-        <P class="submenu-produto-legenda">{{categoria | capitalize}}</P>
-      </div>
+      <router-link
+        :to="{name:categoria.path}"
+        tag="div"
+        class="produto-icone"
+        v-for="categoria in categorias"
+        :key="`${categoria.nome}-dog27`"
+      >
+        <img :src="getImgUrl(categoria.nome)" :alt="`${categoria.nome} dog27`" />
+        <P class="submenu-produto-legenda">{{categoria.nome | capitalize}}</P>
+      </router-link>
     </div>
     <div class="arrow" @click="swapRight()">
       <img class="arrow-img" src="@/assets/arrow-right.svg" alt="Dog27" />
@@ -24,13 +30,34 @@ export default {
   data() {
     return {
       categorias: [
-        "coleiras",
-        "peitorais",
-        "cintos",
-        "guias"
-        // "comedouros",
-        // "gravatas",
-        // "tapetes higiênicos"
+        {
+          nome: "coleiras",
+          path: "coleira"
+        },
+        {
+          nome: "peitorais",
+          path: "peitoral"
+        },
+        {
+          nome: "cintos",
+          path: "cinto"
+        },
+        {
+          nome: "guias",
+          path: "guia"
+        }
+        // {
+        //   nome: "comedouros",
+        //   path: "comedouro"
+        // },
+        // {
+        //   nome: "gravatas",
+        //   path: "gravata"
+        // },
+        // {
+        //   nome: "tapetes higiênicos",
+        //   path: "tapete"
+        // }
       ]
     };
   },
