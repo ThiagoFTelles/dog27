@@ -3,26 +3,87 @@
     <h3>Contact Form</h3>
 
     <div class="container">
-      <form action="/action_page.php">
-        <input type="text" id="fname" name="firstname" placeholder="NOME COMPLETO" />
-        <input type="email" id="email" name="email" placeholder="EMAIL*" />
-        <input type="text" id="assunto" name="assunto" placeholder="ASSUNTO" />
-        <textarea
+      <section v-if="msgEnviada">
+        <p>Mensagem enviada com sucesso!</p>
+        <button class="btn" @click="msgEnviada=false">Enviar outra</button>
+      </section>
+      <form v-else :action="actionUrl" method="post" @submit="onSubmit()">
+        <input
+          type="text"
+          v-model="name"
+          id="name"
+          name="name"
+          placeholder="NOME COMPLETO"
+          required
+        />
+        <input type="text" v-model="phone" id="phone" name="phone" placeholder="TELEFONE" required />
+        <input type="email" v-model="email" id="email" name="email" placeholder="EMAIL" required />
+        <input
+          type="text"
+          v-model="subject"
           id="subject"
           name="subject"
+          placeholder="ASSUNTO"
+          required
+        />
+        <textarea
+          v-model="message"
+          id="message"
+          name="message"
           placeholder="ESCREVE AQUI A SUA MENSAGEM"
           style="height:100px"
         ></textarea>
 
         <input type="submit" value="Submit" />
       </form>
+      <erroNotificacao v-if="erros.length" />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SubMenuContato"
+  name: "SubMenuContato",
+  data() {
+    return {
+      actionUrl: `${process.env.VUE_APP_SITE_PREFIX}/helpers/sendmail.php`,
+      msgEnviada: false,
+      name: null,
+      phone: null,
+      message: null,
+      email: null,
+      subject: null,
+      erros: []
+    };
+  },
+  methods: {
+    onSubmit() {
+      this.erros = [];
+      let self = this;
+
+      if (
+        this.name &&
+        this.phone &&
+        this.message &&
+        this.email &&
+        this.subject
+      ) {
+        fetch(this.actionUrl).then(res => {
+          if (res.error) {
+            self.erros.push(res.error);
+          } else {
+            self.msgEnviada = true;
+          }
+        });
+      } else {
+        this.erros.push("Preencha todos os campos.");
+      }
+    },
+    created() {
+      this.msgEnviada = false;
+      this.erros = [];
+    }
+  }
 };
 </script>
 
