@@ -483,7 +483,7 @@ export default {
         .then(response => {
           if (response.data.length === 0) {
             // eslint-disable-next-line
-            console.log("deu erro no combo");
+            console.log("nenhum combo encontrado.");
             this.mostrarComboArea = false;
           } else {
             let resposta = response.data[0];

@@ -12,7 +12,7 @@
       </div>
     </transition>
     <transition mode="out-in">
-      <AreaDeCompra :produto="produtoNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
+      <AreaDeCompra :produto="categoriaNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
     </transition>
     <div class="peitoral-container">
       <div class="texto-box">
@@ -108,7 +108,7 @@ export default {
     return {
       produtos: null,
       produto: null,
-      produtoNome: "Peitoral",
+      categoriaNome: "Peitoral",
       estampa: null,
       tamanho: null,
       estoque: null,

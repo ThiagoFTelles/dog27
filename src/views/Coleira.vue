@@ -12,7 +12,7 @@
       </div>
     </transition>
     <transition mode="out-in">
-      <AreaDeCompra :produto="produtoNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
+      <AreaDeCompra :produto="categoriaNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
     </transition>
     <div class="produto-container">
       <div class="texto-box">
@@ -65,7 +65,7 @@ export default {
   components: { AreaDeCompra },
   data() {
     return {
-      produtoNome: "coleira",
+      categoriaNome: "coleira",
       produtos: null,
       produto: null,
       estampa: null,

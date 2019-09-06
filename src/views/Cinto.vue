@@ -1,101 +1,8 @@
 <template>
   <section>
     <transition mode="out-in">
-      <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
-        <div>
-          <p>Peitoral Híbrido</p>
-        </div>
-        <div>
-          <p class="medidas">Medidas</p>
-          <button @click="vaiComprar">Comprar</button>
-        </div>
-      </div>
+      <AreaDeCompra :produto="categoriaNome" v-show="true" key="area-de-compra"></AreaDeCompra>
     </transition>
-    <transition mode="out-in">
-      <AreaDeCompra v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
-    </transition>
-    <div class="peitoral-container">
-      <div class="texto-box">
-        <h1 class="saiba-mais-titulo">PEITORAL HÍBRIDO</h1>
-        <p
-          class="saiba-mais-paragrafo"
-        >O único peitoral híbrido do mercado. onde o funcional encontra beleza e conforto.</p>
-      </div>
-
-      <img
-        src="@/assets/peitoral-para-cachorro-dog27.jpg"
-        alt="Peitoral para cahorro dog27"
-        class="peitoral-detalhe"
-      />
-      <div class="texto-box">
-        <h1 class="saiba-mais-titulo">COMO ASSIM "HÍBRIDO"?</h1>
-        <p class="saiba-mais-paragrafo maior">Basta desengatar, virar, ajustar e pronto.</p>
-        <p
-          class="saiba-mais-paragrafo maior"
-        >Do peitoral Anti-puxão ao convencional em poucos segundos</p>
-      </div>
-      <img
-        src="@/assets/peitoral-para-cachorro-dog27-demonstracao.jpg"
-        alt="Peitoral para cahorro dog27"
-        class="peitoral-demonstracao"
-      />
-      <h1 class="saiba-mais-subtitulo">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
-      <img
-        src="@/assets/wide.jpg"
-        alt="Peitoral para cahorro dog27"
-        class="peitoral-estampa"
-      />
-      <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
-      <div class="peitoral-tamanhos-container">
-        <img
-          src="@/assets/peitoral-para-cachorro-dog27-tamanhos-1.jpg"
-          alt="Peitoral para cahorro dog27"
-          class="peitoral-tamanhos"
-        />
-        <img
-          src="@/assets/4 tamanhos diferentes.jpg"
-          alt="Peitoral para cahorro dog27"
-          class="peitoral-tamanhos"
-        />
-      </div>
-      <h2 class="saiba-mais-titulo">UM DESIGN PERFEITO</h2>
-      <div class="design-info-container">
-        <div class="design-info left">
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>DESIGN HÍBRIDO INOVADOR</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>RESISTENTE AO CLIMA E POEIRA</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>ESTAMPAS DESENHADAS A MÃO</p>
-          </div>
-        </div>
-        <div class="design-info right">
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>AJUSTÁVEL: CABE EM QUALQUER DOG</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>FECHO SUPER RESISTENTE</p>
-          </div>
-          <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
-            <p>TIRA SUPER RESISTENTE</p>
-          </div>
-        </div>
-      </div>
-      <div class="comprar-agora">
-        <h2 class="saiba-mais-subtitulo">a segurança e o conforto que o seu dog merece!</h2>
-        <div class="btn-vazado">
-          <button @click="vaiComprar">COMPRAR AGORA</button>
-        </div>
-      </div>
-    </div>
   </section>
 </template>
 
@@ -112,10 +19,11 @@ export default {
     return {
       produtos: null,
       produto: null,
+      categoriaNome: "Cinto",
       estampa: null,
       tamanho: null,
       estoque: null,
-      categoriaId: 16,
+      categoriaId: 33,
       idCategoriaCombo: 35
     };
   },
@@ -335,8 +243,8 @@ img {
 .comprar-agora {
   display: grid;
   grid-template-rows: 175px 1fr 1fr;
-  background: url("../assets/bg-comprar-agora-peitoral.jpg") no-repeat center
-    center;
+  background: url("../assets/coleira/pagina de coleiras-05.jpg") no-repeat
+    center center;
   width: 600px;
   height: 400px;
   margin: auto;
