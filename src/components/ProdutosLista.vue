@@ -11,10 +11,10 @@
             <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
             <h2
               class="banner-descricao"
-            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando quiser em poucos segundos.</h2>
             <div class="links">
-              <router-link :to="{name: 'peitoral'}" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'peitoral'}" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'peitoral', params: {comprar:false }  }" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'peitoral', params: {comprar:true }  }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -28,8 +28,8 @@
               class="banner-descricao"
             >O clássico nunca sai de moda.<br>Mais conforto e segurança para o seu cão.</h2>
             <div class="links">
-              <router-link :to="{name: 'coleira'}" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'coleira'}" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'coleira', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'coleira', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -43,8 +43,8 @@
               class="banner-descricao"
             >Confortável, super forte e linda de viver.</h2>
             <div class="links">
-              <router-link :to="{name: 'guia'}" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'guia'}" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'guia', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'guia', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -59,8 +59,8 @@
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <router-link :to="{name: 'comedouro'}" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'comedouro'}" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'comedouro', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'comedouro', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -74,8 +74,8 @@
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <router-link :to="{name: 'gravata'}" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'gravata'}" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'gravata', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'gravata', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -89,8 +89,8 @@
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <router-link :to="{name: 'cinto'}" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'cinto'}" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'cinto', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'cinto', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>-->

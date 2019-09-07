@@ -185,6 +185,13 @@ export default {
       categoriaComboId: this.idCategoriaCombo
     };
     this.selecionarCategoria(categorias);
+
+    if(this.comprar === true){
+      this.vaiComprar();
+    }
+    else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
+      this.switchAreaDeCompra(false);
+    }
   },
   watch: {
     mostrarAreaDeCompra() {

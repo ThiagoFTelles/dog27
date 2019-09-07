@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="area-de-compra-container">
+    <div v-if="variacoesDisponiveis.length" class="area-de-compra-container">
       <div class="area-de-compra-imagens">
         <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-area-de-compra principal" />
         <div
@@ -89,7 +89,9 @@
           </transition>
         </div>
       </div>
+      
     </div>
+    <PaginaCarregando v-else />
     <section v-if="mostrarComboArea">
       <div class="combo" v-if="produtoCombo">
         <div class="combo-produtos">
