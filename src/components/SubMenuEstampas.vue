@@ -15,7 +15,7 @@
           </div>
           <div class="subtitulo-submenu-estampas">
             <h2 class="submenu-estampa-titulo">{{estampa.nome | uppercase}}</h2>
-            <div class="btn-submenu-estampas">Comprar >></div>
+            <div class="btn-submenu-estampas" @click="getEstampa(estampa)">Comprar >></div>
           </div>
         </div>
         
@@ -34,10 +34,21 @@ export default {
   name: "SubMenuEstampas",
   data() {
     return {
-      estampas: []
+      estampas: [],
+      produtosDaEstampa: []
     }
   },
   methods: {
+    getEstampa(estampa){
+      api
+        .get(
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?search=${estampa.slug}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+        )
+        .then(response => {
+          console.log("produtos da estampa:");
+          console.log(response.data);
+        })
+    },
     getEstampas(){
       api
         .get(
