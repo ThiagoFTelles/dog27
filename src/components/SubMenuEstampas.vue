@@ -96,7 +96,6 @@ export default {
 
 <style scoped>
 .submenu-container {
-  max-height: 350px;
   position: absolute;
   z-index: 2;
   display: flex;
