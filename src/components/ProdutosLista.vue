@@ -5,7 +5,7 @@
       <div class="produtos" key="produtos">
         <div class="produto duplo">
           <div class="banner-imagem">
-            <img src="../assets/coleira.png" alt="coleira" />
+            <img src="../assets/home/peitoral-hibrido-para-cachorro-dog27.jpg" alt="peitoral" />
           </div>
           <div class="banner-textos">
             <h1 class="banner-titulo">PEITORAL HÍBRIDO</h1>
@@ -20,13 +20,13 @@
         </div>
         <div class="produto simples">
           <div class="banner-imagem">
-            <img src="../assets/coleira.png" alt="coleira" />
+            <img src="../assets/home/coleira-para-cachorro-dog27.jpg" alt="coleira" />
           </div>
           <div class="banner-textos">
             <h1 class="banner-titulo">COLEIRAS</h1>
             <h2
               class="banner-descricao"
-            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            >O clássico nunca sai de moda.<br>Mais conforto e segurança para o seu cão.</h2>
             <div class="links">
               <router-link :to="{name: 'coleira'}" class="banner-link left-link">Saiba mais >></router-link>
               <router-link :to="{name: 'coleira'}" class="banner-link">Comprar >></router-link>
@@ -35,13 +35,13 @@
         </div>
         <div class="produto simples">
           <div class="banner-imagem">
-            <img src="../assets/coleira.png" alt="coleira" />
+            <img src="../assets/home/guia-para-cachorro-dog27.jpg" alt="guia" />
           </div>
           <div class="banner-textos">
             <h1 class="banner-titulo">GUIAS</h1>
             <h2
               class="banner-descricao"
-            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            >Confortável, super forte e linda de viver.</h2>
             <div class="links">
               <router-link :to="{name: 'guia'}" class="banner-link left-link">Saiba mais >></router-link>
               <router-link :to="{name: 'guia'}" class="banner-link">Comprar >></router-link>
@@ -137,11 +137,11 @@ export default {
   },
   watch: {
     url() {
-      this.getProdutos();
+      // this.getProdutos();
     }
   },
   created() {
-    this.getProdutos();
+    // this.getProdutos();
   }
 };
 </script>

@@ -4,48 +4,23 @@
       <h1 class="titulo-submenu-estampas">ESTAMPAS</h1>
     </div>
     <section class="submenu-container-conteudo">
-      <div class="arrow">
+      <div class="arrow"  @click="swapLeft()">
         <img src="@/assets/arrow-left.svg" alt="Dog27" />
       </div>
-      <div class="estampas-conteudo">
-        <div class="area-submenu-estampas">
+      <div class="estampas-conteudo" >
+        <div class="area-submenu-estampas" v-for="(estampa, index) in chunkEstampas"
+                :key="`estampa-link-${index}`">
           <div class="imagem-submenu-estampas">
-            <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
+            <img :src="getSrc(estampa.slug)" :alt="estampa.nome" />
           </div>
           <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
+            <h2 class="submenu-estampa-titulo">{{estampa.nome | uppercase}}</h2>
             <div class="btn-submenu-estampas">Comprar >></div>
           </div>
         </div>
-        <div class="area-submenu-estampas">
-          <div class="imagem-submenu-estampas">
-            <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
-          </div>
-          <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
-            <div class="btn-submenu-estampas">Comprar >></div>
-          </div>
-        </div>
-        <div class="area-submenu-estampas">
-          <div class="imagem-submenu-estampas">
-            <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
-          </div>
-          <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
-            <div class="btn-submenu-estampas">Comprar >></div>
-          </div>
-        </div>
-        <div class="area-submenu-estampas">
-          <div class="imagem-submenu-estampas">
-            <img src="@/assets/imagem-submenu-estampa.png" alt="Coleira Estampada Dog27" />
-          </div>
-          <div class="subtitulo-submenu-estampas">
-            <h2 class="submenu-estampa-titulo">PIPOCA</h2>
-            <div class="btn-submenu-estampas">Comprar >></div>
-          </div>
-        </div>
+        
       </div>
-      <div class="arrow">
+      <div class="arrow" @click="swapRight()">
         <img src="@/assets/arrow-right.svg" alt="Dog27" />
       </div>
     </section>
@@ -53,13 +28,75 @@
 </template>
 
 <script>
+import { api } from "@/services.js";
+
 export default {
-  name: "SubMenuEstampas"
+  name: "SubMenuEstampas",
+  data() {
+    return {
+      estampas: []
+    }
+  },
+  methods: {
+    getEstampas(){
+      api
+        .get(
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/attributes/3/terms?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+        )
+        .then(response => {
+          this.estampas = [];
+          response.data.forEach(this.estampasDisponiveis);
+        })
+    },
+    estampasDisponiveis(estampa){
+      let produtosTotal = estampa.count;
+      let nome = estampa.name;
+      let slug = estampa.slug;
+      let id = estampa.id;
+      let descricao = estampa.description;
+
+      let obj = {
+        nome: nome,
+        slug: slug,
+      id: id,
+      descricao: descricao,
+      produtosTotal: produtosTotal
+      };
+
+      if(produtosTotal > 0) {
+        this.estampas.push(obj);
+      }
+    },
+    getSrc(slug){
+      return require ("../assets/estampas/Coleira_de_cachorro_"+slug+".jpg");
+    },
+    swapRight() {
+      let first = this.estampas[0];
+      this.estampas.push(first);
+      this.estampas.shift();
+    },
+    swapLeft() {
+      let lastIndex = this.estampas.length - 1;
+      let last = this.estampas[lastIndex];
+      this.estampas.unshift(last);
+      this.estampas.pop();
+    },
+
+  },
+    computed:{
+      chunkEstampas(){
+    return this.estampas.slice(0,4);
+    }
+    },
+  created(){
+    this.getEstampas();
+  }
 };
 </script>
 
 <style scoped>
 .submenu-container {
+  max-height: 350px;
   position: absolute;
   z-index: 2;
   display: flex;
@@ -89,9 +126,15 @@ export default {
   color: black;
 }
 
+.arrow {
+  display: grid;
+    grid-template-rows: 20px 1fr 20px;
+}
+
 .arrow img {
   margin: 100% 0;
   padding: 0 10px;
+      width: fit-content;
 }
 
 .estampas-conteudo {
@@ -110,8 +153,16 @@ export default {
   margin: 0 auto;
 }
 
+.area-submenu-estampas {
+  
+}
+
+.imagem-submenu-estampas {
+  
+}
+
 .imagem-submenu-estampas img {
-  padding: 20px;
+  padding: 0;
 }
 
 .subtitulo-submenu-estampas {
@@ -119,7 +170,7 @@ export default {
 }
 
 .submenu-estampa-titulo {
-  margin: 10px;
+  margin-top: 10px;
   font-family: "Fira Sans", sans-serif;
   text-align: center;
   font-size: 1.3em;
@@ -128,7 +179,7 @@ export default {
 }
 
 .btn-submenu-estampas {
-  margin: 15px;
+  margin-bottom: 15px;
   cursor: pointer;
   flex: 1;
   color: #00acff;

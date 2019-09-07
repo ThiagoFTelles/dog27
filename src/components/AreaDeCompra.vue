@@ -467,7 +467,7 @@ export default {
       }
 
       // OBS: Guia não tem tamanho M
-      if (tamanho == "_M") {
+      if (tamanho == "_M" || tamanho == "_U") {
         newSufix = sufix.slice(0, -2);
         newSufix = newSufix + "_G";
       }
@@ -492,7 +492,7 @@ export default {
               nomeDoProduto:
                 this.nomeDoProdutoCombo + " " + this.estampaEscolhida.nome,
               tamanho:
-                this.variacaoEscolhida.tamanho == "M"
+                this.variacaoEscolhida.tamanho == "M" || this.variacaoEscolhida.tamanho == "U"
                   ? "G"
                   : this.variacaoEscolhida.tamanho,
               preco: resposta.regular_price,
