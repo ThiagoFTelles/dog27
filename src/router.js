@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home.vue";
-import Produto from "@/views/Produto.vue";
 import Checkout from "@/views/Checkout.vue";
 import CheckoutCredito from "@/components/CheckoutCredito.vue";
 import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
@@ -15,6 +14,7 @@ import Cinto from "@/views/Cinto.vue";
 import Comedouro from "@/views/Comedouro.vue";
 import Gravata from "@/views/Gravata.vue";
 import Guia from "@/views/Guia.vue";
+import ProdutosDaEstampa from "@/views/ProdutosDaEstampa.vue";
 
 Vue.use(Router);
 
@@ -68,9 +68,9 @@ const router = new Router({
       props: true
     },
     {
-      path: "/produto/:id",
-      name: "produto",
-      component: Produto,
+      path: "/estampa/:estampa",
+      name: "produtosDaEstampa",
+      component: ProdutosDaEstampa,
       props: true
     },
     {

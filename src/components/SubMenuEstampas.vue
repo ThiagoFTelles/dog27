@@ -4,21 +4,24 @@
       <h1 class="titulo-submenu-estampas">ESTAMPAS</h1>
     </div>
     <section class="submenu-container-conteudo">
-      <div class="arrow"  @click="swapLeft()">
+      <div class="arrow" @click="swapLeft()">
         <img src="@/assets/arrow-left.svg" alt="Dog27" />
       </div>
-      <div class="estampas-conteudo" >
-        <div class="area-submenu-estampas" v-for="(estampa, index) in chunkEstampas"
-                :key="`estampa-link-${index}`">
+      <div class="estampas-conteudo">
+        <div
+          class="area-submenu-estampas"
+          v-for="(estampa, index) in chunkEstampas"
+          :key="`estampa-link-${index}`"
+          @click="getEstampa(estampa)"
+        >
           <div class="imagem-submenu-estampas">
             <img :src="getSrc(estampa.slug)" :alt="estampa.nome" />
           </div>
           <div class="subtitulo-submenu-estampas">
             <h2 class="submenu-estampa-titulo">{{estampa.nome | uppercase}}</h2>
-            <div class="btn-submenu-estampas" @click="getEstampa(estampa)">Comprar >></div>
+            <div class="btn-submenu-estampas">Comprar >></div>
           </div>
         </div>
-        
       </div>
       <div class="arrow" @click="swapRight()">
         <img src="@/assets/arrow-right.svg" alt="Dog27" />
@@ -36,20 +39,38 @@ export default {
     return {
       estampas: [],
       produtosDaEstampa: []
-    }
+    };
   },
   methods: {
-    getEstampa(estampa){
+    getEstampa(estampa) {
       api
         .get(
           `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?search=${estampa.slug}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
-          console.log("produtos da estampa:");
-          console.log(response.data);
+          this.produtosDaEstampa = [];
+          response.data.forEach(this.getProdutosDaEstampa);
         })
+        .then(() => {
+          this.$router.push({
+            name: "produtosDaEstampa",
+            params: {
+              estampa: estampa.nome,
+              produtos: this.produtosDaEstampa
+            }
+          });
+        });
     },
-    getEstampas(){
+    getProdutosDaEstampa(produto) {
+      let obj = {
+        id: produto.id,
+        nome: produto.name.replace(/ .*/, ""),
+        precoMinimo: produto.price,
+        imgSrc: produto.images[0].src
+      };
+      this.produtosDaEstampa.unshift(obj);
+    },
+    getEstampas() {
       api
         .get(
           `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/attributes/3/terms?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
@@ -57,9 +78,9 @@ export default {
         .then(response => {
           this.estampas = [];
           response.data.forEach(this.estampasDisponiveis);
-        })
+        });
     },
-    estampasDisponiveis(estampa){
+    estampasDisponiveis(estampa) {
       let produtosTotal = estampa.count;
       let nome = estampa.name;
       let slug = estampa.slug;
@@ -69,17 +90,17 @@ export default {
       let obj = {
         nome: nome,
         slug: slug,
-      id: id,
-      descricao: descricao,
-      produtosTotal: produtosTotal
+        id: id,
+        descricao: descricao,
+        produtosTotal: produtosTotal
       };
 
-      if(produtosTotal > 0) {
+      if (produtosTotal > 0) {
         this.estampas.push(obj);
       }
     },
-    getSrc(slug){
-      return require ("../assets/estampas/Coleira_de_cachorro_"+slug+".jpg");
+    getSrc(slug) {
+      return require("../assets/estampas/Coleira_de_cachorro_" + slug + ".jpg");
     },
     swapRight() {
       let first = this.estampas[0];
@@ -91,15 +112,14 @@ export default {
       let last = this.estampas[lastIndex];
       this.estampas.unshift(last);
       this.estampas.pop();
-    },
-
-  },
-    computed:{
-      chunkEstampas(){
-    return this.estampas.slice(0,4);
     }
-    },
-  created(){
+  },
+  computed: {
+    chunkEstampas() {
+      return this.estampas.slice(0, 4);
+    }
+  },
+  created() {
     this.getEstampas();
   }
 };
@@ -138,13 +158,13 @@ export default {
 
 .arrow {
   display: grid;
-    grid-template-rows: 20px 1fr 20px;
+  grid-template-rows: 20px 1fr 20px;
 }
 
 .arrow img {
   margin: 100% 0;
   padding: 0 10px;
-      width: fit-content;
+  width: fit-content;
 }
 
 .estampas-conteudo {
@@ -163,16 +183,13 @@ export default {
   margin: 0 auto;
 }
 
-.area-submenu-estampas {
-  
-}
-
 .imagem-submenu-estampas {
-  
+  cursor: pointer;
 }
 
 .imagem-submenu-estampas img {
   padding: 0;
+  margin: 0 auto;
 }
 
 .subtitulo-submenu-estampas {
