@@ -50,7 +50,7 @@ const router = new Router({
       props: true
     },
     {
-      path: "/cinto-de-seguranca-para-cachorros-dog27",
+      path: "/cinto-para-cachorros-dog27",
       name: "cinto",
       component: Cinto,
       props: true

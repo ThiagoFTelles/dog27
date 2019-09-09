@@ -49,22 +49,22 @@
           </div>
         </div>
 
-        <!-- <div class="produto duplo">
+        <div class="produto duplo">
           <div class="banner-imagem">
-            <img src="../assets/coleira.png" alt="coleira" />
+            <img src="../assets/coleira.png" alt="cinto" />
           </div>
           <div class="banner-textos">
-            <h1 class="banner-titulo">COMEDOURO</h1>
+            <h1 class="banner-titulo">CINTO</h1>
             <h2
               class="banner-descricao"
-            >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            >Cinto convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
-              <router-link :to="{name: 'comedouro', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'comedouro', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'cinto', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
+              <router-link :to="{name: 'cinto', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
         </div>
-        <div class="produto simples">
+        <!-- <div class="produto simples">
           <div class="banner-imagem">
             <img src="../assets/coleira.png" alt="coleira" />
           </div>
@@ -93,7 +93,7 @@
               <router-link :to="{name: 'cinto', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
-        </div>-->
+        </div> -->
         <ProdutosPaginar :produtosTotal="produtosTotal" :produtosPorPagina="produtosPorPagina" />
       </div>
     </transition>

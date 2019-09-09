@@ -35,6 +35,10 @@ Vue.filter('uppercase', function (value) {
   return value.toUpperCase()
 })
 
+Vue.filter('lowercase', function (value) {
+  return value.toLowerCase()
+})
+
 Vue.filter('numeroPreco', function (valor) {
   //return `R$ ${valor},00`;
   return valor.toLocaleString("pt-BR", {

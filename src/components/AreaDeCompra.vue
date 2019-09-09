@@ -89,7 +89,6 @@
           </transition>
         </div>
       </div>
-      
     </div>
     <PaginaCarregando v-else />
     <section v-if="mostrarComboArea">
@@ -494,7 +493,8 @@ export default {
               nomeDoProduto:
                 this.nomeDoProdutoCombo + " " + this.estampaEscolhida.nome,
               tamanho:
-                this.variacaoEscolhida.tamanho == "M" || this.variacaoEscolhida.tamanho == "U"
+                this.variacaoEscolhida.tamanho == "M" ||
+                this.variacaoEscolhida.tamanho == "U"
                   ? "G"
                   : this.variacaoEscolhida.tamanho,
               preco: resposta.regular_price,

@@ -1,17 +1,21 @@
 <template>
   <section>
-    <div class="banner"></div>
+    <div class="banner">
+      <img :src="getSrc(estampa)" alt="dog-27" />
+    </div>
     <div class="produto-container">
       <h1 class="produto-titulo">{{ estampa | uppercase}}</h1>
-      <div
+      <router-link
+        tag="div"
         class="produto-da-estampa"
         v-for="(produto, index) in produtos"
         :key="`produto-${estampa}-${index}`"
+        :to="`/${produto.nome}-para-cachorros-dog27`"
       >
         <img class="produto-img" :src="produto.imgSrc" alt />
         <h2 class="produto-subtitulo">{{produto.nome | uppercase}} {{estampa | uppercase}}</h2>
         <p class="produto-paragrafo">A parir de {{Number(produto.precoMinimo) | numeroPreco}}</p>
-      </div>
+      </router-link>
     </div>
   </section>
 </template>
@@ -19,7 +23,17 @@
 <script>
 export default {
   name: "ProdutosDaEstampa",
-  props: { comprar: Boolean, estampa: String, produtos: Array }
+  props: { comprar: Boolean, estampa: String, produtos: Array },
+  methods: {
+    getSrc(estampa) {
+      let estampaNome = estampa.toLowerCase();
+      let resultado = require("../assets/estampas/banner-estampas/" +
+        estampaNome +
+        ".jpg");
+
+      return resultado;
+    }
+  }
 };
 </script>
 
@@ -32,7 +46,10 @@ section {
   width: 100%;
   height: 260px;
   display: block;
-  background: #4ee4ff;
+}
+
+.banner img {
+  margin: 0 auto;
 }
 
 .produto-container {
