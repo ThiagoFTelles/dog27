@@ -66,7 +66,11 @@ export default {
         id: produto.id,
         nome: produto.name.replace(/ .*/, ""),
         precoMinimo: produto.price,
-        imgSrc: produto.images[0].src
+        fotos: produto.images,
+        attributes: produto.attributes,
+        imgSrc: produto.images[0].src,
+        categoriaNome: produto.categories[0].id,
+        categoriaId: produto.categories[0].name
       };
       this.produtosDaEstampa.unshift(obj);
     },

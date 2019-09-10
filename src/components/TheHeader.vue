@@ -173,7 +173,6 @@ export default {
         fotos: produto.images,
         attributes: produto.attributes,
         imgSrc: produto.images[0].src,
-        sku: produto.sku,
         categoriaNome: produto.categories[0].id,
         categoriaId: produto.categories[0].name
       };

@@ -5,26 +5,28 @@
     </div>
     <div class="produto-container">
       <h1 class="produto-titulo">{{ estampa | uppercase}}</h1>
-      <router-link
-        tag="div"
+      <div
         class="produto-da-estampa"
         v-for="(produto, index) in produtos"
         :key="`produto-${estampa}-${index}`"
-        :to="`/${produto.nome}-para-cachorros-dog27`"
+        @click="direcionarProduto(produto)"
       >
         <img class="produto-img" :src="produto.imgSrc" alt />
         <h2 class="produto-subtitulo">{{produto.nome | uppercase}} {{estampa | uppercase}}</h2>
         <p class="produto-paragrafo">A parir de {{Number(produto.precoMinimo) | numeroPreco}}</p>
-      </router-link>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "ProdutosDaEstampa",
   props: { comprar: Boolean, estampa: String, produtos: Array },
   methods: {
+    ...mapActions(["selecionarCategoria", "redirecionarEstampa"]),
     getSrc(estampa) {
       let estampaNome = estampa.toLowerCase();
       let resultado = require("../assets/estampas/banner-estampas/" +
@@ -32,6 +34,53 @@ export default {
         ".jpg");
 
       return resultado;
+    },
+    prepararProduto(id) {
+      let categoriaComboId = id === 35 ? 16 : 35;
+
+      let categorias = {
+        categoriaId: id,
+        categoriaComboId: categoriaComboId
+      };
+
+      this.selecionarCategoria(categorias);
+    },
+    getImgEstampaUrl(estampa) {
+      var estampas = require.context("../assets/estampas/", false, /\.jpg$/);
+      return estampas(
+        "./Coleira_de_cachorro_" +
+          estampa.toLowerCase().replace(/\s/g, "") +
+          ".jpg"
+      );
+    },
+    async direcionarProduto(produto) {
+      await this.prepararProduto(produto.categoriaId);
+
+      let atributoDaEstampa = produto.attributes.filter(chave => {
+        return chave.name === "Estampa";
+      });
+      let estampa = atributoDaEstampa[0].options[0];
+
+      let fotosDoProduto = produto.fotos;
+      let fotosSrc = [];
+      fotosDoProduto.forEach(element => {
+        fotosSrc.push({ src: element.src });
+      });
+
+      let produtoEscolhido = {
+        nomeDoProduto: produto.nome,
+        estampa: estampa,
+        idProdutoPai: produto.id,
+        srcFotos: fotosSrc,
+        urlThumbnail: this.getImgEstampaUrl(estampa)
+      };
+
+      await this.redirecionarEstampa(produtoEscolhido);
+
+      await this.$router.push({
+        name: produto.nome.replace(/ .*/, "").toLowerCase(),
+        params: { comprar: true }
+      });
     }
   }
 };
