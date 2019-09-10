@@ -3,7 +3,6 @@ import Router from "vue-router";
 import Home from "@/views/Home.vue";
 import Checkout from "@/views/Checkout.vue";
 import CheckoutCredito from "@/components/CheckoutCredito.vue";
-import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
 import Login from "@/views/Login.vue";
 import Usuario from "@/views/usuario/Usuario.vue";
 import UsuarioEditar from "@/views/usuario/UsuarioEditar.vue";
@@ -14,7 +13,9 @@ import Cinto from "@/views/Cinto.vue";
 import Comedouro from "@/views/Comedouro.vue";
 import Gravata from "@/views/Gravata.vue";
 import Guia from "@/views/Guia.vue";
+import Tapete from "@/views/Tapete.vue";
 import ProdutosDaEstampa from "@/views/ProdutosDaEstampa.vue";
+// import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
 
 Vue.use(Router);
 
@@ -68,6 +69,12 @@ const router = new Router({
       props: true
     },
     {
+      path: "/tapete-para-cachorros-dog27",
+      name: "tapete",
+      component: Tapete,
+      props: true
+    },
+    {
       path: "/estampa/:estampa",
       name: "produtosDaEstampa",
       component: ProdutosDaEstampa,
@@ -83,11 +90,11 @@ const router = new Router({
       name: "checkoutcredito",
       component: CheckoutCredito
     },
-    {
-      path: "/checkoutboleto",
-      name: "checkoutboleto",
-      component: CheckoutBoleto
-    },
+    // {
+    //   path: "/checkoutboleto",
+    //   name: "checkoutboleto",
+    //   component: CheckoutBoleto
+    // },
     {
       path: "/login",
       name: "login",

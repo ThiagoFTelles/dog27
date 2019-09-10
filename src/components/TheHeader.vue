@@ -36,8 +36,16 @@
             <a target="_blank" href="https://blog.dog27.com.br" class="menu-link">Blog</a>
           </ul>
         </nav>
+
         <a class="icon lupa">
-          <img id="lupa" src="@/assets/search.svg" />
+          <transition>
+            <div v-if="mostrarPesquisa" class="barra-de-pesquisa">
+              <a id="fechar-pesquisa" @click="mostrarPesquisa=false">X</a>
+              <input type="text" v-model="pesquisa" v-on:keyup.enter="pesquisar(pesquisa)" />
+              <img id="lupa-inside" src="@/assets/search.svg" @click="pesquisar(pesquisa)" />
+            </div>
+            <img v-else @click="mostrarPesquisa=true" id="lupa" src="@/assets/search.svg" />
+          </transition>
         </a>
         <router-link to="/usuario" tag="a" class="icon login-profile">
           <img src="@/assets/person.svg" alt="login-dog27" />
@@ -98,6 +106,7 @@ import SubMenuContato from "@/components/SubMenuContato.vue";
 import CarrinhoDeCompras from "@/components/CarrinhoDeCompras.vue";
 import Login from "@/views/Login.vue";
 import { mapState } from "vuex";
+import { api } from "@/services.js";
 
 export default {
   name: "TheHeader",
@@ -113,7 +122,10 @@ export default {
       hoverLinkContato: false,
       hoverLinkBag: false,
       hoverLinkLogin: false,
-      mostrarBadgeCarrinho: false
+      mostrarBadgeCarrinho: false,
+      mostrarPesquisa: false,
+      pesquisa: "",
+      produtosDaPesquisa: []
     };
   },
   components: {
@@ -124,7 +136,36 @@ export default {
     CarrinhoDeCompras,
     Login
   },
-  methods: {},
+  methods: {
+    pesquisar(pesquisa) {
+      api
+        .get(
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?search=${pesquisa}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+        )
+        .then(response => {
+          this.produtosDaPesquisa = [];
+          response.data.forEach(this.getProdutosDaPesquisa);
+        })
+        .then(() => {
+          this.$router.push({
+            name: "produtosDaEstampa",
+            params: {
+              estampa: "default",
+              produtos: this.produtosDaPesquisa
+            }
+          });
+        });
+    },
+    getProdutosDaPesquisa(produto) {
+      let obj = {
+        id: produto.id,
+        nome: produto.name,
+        precoMinimo: produto.price,
+        imgSrc: produto.images[0].src
+      };
+      this.produtosDaPesquisa.unshift(obj);
+    }
+  },
   watch: {
     carrinho() {
       let quantidade = this.quantidadeDeItensNoCarrinho;
@@ -144,6 +185,9 @@ export default {
       let quantidade = this.carrinho.length;
       return quantidade;
     }
+  },
+  created() {
+    this.pesquisa = "";
   }
 };
 </script>
@@ -211,15 +255,15 @@ section {
 .bag[data-badge]:after {
   content: attr(data-badge);
   position: absolute;
-  top: 30px;
+  top: 25px;
   right: -8px;
   font-size: 0.7em;
   background: rgb(59, 177, 212);
   color: white;
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   text-align: center;
-  line-height: 18px;
+  line-height: 15px;
   border-radius: 50%;
   box-shadow: 0 0 1px #333;
 }
@@ -241,11 +285,50 @@ section {
 }
 
 .icon img {
-  width: 27px;
-  height: 27px;
+  width: 20px;
+  height: 20px;
   border: none;
   cursor: pointer;
   box-shadow: none;
+}
+
+.barra-de-pesquisa {
+  width: 300px;
+  position: relative;
+}
+
+.barra-de-pesquisa input {
+  margin: 0;
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 3px solid white;
+  background: rgba(0, 0, 0, 0);
+  color: white;
+}
+
+#lupa-inside {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  padding: 7px;
+  height: 30px;
+  width: 35px;
+  margin: 0;
+}
+
+#fechar-pesquisa {
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  font-size: 0.99rem;
+  top: 3px;
+  right: 0;
+  padding: 3px 13px 3px 3px;
+  height: 30px;
+  width: 35px;
+  margin: 0;
+  text-align: right;
 }
 
 .v-enter,
