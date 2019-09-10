@@ -15,6 +15,7 @@ import Gravata from "@/views/Gravata.vue";
 import Guia from "@/views/Guia.vue";
 import Tapete from "@/views/Tapete.vue";
 import ProdutosDaEstampa from "@/views/ProdutosDaEstampa.vue";
+import ProdutosDaPesquisa from "@/views/ProdutosDaPesquisa.vue";
 // import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
 
 Vue.use(Router);
@@ -78,6 +79,12 @@ const router = new Router({
       path: "/estampa/:estampa",
       name: "produtosDaEstampa",
       component: ProdutosDaEstampa,
+      props: true
+    },
+    {
+      path: "/pesquisa/:pesquisa",
+      name: "produtosDaPesquisa",
+      component: ProdutosDaPesquisa,
       props: true
     },
     {

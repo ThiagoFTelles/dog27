@@ -41,10 +41,15 @@
           <transition>
             <div v-if="mostrarPesquisa" class="barra-de-pesquisa">
               <a id="fechar-pesquisa" @click="mostrarPesquisa=false">X</a>
-              <input type="text" v-model="pesquisa" v-on:keyup.enter="pesquisar(pesquisa)" />
+              <input
+                ref="barraDePesquisa"
+                type="text"
+                v-model="pesquisa"
+                v-on:keyup.enter="pesquisar(pesquisa)"
+              />
               <img id="lupa-inside" src="@/assets/search.svg" @click="pesquisar(pesquisa)" />
             </div>
-            <img v-else @click="mostrarPesquisa=true" id="lupa" src="@/assets/search.svg" />
+            <img v-else @click="mostrarAreaDePesquisa()" id="lupa" src="@/assets/search.svg" />
           </transition>
         </a>
         <router-link to="/usuario" tag="a" class="icon login-profile">
@@ -137,6 +142,10 @@ export default {
     Login
   },
   methods: {
+    mostrarAreaDePesquisa() {
+      this.mostrarPesquisa = true;
+      this.$nextTick(() => this.$refs.barraDePesquisa.focus());
+    },
     pesquisar(pesquisa) {
       api
         .get(
@@ -148,9 +157,9 @@ export default {
         })
         .then(() => {
           this.$router.push({
-            name: "produtosDaEstampa",
+            name: "produtosDaPesquisa",
             params: {
-              estampa: "default",
+              pesquisa: pesquisa,
               produtos: this.produtosDaPesquisa
             }
           });
@@ -161,7 +170,12 @@ export default {
         id: produto.id,
         nome: produto.name,
         precoMinimo: produto.price,
-        imgSrc: produto.images[0].src
+        fotos: produto.images,
+        attributes: produto.attributes,
+        imgSrc: produto.images[0].src,
+        sku: produto.sku,
+        categoriaNome: produto.categories[0].id,
+        categoriaId: produto.categories[0].name
       };
       this.produtosDaPesquisa.unshift(obj);
     }

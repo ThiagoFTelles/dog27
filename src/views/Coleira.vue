@@ -135,8 +135,8 @@ export default {
   computed: {
     ...mapState({
       mostrarAreaDeCompra: state => state.areaDeCompra.mostrarAreaDeCompra
-    }),
-    ...mapState(["idCategoriaSelecionada"])
+    })
+    // ...mapState(["idCategoriaSelecionada"])
   },
   created() {
     let categorias = {
@@ -145,10 +145,9 @@ export default {
     };
     this.selecionarCategoria(categorias);
 
-    if(this.comprar === true){
+    if (this.comprar === true) {
       this.vaiComprar();
-    }
-    else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
+    } else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
       this.switchAreaDeCompra(false);
     }
   },

@@ -219,7 +219,8 @@ export default {
   props: ["produto"],
   computed: {
     ...mapState({
-      carrinho: state => state.cart.carrinho
+      carrinho: state => state.cart.carrinho,
+      estampaRedirecionada: state => state.areaDeCompra.estampaRedirecionada
     }),
     ...mapState(["idCategoriaSelecionada", "idCategoriaCombo"]),
     precoCombo() {
@@ -300,11 +301,13 @@ export default {
         )
         .then(response => {
           response.data.forEach(this.estampasDaCategoria);
-          let primeiraEstampaDisponivel = this.estampasDisponiveis.find(
-            function() {
-              return true;
-            }
-          );
+        })
+        .then(() => {
+          let primeiraEstampaDisponivel = this.estampaRedirecionada
+            ? this.estampaRedirecionada
+            : this.estampasDisponiveis.find(function() {
+                return true;
+              });
 
           this.estampaEscolhida.nome = primeiraEstampaDisponivel.estampa;
           this.estampaEscolhida.srcFotos = primeiraEstampaDisponivel.srcFotos;
