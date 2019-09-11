@@ -1,15 +1,17 @@
 <template>
   <section>
     <transition mode="out-in">
-      <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
-        <div>
-          <p>Peitoral Híbrido</p>
+      <section class="call-to-buy-container">
+        <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
+          <div>
+            <p>Peitoral Híbrido</p>
+          </div>
+          <div>
+            <p class="medidas">Medidas</p>
+            <button @click="vaiComprar">Comprar</button>
+          </div>
         </div>
-        <div>
-          <p class="medidas">Medidas</p>
-          <button @click="vaiComprar">Comprar</button>
-        </div>
-      </div>
+      </section>
     </transition>
     <transition mode="out-in">
       <AreaDeCompra :produto="categoriaNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
@@ -186,10 +188,9 @@ export default {
     };
     this.selecionarCategoria(categorias);
 
-    if(this.comprar === true){
+    if (this.comprar === true) {
       this.vaiComprar();
-    }
-    else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
+    } else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
       this.switchAreaDeCompra(false);
     }
   },

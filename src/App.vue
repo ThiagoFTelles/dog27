@@ -160,6 +160,12 @@ textarea:focus {
   border-color: #24a9de;
 }
 
+.call-to-buy-container {
+  position: sticky;
+  top: 103px;
+  background: white;
+}
+
 .v-enter,
 .v-leave-to {
   opacity: 0;

@@ -283,7 +283,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["adicionarItemAoCarrinho", "switchAreaDeCompra"]),
+    ...mapActions([
+      "adicionarItemAoCarrinho",
+      "switchAreaDeCompra",
+      "redirecionarEstampa"
+    ]),
     aumentarQuantidadeEscolhida() {
       if (this.variacaoEscolhida.estoque > 0 && this.quantidadeEscolhida < 5) {
         this.quantidadeEscolhida++;
@@ -323,6 +327,9 @@ export default {
             primeiraEstampaDisponivel.estampa;
 
           this.getVariacoes(primeiraEstampaDisponivel.idProdutoPai);
+        })
+        .then(() => {
+          this.redirecionarEstampa(null);
         });
     },
     estampasDaCategoria(item) {

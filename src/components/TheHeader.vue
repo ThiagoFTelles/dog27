@@ -147,6 +147,9 @@ export default {
       this.$nextTick(() => this.$refs.barraDePesquisa.focus());
     },
     pesquisar(pesquisa) {
+      this.$nextTick(
+        () => (this.$refs.barraDePesquisa.value = "Pesquisando...")
+      );
       api
         .get(
           `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?search=${pesquisa}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
@@ -163,6 +166,9 @@ export default {
               produtos: this.produtosDaPesquisa
             }
           });
+
+          this.$nextTick(() => (this.$refs.barraDePesquisa.value = ""));
+          this.mostrarPesquisa = false;
         });
     },
     getProdutosDaPesquisa(produto) {

@@ -114,6 +114,7 @@ section {
   display: inline-block;
   margin: 0 50px;
   cursor: pointer;
+  padding-bottom: 20px;
 }
 
 .produto-titulo {

@@ -13,8 +13,14 @@
               class="banner-descricao"
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando quiser em poucos segundos.</h2>
             <div class="links">
-              <router-link :to="{name: 'peitoral', params: {comprar:false }  }" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'peitoral', params: {comprar:true }  }" class="banner-link">Comprar >></router-link>
+              <router-link
+                :to="{name: 'peitoral', params: {comprar:false }  }"
+                class="banner-link left-link"
+              >Saiba mais >></router-link>
+              <router-link
+                :to="{name: 'peitoral', params: {comprar:true }  }"
+                class="banner-link"
+              >Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -24,12 +30,19 @@
           </div>
           <div class="banner-textos">
             <h1 class="banner-titulo">COLEIRAS</h1>
-            <h2
-              class="banner-descricao"
-            >O clássico nunca sai de moda.<br>Mais conforto e segurança para o seu cão.</h2>
+            <h2 class="banner-descricao">
+              O clássico nunca sai de moda.
+              <br />Mais conforto e segurança para o seu cão.
+            </h2>
             <div class="links">
-              <router-link :to="{name: 'coleira', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'coleira', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
+              <router-link
+                :to="{name: 'coleira', params: {comprar:false } }"
+                class="banner-link left-link"
+              >Saiba mais >></router-link>
+              <router-link
+                :to="{name: 'coleira', params: {comprar:true } }"
+                class="banner-link"
+              >Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -39,12 +52,16 @@
           </div>
           <div class="banner-textos">
             <h1 class="banner-titulo">GUIAS</h1>
-            <h2
-              class="banner-descricao"
-            >Confortável, super forte e linda de viver.</h2>
+            <h2 class="banner-descricao">Confortável, super forte e linda de viver.</h2>
             <div class="links">
-              <router-link :to="{name: 'guia', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'guia', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
+              <router-link
+                :to="{name: 'guia', params: {comprar:false } }"
+                class="banner-link left-link"
+              >Saiba mais >></router-link>
+              <router-link
+                :to="{name: 'guia', params: {comprar:true } }"
+                class="banner-link"
+              >Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -55,12 +72,16 @@
           </div>
           <div class="banner-textos">
             <h1 class="banner-titulo">CINTO</h1>
-            <h2
-              class="banner-descricao"
-            >Cinto convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
+            <h2 class="banner-descricao">Porque passeio de carro deve ser seguro!</h2>
             <div class="links">
-              <router-link :to="{name: 'cinto', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'cinto', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
+              <router-link
+                :to="{name: 'cinto', params: {comprar:false } }"
+                class="banner-link left-link"
+              >Saiba mais >></router-link>
+              <router-link
+                :to="{name: 'cinto', params: {comprar:true } }"
+                class="banner-link"
+              >Comprar >></router-link>
             </div>
           </div>
         </div>
@@ -93,7 +114,7 @@
               <router-link :to="{name: 'cinto', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
             </div>
           </div>
-        </div> -->
+        </div>-->
         <ProdutosPaginar :produtosTotal="produtosTotal" :produtosPorPagina="produtosPorPagina" />
       </div>
     </transition>

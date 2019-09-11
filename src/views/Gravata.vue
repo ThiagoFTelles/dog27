@@ -1,15 +1,17 @@
 <template>
   <section>
     <transition mode="out-in">
-      <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
-        <div>
-          <p>Peitoral Híbrido</p>
+      <section class="call-to-buy-container">
+        <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
+          <div>
+            <p>Peitoral Híbrido</p>
+          </div>
+          <div>
+            <p class="medidas">Medidas</p>
+            <button @click="vaiComprar">Comprar</button>
+          </div>
         </div>
-        <div>
-          <p class="medidas">Medidas</p>
-          <button @click="vaiComprar">Comprar</button>
-        </div>
-      </div>
+      </section>
     </transition>
     <transition mode="out-in">
       <AreaDeCompra v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
@@ -40,11 +42,7 @@
         class="peitoral-demonstracao"
       />
       <h1 class="saiba-mais-subtitulo">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
-      <img
-        src="@/assets/wide.jpg"
-        alt="Peitoral para cahorro dog27"
-        class="peitoral-estampa"
-      />
+      <img src="@/assets/wide.jpg" alt="Peitoral para cahorro dog27" class="peitoral-estampa" />
       <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
       <div class="peitoral-tamanhos-container">
         <img
@@ -189,10 +187,9 @@ export default {
     };
     this.selecionarCategoria(categorias);
 
-    if(this.comprar === true){
+    if (this.comprar === true) {
       this.vaiComprar();
-    }
-    else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
+    } else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
       this.switchAreaDeCompra(false);
     }
   },

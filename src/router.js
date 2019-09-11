@@ -16,6 +16,7 @@ import Guia from "@/views/Guia.vue";
 import Tapete from "@/views/Tapete.vue";
 import ProdutosDaEstampa from "@/views/ProdutosDaEstampa.vue";
 import ProdutosDaPesquisa from "@/views/ProdutosDaPesquisa.vue";
+import Termos from "@/views/Termos.vue";
 // import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
 
 Vue.use(Router);
@@ -106,6 +107,11 @@ const router = new Router({
       path: "/login",
       name: "login",
       component: Login,
+    },
+    {
+      path: "/termos",
+      name: "termos",
+      component: Termos,
     },
     {
       path: "/usuario",
