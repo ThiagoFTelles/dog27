@@ -6,7 +6,7 @@
       <h3>Se não encontrou nosso e-mail, não se esqueça de olhar na caixa de spam.</h3>
     </section>
 
-    <section v-else class="checkout">
+    <section v-else class="checkout2">
       <p v-if="Brand">Bandeira: {{Brand}}</p>
       <p v-if="!Brand">Aceitamos: Visa, Master e AMEX</p>
 
@@ -18,6 +18,8 @@
         id="CardNumber"
         v-model="CardNumber"
       />
+      <div class="separador" v-if="!Brand"></div>
+
       <section v-if="Brand">
         <label for="ExpirationDate">Válido até</label>
         <input
@@ -51,6 +53,7 @@
         <button @click="abrirOrdem" class="btn">Pagar</button>
       </section>
     </section>
+    <div class="separador2" v-if="Brand"></div>
   </section>
 </template>
 
@@ -231,6 +234,22 @@ export default {
 };
 </script>
 <style scoped>
+.checkout {
+  flex: 1;
+}
+
+.checkout2 {
+  flex: 1;
+}
+
+.separador {
+  height: 100vh;
+}
+
+.separador2 {
+  height: 18vh;
+}
+
 input {
   text-transform: uppercase;
 }

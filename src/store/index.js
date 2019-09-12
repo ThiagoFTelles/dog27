@@ -146,5 +146,10 @@ export default new Vuex.Store({
       window.localStorage.removeItem("token");
       context.commit("UPDATE_LOGIN", false);
     }
+  },
+  getters: {
+    logado(state) {
+      return state.login;
+    }
   }
 });

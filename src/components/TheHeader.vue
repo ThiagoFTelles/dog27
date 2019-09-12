@@ -53,15 +53,35 @@
           </transition>
         </a>
         <router-link to="/usuario" tag="a" class="icon login-profile">
-          <img src="@/assets/person.svg" alt="login-dog27" />
+          <img v-if="logado===false" src="@/assets/person.svg" alt="login-dog27" />
+          <img v-else src="@/assets/person-logged.svg" alt="login-dog27" />
         </router-link>
         <a
           class="icon bag"
           :data-badge="quantidadeDeItensNoCarrinho > 0 ? quantidadeDeItensNoCarrinho : null"
           @mouseover="hoverLinkBag = true"
-          @mouseleave="hoverLinkBag = false"
         >
           <img src="@/assets/bag.svg" />
+          <transition mode="out-in">
+            <section class="cart-capsule">
+              <CarrinhoDeCompras v-show="hoverLinkBag" @mouseleave="hoverLinkBag = false">
+                <template v-slot:top>
+                  <div class="carrinho-slot">
+                    <h2 class="carrinho_titulo">Seu carrinho</h2>
+                    <button class="carrinho_fechar" @click="hoverLinkBag = false">X</button>
+                  </div>
+                </template>
+                <template v-slot:bottom>
+                  <div class="bottom">
+                    <router-link
+                      :to="{name: 'checkout'}"
+                      class="carrinho_finalizar"
+                    >Finalizar Compra</router-link>
+                  </div>
+                </template>
+              </CarrinhoDeCompras>
+            </section>
+          </transition>
         </a>
       </section>
     </header>
@@ -86,20 +106,6 @@
         v-show="hoverLinkContato"
       />
     </transition>
-    <transition mode="out-in">
-      <CarrinhoDeCompras
-        v-show="hoverLinkBag"
-        @mouseover.native="hoverLinkBag = true"
-        @mouseleave.native="hoverLinkBag = false"
-      />
-    </transition>
-    <transition mode="out-in">
-      <Login
-        v-if="hoverLinkLogin"
-        @mouseover.native="hoverLinkLogin = true"
-        @mouseleave.native="hoverLinkLogin = false"
-      />
-    </transition>
   </section>
 </template>
 
@@ -109,8 +115,7 @@ import SubMenuProdutos from "@/components/SubMenuProdutos.vue";
 import SubMenuEstampas from "@/components/SubMenuEstampas.vue";
 import SubMenuContato from "@/components/SubMenuContato.vue";
 import CarrinhoDeCompras from "@/components/CarrinhoDeCompras.vue";
-import Login from "@/views/Login.vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { api } from "@/services.js";
 
 export default {
@@ -126,7 +131,6 @@ export default {
       hoverLinkEstampas: false,
       hoverLinkContato: false,
       hoverLinkBag: false,
-      hoverLinkLogin: false,
       mostrarBadgeCarrinho: false,
       mostrarPesquisa: false,
       pesquisa: "",
@@ -138,8 +142,7 @@ export default {
     SubMenuProdutos,
     SubMenuEstampas,
     SubMenuContato,
-    CarrinhoDeCompras,
-    Login
+    CarrinhoDeCompras
   },
   methods: {
     mostrarAreaDePesquisa() {
@@ -203,7 +206,8 @@ export default {
     quantidadeDeItensNoCarrinho() {
       let quantidade = this.carrinho.length;
       return quantidade;
-    }
+    },
+    ...mapGetters(["logado"])
   },
   created() {
     this.pesquisa = "";
@@ -287,6 +291,12 @@ section {
   box-shadow: 0 0 1px #333;
 }
 
+.cart-capsule {
+  position: absolute;
+  top: 56px;
+  left: -450px;
+}
+
 .menu-link.router-link-exact-active,
 .menu-link:hover {
   background: rgb(75, 75, 75);
@@ -348,6 +358,35 @@ section {
   width: 35px;
   margin: 0;
   text-align: right;
+}
+
+.carrinho-slot {
+  display: flex;
+}
+
+.carrinho_fechar {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: cursive;
+  color: #4f4742;
+}
+
+.carrinho-slot h2 {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #4a4a4a;
+  font-style: italic;
+  font-family: sans-serif;
+}
+
+.carrinho_titulo {
+  flex: 1;
+}
+
+.carrinho_finalizar {
+  color: white;
 }
 
 .v-enter,

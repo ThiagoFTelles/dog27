@@ -1,5 +1,6 @@
 <template>
   <footer>
+    <div class="separador"></div>
     <div class="footer-banner">
       <div class="inscricao">
         <p>Faça parte da dog27</p>
@@ -71,10 +72,18 @@ export default {
 
 <style scoped>
 footer {
+  position: relative;
   background: #eaeae8;
   text-align: center;
   font-size: 1.2rem;
-  top: 75px; /* 75px é "mais ou menos o tamanho dele", isto faz o site sempre ter uma barra de scroll */
+  /* top: 570px; , */
+  /* 75px é "mais ou menos o tamanho dele", isto faz o site sempre ter uma barra de scroll */
+}
+
+.separador {
+  height: 50px;
+  margin: 0 auto;
+  background: white;
 }
 
 .footer-banner {
