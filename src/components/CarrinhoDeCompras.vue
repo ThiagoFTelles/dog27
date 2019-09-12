@@ -5,8 +5,8 @@
         <slot name="top"></slot>
 
         <div v-if="carrinho.length > 0">
-          <ul class="carrinho_lista">
-            <li v-if="ganhouPresente" class="carrinho_item">
+          <transition-group class="carrinho_lista" name="cart-list" tag="ul">
+            <li v-if="ganhouPresente" class="carrinho_item" key="carrinho-presente">
               <p class="quantidade">Quantidade: 1</p>
               <p class="titulo">{{nomeDoPresente | uppercase}}</p>
               <p class="tamanho">Tamanho: U</p>
@@ -42,7 +42,7 @@
               >X</button>
               <br />
             </li>
-          </ul>
+          </transition-group>
           <div class="total-area">
             <h2 class="carrinho_total">TOTAL</h2>
             <h2 class="carrinho_total">{{carrinhoTotal | numeroPreco}}</h2>
@@ -196,5 +196,16 @@ export default {
   color: #565656;
   flex: 1;
   font-size: 1.5rem;
+}
+
+.cart-list-enter,
+.cart-list-leave-to {
+  opacity: 0;
+  transform: translate3d(20px, 0, 0);
+}
+
+.cart-list-enter-active,
+.cart-list-leave-active {
+  transition: all 0.3s;
 }
 </style>
