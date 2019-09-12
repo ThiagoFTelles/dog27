@@ -48,10 +48,14 @@
             <h2 class="carrinho_total">{{carrinhoTotal | numeroPreco}}</h2>
           </div>
         </div>
-        <p v-else>O carrinho está vazio.</p>
       </div>
     </section>
     <slot v-if="carrinho.length > 0" name="bottom"></slot>
+    <section class="vazio" v-else>
+      <div class="bottom" @click="finalizarCompra">
+        <a class="carrinho_finalizar">Nenhum item adicionado...</a>
+      </div>
+    </section>
   </section>
 </template>
 
@@ -196,6 +200,20 @@ export default {
   color: #565656;
   flex: 1;
   font-size: 1.5rem;
+}
+
+.vazio div {
+  background: none;
+  cursor: default;
+  text-align: left;
+}
+.vazio a {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #4a4a4a;
+  font-style: italic;
+  font-family: sans-serif;
+  text-transform: lowercase;
 }
 
 .cart-list-enter,
