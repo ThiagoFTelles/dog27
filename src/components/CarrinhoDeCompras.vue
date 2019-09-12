@@ -18,9 +18,11 @@
               :key="`carrinho-item${index}`"
             >
               <p class="quantidade">Quantidade: {{item.quantidade}}</p>
-              <p class="titulo">{{item.nomeDoProduto}}</p>
-              <p class="tamanho">Tamanho: XX</p>
-              <img src alt class="foto" />
+              <p
+                class="titulo"
+              >{{item.categoria | uppercase}} PARA CACHORROS {{item.estampa | uppercase}}</p>
+              <p class="tamanho">Tamanho: {{item.tamanho}}</p>
+              <img src :alt="`${item.categoria} para cachorros ${item.estampa}`" class="foto" />
 
               <p
                 :class="{ green: item.isCombo }"
@@ -160,6 +162,7 @@ export default {
 }
 
 .bottom {
+  cursor: pointer;
   background: #2d7a38;
   padding: 18px;
   text-align: center;

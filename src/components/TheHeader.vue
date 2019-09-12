@@ -72,7 +72,7 @@
                   </div>
                 </template>
                 <template v-slot:bottom>
-                  <div class="bottom">
+                  <div class="bottom" @click="finalizarCompra">
                     <router-link
                       :to="{name: 'checkout'}"
                       class="carrinho_finalizar"
@@ -145,6 +145,9 @@ export default {
     CarrinhoDeCompras
   },
   methods: {
+    finalizarCompra() {
+      this.$router.push({ name: "checkout" });
+    },
     mostrarAreaDePesquisa() {
       this.mostrarPesquisa = true;
       this.$nextTick(() => this.$refs.barraDePesquisa.focus());

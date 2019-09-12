@@ -198,6 +198,9 @@ export default {
       },
       variacoesDisponiveis: [],
       variacaoEscolhida: {
+        fotoUrl: "",
+        estampa: "",
+        categoria: "",
         tamanho: "",
         sku: "",
         preco: "",
@@ -242,6 +245,8 @@ export default {
     },
     comboEscolhido() {
       let produto_1 = {
+        categoria: this.variacaoEscolhida.categoria,
+        estampa: this.variacaoEscolhida.estampa,
         tamanho: this.variacaoEscolhida.tamanho,
         sku: this.variacaoEscolhida.sku,
         preco: this.variacaoEscolhida.preco,
@@ -258,6 +263,8 @@ export default {
       };
 
       let produto_2 = {
+        categoria: this.produtoCombo.categoria,
+        estampa: this.produtoCombo.estampa,
         tamanho: this.produtoCombo.tamanho,
         sku: this.produtoCombo.sku,
         preco: this.produtoCombo.preco,
@@ -325,6 +332,9 @@ export default {
             primeiraEstampaDisponivel.nomeDoProduto +
             " " +
             primeiraEstampaDisponivel.estampa;
+          this.estampaEscolhida.categoria =
+            primeiraEstampaDisponivel.nomeDoProduto;
+          this.estampaEscolhida.estampa = primeiraEstampaDisponivel.estampa;
 
           this.getVariacoes(primeiraEstampaDisponivel.idProdutoPai);
         })
@@ -344,8 +354,13 @@ export default {
         fotosSrc.push({ src: element.src });
       });
 
+      let nomeDaCategoria = item.categories[0].name;
+      let lastChar = nomeDaCategoria[nomeDaCategoria.length - 1];
+      nomeDaCategoria =
+        lastChar === "s" ? nomeDaCategoria.slice(0, -1) : nomeDaCategoria;
+
       this.estampasDisponiveis.push({
-        nomeDoProduto: item.categories[0].name,
+        nomeDoProduto: nomeDaCategoria,
         estampa: estampa,
         idProdutoPai: item.id,
         srcFotos: fotosSrc,
@@ -390,6 +405,8 @@ export default {
       this.estampaEscolhida.nome = estampa.estampa;
       this.estampaEscolhida.nomeDoProduto =
         estampa.nomeDoProduto + " " + estampa.estampa;
+      this.estampaEscolhida.categoria = estampa.nomeDoProduto;
+      this.estampaEscolhida.estampa = estampa.estampa;
       this.estampaEscolhida.idProdutoPai = estampa.idProdutoPai;
       this.estampaEscolhida.urlThumbnail = estampa.urlThumbnail;
       this.estampaEscolhida.srcFotos = estampa.srcFotos;
@@ -432,6 +449,9 @@ export default {
     async escolherVariacao(variacao) {
       this.produtoCombo = null;
 
+      this.variacaoEscolhida.categoria = variacao.categoria;
+      this.variacaoEscolhida.estampa = variacao.estampa;
+      this.variacaoEscolhida.fotoUrl = variacao.fotoUrl;
       this.variacaoEscolhida.tamanho = variacao.tamanho;
       this.variacaoEscolhida.sku = variacao.sku;
       this.variacaoEscolhida.preco = variacao.preco;
@@ -522,6 +542,9 @@ export default {
     },
     colocarNoCarrinho(item) {
       const itemDoCarrinho = {
+        categoria: item.categoria,
+        estampa: item.estampa,
+        tamanho: item.tamanho,
         nomeDoProduto: item.nomeDoProduto + " " + item.tamanho,
         valorUnitarioCobrado: item.valorUnitarioCobrado,
         pesoTotal: item.peso * item.quantidade,
@@ -540,6 +563,9 @@ export default {
       let item = combo[0];
 
       let itemDoCarrinho = {
+        categoria: item.categoria,
+        estampa: item.estampa,
+        tamanho: item.tamanho,
         nomeDoProduto: item.nomeDoProduto + " " + item.tamanho,
         valorUnitarioCobrado: item.valorUnitarioCobrado,
         pesoTotal: item.peso * item.quantidade,
@@ -555,6 +581,9 @@ export default {
       item = combo[1];
 
       itemDoCarrinho = {
+        categoria: item.categoria,
+        estampa: item.estampa,
+        tamanho: item.tamanho,
         nomeDoProduto: item.nomeDoProduto + " " + item.tamanho,
         valorUnitarioCobrado: item.valorUnitarioCobrado,
         pesoTotal: item.peso * item.quantidade,
@@ -576,6 +605,9 @@ export default {
       let tamanho = atributoDoTamanho[0].option;
 
       this.variacoesDisponiveis.push({
+        categoria: this.estampaEscolhida.categoria.replace(/ .*/, ""),
+        estampa: this.estampaEscolhida.estampa,
+        fotoUrl: item.image.src,
         id: item.id,
         sku: item.sku,
         tamanho: tamanho,
