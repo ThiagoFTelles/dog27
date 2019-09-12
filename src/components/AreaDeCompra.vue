@@ -451,6 +451,22 @@ export default {
     },
     async escolherVariacao(variacao) {
       this.produtoCombo = null;
+      this.variacaoEscolhida = {
+        fotoUrl: "",
+        estampa: "",
+        categoria: "",
+        tamanho: "",
+        sku: "",
+        preco: "",
+        precoPromocional: "",
+        estoque: null,
+        nomeDoProduto: "",
+        valorUnitarioCobrado: "",
+        peso: "",
+        idProdutoPai: "",
+        idDaVariacao: "",
+        quantidade: 0
+      };
 
       this.variacaoEscolhida.categoria = variacao.categoria;
       this.variacaoEscolhida.estampa = variacao.estampa;
