@@ -22,7 +22,11 @@
                 class="titulo"
               >{{item.categoria | uppercase}} PARA CACHORROS {{item.estampa | uppercase}}</p>
               <p class="tamanho">Tamanho: {{item.tamanho}}</p>
-              <img src :alt="`${item.categoria} para cachorros ${item.estampa}`" class="foto" />
+              <img
+                :src="item.fotoUrl"
+                :alt="`${item.categoria} para cachorros ${item.estampa}`"
+                class="foto"
+              />
 
               <p
                 :class="{ green: item.isCombo }"

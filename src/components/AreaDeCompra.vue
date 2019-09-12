@@ -306,6 +306,7 @@ export default {
       this.variacaoEscolhida.estoque++;
     },
     getEstampas() {
+      this.estampasDisponiveis = [];
       api
         .get(
           `https://marinawave.com.br/api-dog27/wp-json/wc/v3/products?category=${this.idCategoriaSelecionada}&per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
@@ -542,6 +543,7 @@ export default {
     },
     colocarNoCarrinho(item) {
       const itemDoCarrinho = {
+        fotoUrl: item.fotoUrl,
         categoria: item.categoria,
         estampa: item.estampa,
         tamanho: item.tamanho,
@@ -563,6 +565,7 @@ export default {
       let item = combo[0];
 
       let itemDoCarrinho = {
+        fotoUrl: item.fotoUrl,
         categoria: item.categoria,
         estampa: item.estampa,
         tamanho: item.tamanho,
@@ -581,6 +584,7 @@ export default {
       item = combo[1];
 
       itemDoCarrinho = {
+        fotoUrl: item.fotoUrl,
         categoria: item.categoria,
         estampa: item.estampa,
         tamanho: item.tamanho,

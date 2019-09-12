@@ -1,7 +1,7 @@
 <template>
   <div class="submenu-container">
     <div class="submenu-mensagem">
-      <p>Os melhores produtos paras o seu Dog</p>
+      <p>Os melhores produtos para o seu Dog</p>
     </div>
     <div class="arrow" @click="swapLeft()">
       <img class="arrow-img" src="@/assets/arrow-left.svg" alt="Dog27" />
