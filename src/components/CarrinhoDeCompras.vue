@@ -7,9 +7,13 @@
         <div v-if="carrinho.length > 0">
           <ul class="carrinho_lista">
             <li v-if="ganhouPresente" class="carrinho_item">
-              <p>x 1</p>
-              <p class="green">{{nomeDoPresente}}</p>
-              <p class="carrinho_preco">{{0 | numeroPreco}}</p>
+              <p class="quantidade">Quantidade: 1</p>
+              <p class="titulo">{{nomeDoPresente | uppercase}}</p>
+              <p class="tamanho">Tamanho: U</p>
+              <img :src="fotoDoPresente" :alt="nomeDoPresente" class="foto" />
+
+              <p class="carrinho_preco green">{{0 | numeroPreco}}</p>
+              <button class="carrinho_remover"></button>
               <br />
             </li>
             <li
@@ -73,6 +77,7 @@ export default {
       carrinho: state => state.cart.carrinho,
       ganhouPresente: state => state.cart.ganhouPresente,
       nomeDoPresente: state => state.cart.nomeDoPresente,
+      fotoDoPresente: state => state.cart.fotoDoPresente,
       metaMaior: state => state.order.metaMaior,
       carrinhoTotal: state => state.cart.carrinhoTotal
     })
@@ -156,6 +161,7 @@ export default {
 .quantidade {
   grid-area: quantidade;
 }
+
 .carrinho_preco {
   grid-area: carrinho_preco;
   font-size: 1rem;
@@ -164,7 +170,9 @@ export default {
   text-align: right;
   margin-top: 8px;
 }
-
+.green {
+  color: green;
+}
 .bottom {
   cursor: pointer;
   background: #2d7a38;

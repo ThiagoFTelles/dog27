@@ -245,6 +245,7 @@ export default {
     },
     comboEscolhido() {
       let produto_1 = {
+        fotoUrl: this.variacaoEscolhida.fotoUrl,
         categoria: this.variacaoEscolhida.categoria,
         estampa: this.variacaoEscolhida.estampa,
         tamanho: this.variacaoEscolhida.tamanho,
@@ -263,6 +264,7 @@ export default {
       };
 
       let produto_2 = {
+        fotoUrl: this.produtoCombo.fotoUrl,
         categoria: this.produtoCombo.categoria,
         estampa: this.produtoCombo.estampa,
         tamanho: this.produtoCombo.tamanho,
@@ -519,7 +521,11 @@ export default {
             this.mostrarComboArea = false;
           } else {
             let resposta = response.data[0];
+
             let produtoCombo = {
+              fotoUrl: resposta.images[0].src,
+              categoria: resposta.name.replace(/ .*/, ""),
+              estampa: this.variacaoEscolhida.estampa,
               imgUrl: resposta.images[0].src,
               nomeDoProduto:
                 this.nomeDoProdutoCombo + " " + this.estampaEscolhida.nome,
@@ -536,6 +542,7 @@ export default {
               estoque: resposta.stock_quantity,
               idProdutoPai: resposta.parent_id
             };
+
             this.produtoCombo = produtoCombo;
             this.mostrarComboArea = true;
           }

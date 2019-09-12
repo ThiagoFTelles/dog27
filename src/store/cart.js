@@ -10,6 +10,7 @@ export default {
       total: "0"
     },
     nomeDoPresente: "Presente: Cinto de segurança Dog27",
+    fotoDoPresente: process.env.VUE_APP_SITE_PREFIX + "/api-dog27/wp-content/uploads/2019/08/4334344934_cinto-durval-1.jpg",
     ganhouPresente: false,
   },
   mutations: {
