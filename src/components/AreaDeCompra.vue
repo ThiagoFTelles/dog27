@@ -801,7 +801,6 @@ export default {
 }
 
 .combo {
-  display: grid;
   display: flex;
   flex-wrap: wrap;
   background: #0e6a8d;
