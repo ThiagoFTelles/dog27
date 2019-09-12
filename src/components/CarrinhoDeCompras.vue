@@ -52,7 +52,7 @@
     </section>
     <slot v-if="carrinho.length > 0" name="bottom"></slot>
     <section class="vazio" v-else>
-      <div class="bottom" @click="finalizarCompra">
+      <div class="bottom">
         <a class="carrinho_finalizar">Nenhum item adicionado...</a>
       </div>
     </section>
