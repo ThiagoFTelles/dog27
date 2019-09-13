@@ -82,6 +82,11 @@ export default {
         params: { comprar: true }
       });
     }
+  },
+  created() {
+    if (!this.produtos) {
+      this.$router.push({ name: "home" });
+    }
   }
 };
 </script>
