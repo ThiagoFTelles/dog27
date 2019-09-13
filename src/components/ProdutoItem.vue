@@ -27,7 +27,7 @@ export default {
   position: relative; /* position relative pq depois vou precisar de um item absolute dentro dele */
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
   .produto {
     grid-template-columns: 1fr;
     grid-gap: 10px;

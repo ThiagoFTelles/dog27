@@ -209,4 +209,9 @@ footer {
   font-weight: 600;
   color: white;
 }
+@media screen and (max-width: 700px) {
+  .separador {
+    background: #f7f7f9;
+  }
+}
 </style>

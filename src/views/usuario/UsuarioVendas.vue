@@ -93,7 +93,7 @@ h3 {
   margin: 0;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
   .entrega {
     grid-template-columns: 1fr;
     grid-gap: 10px;

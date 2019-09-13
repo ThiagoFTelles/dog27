@@ -183,17 +183,6 @@ export default {
   margin: 30px;
 }
 
-@media screen and (max-width: 500px) {
-  .produtos {
-    grid-template-columns: repeat(
-      1,
-      1fr
-    ); /* dividiu em 1 coluna com 1fr cada uma */
-    grid-gap: 10px;
-    margin: 10px;
-  }
-}
-
 .produto {
   grid-column: initial;
   /* box-shadow: 0 4px 8px rgba(30, 60, 90, 0.1); */
@@ -303,5 +292,38 @@ export default {
 .v-enter-active,
 .v-leave-active {
   transition: all 0.3s;
+}
+
+@media screen and (max-width: 700px) {
+  .produtos-container {
+    background: #f7f7f9;
+    padding-top: 25px;
+  }
+
+  .produtos {
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ); /* dividiu em 1 coluna com 1fr cada uma */
+    grid-gap: 30px;
+    margin: 10px;
+  }
+
+  .duplo,
+  .simples {
+    height: 100%;
+    max-height: 100%;
+    grid-column: 1/3;
+    grid-template-columns: 1fr;
+  }
+
+  .duplo img,
+  .simples img {
+    margin: 30px auto 5px auto;
+  }
+
+  .banner-imagem {
+    height: 300px;
+  }
 }
 </style>

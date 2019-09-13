@@ -145,6 +145,6 @@ section {
   font-size: 0.8em;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
 }
 </style>

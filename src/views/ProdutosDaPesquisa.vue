@@ -147,6 +147,6 @@ section {
   padding: 20px 50px;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
 }
 </style>

@@ -183,4 +183,10 @@ textarea:focus {
 .v-leave-active {
   transition: all 0.3s;
 }
+
+@media screen and (max-width: 700px) {
+  #main {
+    background: #f7f7f9;
+  }
+}
 </style>

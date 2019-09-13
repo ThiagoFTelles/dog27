@@ -329,6 +329,6 @@ img {
   cursor: pointer;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
 }
 </style>
