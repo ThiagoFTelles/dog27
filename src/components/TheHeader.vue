@@ -88,8 +88,8 @@
         <router-link to="/" class="logo">
           <img src="@/assets/header/icone-logo-com-texto-branca.svg" alt="Dog27" />
         </router-link>
-
-        <img class="menu-mobile" src="@/assets/header/menu-mobile.svg" alt="Dog27" />
+        <MenuMobile />
+        <!-- <img class="menu-mobile" src="@/assets/header/menu-mobile.svg" alt="Dog27" /> -->
 
         <!-- <nav>
           <ul class="menu">
@@ -200,6 +200,7 @@ import SubMenuProdutos from "@/components/SubMenuProdutos.vue";
 import SubMenuEstampas from "@/components/SubMenuEstampas.vue";
 import SubMenuContato from "@/components/SubMenuContato.vue";
 import CarrinhoDeCompras from "@/components/CarrinhoDeCompras.vue";
+import MenuMobile from "@/components/MenuMobile.vue";
 import { mapState, mapGetters } from "vuex";
 import { api } from "@/services.js";
 
@@ -227,7 +228,8 @@ export default {
     SubMenuProdutos,
     SubMenuEstampas,
     SubMenuContato,
-    CarrinhoDeCompras
+    CarrinhoDeCompras,
+    MenuMobile
   },
   methods: {
     finalizarCompra() {
@@ -497,8 +499,8 @@ section {
 
   .logo,
   .logo img,
-  .menu-mobile,
-  .menu-mobile img {
+  .menu-mobile2,
+  .menu-mobile2 img {
     display: inline;
   }
 
@@ -510,17 +512,8 @@ section {
     padding: 7px 0;
   }
 
-  .logo img,
-  .menu-mobile {
+  .logo img {
     width: 50px;
-    height: auto;
-  }
-
-  .menu-mobile {
-    grid-column: 1/2;
-    grid-row: 1;
-    margin-left: 20px;
-    width: 25px;
   }
 }
 
