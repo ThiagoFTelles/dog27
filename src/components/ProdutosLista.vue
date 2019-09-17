@@ -326,4 +326,18 @@ export default {
     height: 300px;
   }
 }
+
+@media screen and (max-width: 500px) {
+  .banner-imagem {
+    height: 200px;
+  }
+
+  .produtos-container {
+    padding-top: 5px;
+  }
+
+  .simples {
+    grid-template-rows: 200px auto;
+  }
+}
 </style>
