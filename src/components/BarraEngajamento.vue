@@ -6,13 +6,24 @@
         v-if="!freteGratis && !ganhouPresente"
         class="texto-engajamento"
         key="barra1"
-      >Falta apenas {{valorQueFalta | numeroPreco}} pra você ganhar frete grátis!</div>
+        v-html="isMobile() ? `Frete grátis: ${this.calculatePercentage(this.carrinhoTotal)}` : `Falta apenas R$ ${valorQueFalta} pra você ganhar frete grátis!`"
+      ></div>
       <div
         v-if="freteGratis && !ganhouPresente"
         class="texto-engajamento"
         key="barra2"
-      >Você ganhou frete grátis! Falta apenas {{valorQueFalta | numeroPreco}} pra você ganhar um presente!</div>
-      <div v-if="freteGratis && ganhouPresente" class="texto-engajamento" key="barra3">
+        v-html="isMobile() ? `Frete grátis + Presente: ${this.calculatePercentage(this.carrinhoTotal)}` : `Você ganhou frete grátis! Falta apenas R$ ${valorQueFalta} pra você ganhar um presente!`"
+      ></div>
+      <div
+        v-if="freteGratis && ganhouPresente && isMobile()"
+        class="texto-engajamento"
+        key="barra3m"
+      >Frete grátis + Presente!</div>
+      <div
+        v-if="freteGratis && ganhouPresente && !isMobile()"
+        class="texto-engajamento"
+        key="barra3"
+      >
         Parabéns! Você ganhou frete grátis e um presente pro seu Dog!
         <router-link :to="{name: 'checkout'}" tag="span" class="finalizar-compra">Finalizar Compra</router-link>
       </div>
@@ -34,6 +45,13 @@ export default {
   },
   methods: {
     ...mapActions(["atualizarPresente"]),
+    isMobile() {
+      if (screen.width <= 500) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     calculatePercentage(valorDoCarrinho) {
       var metaMenor = this.metaMenor;
       var metaMaior = this.metaMaior;
@@ -60,7 +78,7 @@ export default {
 
       let progresso = valorDoCarrinho / metaAtual;
       this.valorQueFalta = metaAtual - valorDoCarrinho;
-      return progresso * 100 + "%";
+      return Math.floor(progresso * 100) + "%";
     }
   },
   computed: {

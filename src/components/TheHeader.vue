@@ -84,6 +84,91 @@
           </transition>
         </a>
       </section>
+      <section class="container-header-mobile">
+        <router-link to="/" class="logo">
+          <img src="@/assets/header/icone-logo-com-texto-branca.svg" alt="Dog27" />
+        </router-link>
+
+        <img class="menu-mobile" src="@/assets/header/menu-mobile.svg" alt="Dog27" />
+
+        <!-- <nav>
+          <ul class="menu">
+            <li
+              @mouseover="hoverLinkProdutos = true"
+              @mouseleave="hoverLinkProdutos = false"
+              class="menu-link"
+            >
+              Produtos
+              <span v-if="hoverLinkProdutos" class="menu-link-arrow"></span>
+            </li>
+
+            <li
+              @mouseover="hoverLinkEstampas = true"
+              @mouseleave="hoverLinkEstampas = false"
+              class="menu-link"
+            >
+              Estampas
+              <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
+            </li>
+            <li
+              @mouseover="hoverLinkContato = true"
+              @mouseleave="hoverLinkContato = false"
+              class="menu-link"
+            >
+              Fale Conosco
+              <span v-if="hoverLinkContato" class="menu-link-arrow"></span>
+            </li>
+            <a target="_blank" href="https://blog.dog27.com.br" class="menu-link">Blog</a>
+          </ul>
+        </nav>
+
+        <a class="icon lupa">
+          <transition>
+            <div v-if="mostrarPesquisa" class="barra-de-pesquisa">
+              <a id="fechar-pesquisa" @click="mostrarPesquisa=false">X</a>
+              <input
+                ref="barraDePesquisa"
+                type="text"
+                v-model="pesquisa"
+                v-on:keyup.enter="pesquisar(pesquisa)"
+              />
+              <img id="lupa-inside" src="@/assets/search.svg" @click="pesquisar(pesquisa)" />
+            </div>
+            <img v-else @click="mostrarAreaDePesquisa()" id="lupa" src="@/assets/search.svg" />
+          </transition>
+        </a>
+        <router-link to="/usuario" tag="a" class="icon login-profile">
+          <img v-if="logado===false" src="@/assets/person.svg" alt="login-dog27" />
+          <img v-else src="@/assets/person-logged.svg" alt="login-dog27" />
+        </router-link>
+        <a
+          class="icon bag"
+          :data-badge="quantidadeDeItensNoCarrinho > 0 ? quantidadeDeItensNoCarrinho : null"
+          @mouseover="hoverLinkBag = true"
+        >
+          <img src="@/assets/bag.svg" />
+          <transition mode="out-in">
+            <section class="cart-capsule">
+              <CarrinhoDeCompras v-show="hoverLinkBag" @mouseleave="hoverLinkBag = false">
+                <template v-slot:top>
+                  <div class="carrinho-slot">
+                    <h2 class="carrinho_titulo">Seu carrinho</h2>
+                    <button class="carrinho_fechar" @click="hoverLinkBag = false">X</button>
+                  </div>
+                </template>
+                <template v-slot:bottom>
+                  <div class="bottom" @click="finalizarCompra">
+                    <router-link
+                      :to="{name: 'checkout'}"
+                      class="carrinho_finalizar"
+                    >Finalizar Compra</router-link>
+                  </div>
+                </template>
+              </CarrinhoDeCompras>
+            </section>
+          </transition>
+        </a>-->
+      </section>
     </header>
     <transition mode="out-in">
       <SubMenuProdutos
@@ -223,6 +308,10 @@ section {
   position: sticky;
   top: 0;
   z-index: 99;
+}
+
+.container-header-mobile {
+  display: none;
 }
 
 .container-header {
@@ -390,6 +479,49 @@ section {
 
 .carrinho_finalizar {
   color: white;
+}
+
+@media screen and (max-width: 700px) {
+  .container-header {
+    display: none;
+  }
+
+  .container-header-mobile {
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 100px 1fr 100px;
+  }
+
+  .logo,
+  .logo img,
+  .menu-mobile,
+  .menu-mobile img {
+    display: inline;
+  }
+
+  .logo {
+    margin: 0 auto;
+    grid-column: 2/3;
+    grid-row: 1;
+    height: 100%;
+    padding: 7px 0;
+  }
+
+  .logo img,
+  .menu-mobile {
+    width: 50px;
+    height: auto;
+  }
+
+  .menu-mobile {
+    grid-column: 1/2;
+    grid-row: 1;
+    margin-left: 20px;
+    width: 25px;
+  }
 }
 
 .v-enter,
