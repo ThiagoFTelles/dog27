@@ -187,10 +187,6 @@ img {
   margin: 0 auto;
 }
 
-.peitoral-demonstracao {
-  max-width: 800px;
-  padding: 50px;
-}
 
 .peitoral-estampa {
   margin: 0;

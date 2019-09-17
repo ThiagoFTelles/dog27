@@ -36,11 +36,13 @@
           class="saiba-mais-paragrafo maior"
         >Do peitoral Anti-puxão ao convencional em poucos segundos</p>
       </div>
+
       <img
         src="@/assets/peitoral-para-cachorro-dog27-demonstracao.jpg"
         alt="Peitoral para cahorro dog27"
         class="peitoral-demonstracao"
       />
+
       <h1 class="saiba-mais-subtitulo">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
       <img src="@/assets/wide.jpg" alt="Peitoral para cahorro dog27" class="peitoral-estampa" />
       <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
@@ -286,6 +288,7 @@ img {
 
 .peitoral-demonstracao {
   max-width: 800px;
+  height: auto;
   padding: 50px;
 }
 
@@ -367,5 +370,8 @@ img {
 }
 
 @media screen and (max-width: 700px) {
+  .peitoral-demonstracao {
+    max-width: 100%;
+  }
 }
 </style>
