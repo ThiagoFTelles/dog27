@@ -15,20 +15,61 @@
           <img src="@/assets/header/icone-logo-com-texto-branca.svg" alt="Dog27" />
         </router-link>
       </div>
-      <ul>
-        <li>
-          <a>PRODUTOS ></a>
-        </li>
-        <li>
-          <a>ESTAMPAS ></a>
-        </li>
-        <li>
-          <a>FALE CONOSCO ></a>
-        </li>
-        <li>
-          <a target="_blank" href="https://blog.dog27.com.br/">BLOG ></a>
-        </li>
-      </ul>
+      <transition>
+        <section v-if="menuSelecionado == 'inicial'">
+          <ul>
+            <li class="menu-option" @click="selecionarMenu('produtos')">
+              <a>PRODUTOS ></a>
+            </li>
+            <li class="menu-option" @click="selecionarMenu('estampas')">
+              <a>ESTAMPAS ></a>
+            </li>
+            <li class="menu-option">
+              <a>FALE CONOSCO ></a>
+            </li>
+            <li class="menu-option">
+              <a target="_blank" href="https://blog.dog27.com.br/">BLOG ></a>
+            </li>
+          </ul>
+        </section>
+        <section v-if="menuSelecionado == 'estampas'">
+          <a class="voltar" @click="selecionarMenu('inicial')">VOLTAR</a>
+          <ul>
+            <li class="menu-option" @click="selecionarMenu('produtos')">
+              <a>ESTAMPAS ></a>
+            </li>
+            <li class="menu-option" @click="selecionarMenu('estampas')">
+              <a>ESTAMPAS ></a>
+            </li>
+            <li class="menu-option" @click="selecionarMenu('contato')">
+              <a>ESTAMPAS ></a>
+            </li>
+          </ul>
+        </section>
+        <section v-if="menuSelecionado == 'produtos'">
+          <a class="voltar" @click="selecionarMenu('inicial')">VOLTAR</a>
+          <ul>
+            <li class="menu-option">
+              <a>COLEIRAS ></a>
+            </li>
+            <li class="menu-option">
+              <a>PEITORAIS ></a>
+            </li>
+            <li class="menu-option">
+              <a>CINTOS ></a>
+            </li>
+            <li class="menu-option">
+              <a>GUIAS ></a>
+            </li>
+            <li class="menu-option">
+              <a>COMEDOUROS ></a>
+            </li>
+            <li class="menu-option">
+              <a>GRAVATAS ></a>
+            </li>
+          </ul>
+        </section>
+      </transition>
     </div>
   </section>
 </template>
@@ -37,21 +78,17 @@
   integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8="
   crossorigin="anonymous"></script>
 <script>
-$(document).on("click", function(e) {
-  if (
-    !e.target.closest(".side-menu-wrapper") &&
-    $(".side-menu-wrapper").hasClass("active")
-  ) {
-    $(".side-menu-wrapper")
-      .css({ left: -$(".side-menu-wrapper").outerWidth() + "px" })
-      .removeClass("active");
-    $(".menu-overlay").css({ opacity: "0", width: "0" });
-  }
-});
-
 export default {
   name: "MenuMobile",
+  data() {
+    return {
+      menuSelecionado: "inicial"
+    };
+  },
   methods: {
+    selecionarMenu(menu) {
+      this.menuSelecionado = menu;
+    },
     openButton() {
       $(".side-menu-wrapper").css({ left: "0px" });
       setTimeout(function() {
@@ -70,17 +107,17 @@ export default {
     }
   },
   created() {
-    $(".side-menu-wrapper")
-      .hide()
-      .css({ left: -$(".side-menu-wrapper").outerWidth() + "px" })
-      .delay(50)
-      .queue(function() {
-        $(".side-menu-wrapper").show();
-      });
+    this.menuSelecionado = "inicial";
   }
 };
 </script>
 <style scoped>
+a {
+  color: #fff;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+}
+
 .menu-mobile {
   margin-left: 20px;
   grid-column: 1/2;
@@ -97,6 +134,14 @@ export default {
   display: flex;
 }
 
+.menu-option {
+  margin: 20px 0;
+}
+
+.menu-option a {
+  font-style: italic;
+}
+
 .top-menu a {
   color: #fff;
   font-size: 2rem;
@@ -110,9 +155,7 @@ export default {
 }
 
 .logo-inside-menu img {
-  height: 35px;
-  display: flex;
-  flex: 1;
+  display: none;
 }
 
 /* ////////////////////////////////////////////////////////////////////////////////////// */
@@ -169,6 +212,14 @@ export default {
   text-align: center;
   opacity: 0;
   transition: opacity 1s;
+}
+
+@media screen and (max-width: 470px) {
+  .logo-inside-menu img {
+    height: 35px;
+    display: flex;
+    flex: 1;
+  }
 }
 </style> 
  
