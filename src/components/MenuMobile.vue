@@ -34,17 +34,7 @@
         </section>
         <section class="menu-content" key="estampas" v-if="menuSelecionado == 'estampas'">
           <a class="voltar" @click="selecionarMenu('inicial')">VOLTAR</a>
-          <ul>
-            <li class="menu-option" @click="selecionarMenu('produtos')">
-              <a>ESTAMPAS ></a>
-            </li>
-            <li class="menu-option" @click="selecionarMenu('estampas')">
-              <a>ESTAMPAS ></a>
-            </li>
-            <li class="menu-option" @click="selecionarMenu('contato')">
-              <a>ESTAMPAS ></a>
-            </li>
-          </ul>
+          <SubMenuEstampasMobile />
         </section>
         <section class="menu-content" key="produtos" v-if="menuSelecionado == 'produtos'">
           <a class="voltar" @click="selecionarMenu('inicial')">VOLTAR</a>
@@ -81,6 +71,8 @@
   integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8="
   crossorigin="anonymous"></script>
 <script>
+import SubMenuEstampasMobile from "@/components/SubMenuEstampasMobile.vue";
+
 export default {
   name: "MenuMobile",
   data() {
@@ -88,6 +80,7 @@ export default {
       menuSelecionado: "inicial"
     };
   },
+  components: { SubMenuEstampasMobile },
   methods: {
     selecionarMenu(menu) {
       this.menuSelecionado = menu;
@@ -169,6 +162,7 @@ a {
 
 /* ////////////////////////////////////////////////////////////////////////////////////// */
 .side-menu-wrapper {
+  overflow: auto;
   /* style menu wrapper */
   background: #2f2c2c;
   padding: 4px 0 0 20px;
