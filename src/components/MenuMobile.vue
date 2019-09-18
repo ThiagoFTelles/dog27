@@ -9,7 +9,12 @@
     <div class="menu-overlay"></div>
 
     <div class="side-menu-wrapper">
-      <a href="#" class="menu-close" @click.prevent="closeButton()">×</a>
+      <div class="top-menu">
+        <a href="#" class="menu-close" @click.prevent="closeButton()">×</a>
+        <router-link to="/" class="logo-inside-menu">
+          <img src="@/assets/header/icone-logo-com-texto-branca.svg" alt="Dog27" />
+        </router-link>
+      </div>
       <ul>
         <li>
           <a>PRODUTOS ></a>
@@ -88,11 +93,33 @@ export default {
   height: inherit;
 }
 
+.top-menu {
+  display: flex;
+}
+
+.top-menu a {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  flex: 1;
+}
+
+.logo-inside-menu {
+  height: 50px;
+}
+
+.logo-inside-menu img {
+  height: 35px;
+  display: flex;
+  flex: 1;
+}
+
 /* ////////////////////////////////////////////////////////////////////////////////////// */
 .side-menu-wrapper {
   /* style menu wrapper */
   background: #2f2c2c;
-  padding: 40px 0 0 40px;
+  padding: 4px 0 0 20px;
   position: fixed; /* Fixed position */
   top: 30px;
   left: -250px; /* Sidebar initial position. "right:0" for right positioned menu */
@@ -121,7 +148,6 @@ export default {
 }
 .side-menu-wrapper > a.menu-close {
   /* close button */
-  padding: 8px 0 4px 23px;
   color: #fff;
   display: block;
   margin: -30px 0 -10px -20px;
