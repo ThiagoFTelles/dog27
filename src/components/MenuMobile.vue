@@ -15,8 +15,8 @@
           <img src="@/assets/header/icone-logo-com-texto-branca.svg" alt="Dog27" />
         </router-link>
       </div>
-      <transition>
-        <section v-if="menuSelecionado == 'inicial'">
+      <transition-group mode="out-in" name="menuMobile">
+        <section class="menu-content" key="inicial" v-if="menuSelecionado == 'inicial'">
           <ul>
             <li class="menu-option" @click="selecionarMenu('produtos')">
               <a>PRODUTOS ></a>
@@ -32,7 +32,7 @@
             </li>
           </ul>
         </section>
-        <section v-if="menuSelecionado == 'estampas'">
+        <section class="menu-content" key="estampas" v-if="menuSelecionado == 'estampas'">
           <a class="voltar" @click="selecionarMenu('inicial')">VOLTAR</a>
           <ul>
             <li class="menu-option" @click="selecionarMenu('produtos')">
@@ -46,30 +46,33 @@
             </li>
           </ul>
         </section>
-        <section v-if="menuSelecionado == 'produtos'">
+        <section class="menu-content" key="produtos" v-if="menuSelecionado == 'produtos'">
           <a class="voltar" @click="selecionarMenu('inicial')">VOLTAR</a>
           <ul>
             <li class="menu-option">
-              <a>COLEIRAS ></a>
+              <router-link tag="a" :to="{name:'coleira'}">COLEIRAS ></router-link>
             </li>
             <li class="menu-option">
-              <a>PEITORAIS ></a>
+              <router-link tag="a" :to="{name:'peitoral'}">PEITORAIS ></router-link>
             </li>
             <li class="menu-option">
-              <a>CINTOS ></a>
+              <router-link tag="a" :to="{name:'cinto'}">CINTOS ></router-link>
             </li>
             <li class="menu-option">
-              <a>GUIAS ></a>
+              <router-link tag="a" :to="{name:'guia'}">GUIAS ></router-link>
             </li>
             <li class="menu-option">
-              <a>COMEDOUROS ></a>
+              <router-link tag="a" :to="{name:'comedouro'}">COMEDOUROS ></router-link>
             </li>
             <li class="menu-option">
-              <a>GRAVATAS ></a>
+              <router-link tag="a" :to="{name:'gravata'}">GRAVATAS ></router-link>
+            </li>
+            <li class="menu-option">
+              <router-link tag="a" :to="{name:'tapete'}">TAPETES ></router-link>
             </li>
           </ul>
         </section>
-      </transition>
+      </transition-group>
     </div>
   </section>
 </template>
@@ -97,6 +100,7 @@ export default {
       $(".menu-overlay").css({ opacity: "0", width: "100%" });
     },
     closeButton() {
+      this.menuSelecionado = "inicial";
       $(".side-menu-wrapper").css({
         left: -$(".side-menu-wrapper").outerWidth() + "px"
       });
@@ -104,6 +108,11 @@ export default {
         $(".side-menu-wrapper").removeClass("active");
       }, 50);
       $(".menu-overlay").css({ opacity: "0", width: "0" });
+    }
+  },
+  watch: {
+    $route: function() {
+      this.closeButton();
     }
   },
   created() {
