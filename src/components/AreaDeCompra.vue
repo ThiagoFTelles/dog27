@@ -1003,6 +1003,8 @@ export default {
 .tamanhos-disponiveis {
   padding: 0 20px;
   border: 1px solid #ccc;
+  height: fit-content;
+  min-height: 30px;
 }
 
 .finalizar-compra-item {
@@ -1138,7 +1140,7 @@ export default {
   }
 
   .combo-produtos {
-    height: auto;
+    height: 300px;
     display: grid;
     grid-template:
       "prod_1 soma prod_2" 1fr
@@ -1153,12 +1155,30 @@ export default {
     max-width: 100px;
   }
 
+  .combo-banner-titulo {
+    font-size: 0.8rem;
+  }
+
+  .selecionar-tamanho {
+    margin-right: 5px;
+  }
+
+  .selecionar-tamanho,
+  .selecionar-quantidade {
+    height: 30px;
+  }
+
+  .alterar-quantidade {
+    padding: 5px 10px;
+  }
+
   .combo .banner-titulo {
     font-size: 2rem;
   }
 
   .tamanhos-disponiveis {
     padding: 0;
+    width: 30px;
   }
 
   .principal {
