@@ -150,6 +150,13 @@ export default new Vuex.Store({
   getters: {
     logado(state) {
       return state.login;
-    }
+    },
+    isMobile() {
+      if (document.documentElement.clientWidth <= 700) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   }
 });

@@ -51,12 +51,12 @@
             <li class="menu-option">
               <router-link tag="a" :to="{name:'guia'}">GUIAS ></router-link>
             </li>
-            <li class="menu-option">
+            <!-- <li class="menu-option">
               <router-link tag="a" :to="{name:'comedouro'}">COMEDOUROS ></router-link>
             </li>
             <li class="menu-option">
               <router-link tag="a" :to="{name:'gravata'}">GRAVATAS ></router-link>
-            </li>
+            </li> -->
             <li class="menu-option">
               <router-link tag="a" :to="{name:'tapete'}">TAPETES ></router-link>
             </li>

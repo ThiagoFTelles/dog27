@@ -188,5 +188,9 @@ textarea:focus {
   #main {
     background: #f7f7f9;
   }
+
+  .call-to-buy-container {
+    top: 75px;
+  }
 }
 </style>

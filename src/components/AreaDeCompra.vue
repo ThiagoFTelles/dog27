@@ -1,43 +1,108 @@
 <template>
   <section>
-    <div v-if="variacoesDisponiveis.length" class="area-de-compra-container">
-      <div class="area-de-compra-imagens">
-        <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-area-de-compra principal" />
-        <div
-          v-for="imagem in estampaEscolhida.srcFotos"
-          :key="imagem.src"
-          class="area-de-compra-thumbnail"
-        >
-          <img
-            :src="imagem.src"
-            alt="Dog27"
-            class="img-area-de-compra"
-            @click="destacarFoto(imagem)"
-          />
+    <section v-if="this.isMobile === false" class="desktop">
+      <div v-if="variacoesDisponiveis.length" class="area-de-compra-container">
+        <div class="area-de-compra-imagens">
+          <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-area-de-compra principal" />
+          <div
+            v-for="imagem in estampaEscolhida.srcFotos"
+            :key="imagem.src"
+            class="area-de-compra-thumbnail"
+          >
+            <img
+              :src="imagem.src"
+              alt="Dog27"
+              class="img-area-de-compra"
+              @click="destacarFoto(imagem)"
+            />
+          </div>
+        </div>
+        <div class="area-de-compra-opcoes">
+          <h1 class="banner-titulo">{{produto | uppercase}}</h1>
+          <p class="label-estampa">Escolha a estampa: {{estampaEscolhida.nome}}</p>
+          <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
+            <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
+              <img :src="estampaEscolhida.urlThumbnail" alt="Dog27" class="estampa-selecionada" />
+              <img class="triangle-arrow-down" src="@/assets/triangle-arrow-down.png" alt />
+            </div>
+            <transition mode="out-in">
+              <ul class="estampas-opcoes" @click="mostrarEstampas" v-if="menuEstampas">
+                <li
+                  v-for="(estampa, index) in estampasDisponiveis"
+                  :key="`estampa-${index}`"
+                  @click="escolherEstampa(estampa)"
+                >
+                  <img :src="estampa.urlThumbnail" alt="Dog27" class="estampa-opcao" />
+                </li>
+              </ul>
+              <section v-if="!menuEstampas">
+                <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+
+                <div class="tamanho-area">
+                  <div class="selecionar-tamanho">
+                    <div
+                      class="tamanhos-disponiveis"
+                      @click="mostrarTamanhos"
+                      v-if="!menuTamanhos"
+                    >{{variacaoEscolhida.tamanho}}</div>
+                    <ul
+                      v-else
+                      @click="mostrarTamanhos"
+                      name="tamanhos-disponiveis"
+                      class="tamanhos-disponiveis"
+                    >
+                      <li
+                        v-for="variacao in variacoesDisponiveis"
+                        :value="variacao.tamanho"
+                        :key="variacao.tamanho"
+                        @click="escolherVariacao(variacao)"
+                      >{{variacao.tamanho}}</li>
+                    </ul>
+                  </div>
+                  <div class="selecionar-quantidade">
+                    <div
+                      v-if="quantidadeEscolhida > 0"
+                      class="alterar-quantidade"
+                      @click="reduzirQuantidadeEscolhida"
+                    >-</div>
+                    <div v-else class="alterar-quantidade">-</div>
+                    <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                    <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+                  </div>
+                </div>
+                <div class="finalizar-compra-item">
+                  <p
+                    v-show="quantidadeEscolhida >0"
+                    class="valor-dos-itens"
+                  >{{variacaoEscolhida.preco * quantidadeEscolhida | numeroPreco}}</p>
+                  <p
+                    v-if="this.variacaoEscolhida.estoque <= 0 && this.quantidadeEscolhida==1"
+                  >Última unidade!</p>
+                  <p v-else-if="this.variacaoEscolhida.estoque <= 0">Estoque esgotado</p>
+                  <button
+                    v-if="quantidadeEscolhida >0"
+                    class="adicionar-ao-carrinho"
+                    @click="colocarNoCarrinho(variacaoEscolhida)"
+                  >Comprar</button>
+                  <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
+                </div>
+              </section>
+            </transition>
+          </div>
         </div>
       </div>
-      <div class="area-de-compra-opcoes">
-        <h1 class="banner-titulo">{{produto | uppercase}}</h1>
-        <p class="label-estampa">Escolha a estampa: {{estampaEscolhida.nome}}</p>
-        <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
-          <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
-            <img :src="estampaEscolhida.urlThumbnail" alt="Dog27" class="estampa-selecionada" />
-            <img class="triangle-arrow-down" src="@/assets/triangle-arrow-down.png" alt />
-          </div>
-          <transition mode="out-in">
-            <ul class="estampas-opcoes" @click="mostrarEstampas" v-if="menuEstampas">
-              <li
-                v-for="(estampa, index) in estampasDisponiveis"
-                :key="`estampa-${index}`"
-                @click="escolherEstampa(estampa)"
-              >
-                <img :src="estampa.urlThumbnail" alt="Dog27" class="estampa-opcao" />
-              </li>
-            </ul>
-            <section v-if="!menuEstampas">
-              <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+      <PaginaCarregando v-else />
+      <section v-if="mostrarComboArea">
+        <div class="combo" v-if="produtoCombo">
+          <div class="combo-produtos">
+            <div class="combo-produto">
+              <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
+              <h1
+                class="combo-banner-titulo"
+              >{{produto | uppercase}} PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
 
-              <div class="tamanho-area">
+              <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+              <div class="tamanho-area-combo">
                 <div class="selecionar-tamanho">
                   <div
                     class="tamanhos-disponiveis"
@@ -69,116 +134,229 @@
                   <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
                 </div>
               </div>
-              <div class="finalizar-compra-item">
-                <p
-                  v-show="quantidadeEscolhida >0"
-                  class="valor-dos-itens"
-                >{{variacaoEscolhida.preco * quantidadeEscolhida | numeroPreco}}</p>
-                <p
-                  v-if="this.variacaoEscolhida.estoque <= 0 && this.quantidadeEscolhida==1"
-                >Última unidade!</p>
-                <p v-else-if="this.variacaoEscolhida.estoque <= 0">Estoque esgotado</p>
-                <button
-                  v-if="quantidadeEscolhida >0"
-                  class="adicionar-ao-carrinho"
-                  @click="colocarNoCarrinho(variacaoEscolhida)"
-                >Comprar</button>
-                <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
-              </div>
-            </section>
-          </transition>
-        </div>
-      </div>
-    </div>
-    <PaginaCarregando v-else />
-    <section v-if="mostrarComboArea">
-      <div class="combo" v-if="produtoCombo">
-        <div class="combo-produtos">
-          <div class="combo-produto">
-            <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
-            <h1
-              class="combo-banner-titulo"
-            >{{produto | uppercase}} PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
+            </div>
+            <h1 class="banner-titulo">+</h1>
+            <div class="combo-produto indicado">
+              <img :src="produtoCombo.imgUrl" alt="Dog27" class="img-combo" />
+              <h1
+                class="combo-banner-titulo"
+              >{{nomeDoProdutoCombo}} {{estampaEscolhida.nome | uppercase}}</h1>
 
-            <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
-            <div class="tamanho-area-combo">
-              <div class="selecionar-tamanho">
-                <div
-                  class="tamanhos-disponiveis"
-                  @click="mostrarTamanhos"
-                  v-if="!menuTamanhos"
-                >{{variacaoEscolhida.tamanho}}</div>
-                <ul
-                  v-else
-                  @click="mostrarTamanhos"
-                  name="tamanhos-disponiveis"
-                  class="tamanhos-disponiveis"
+              <p class="label-estampa">Tamanho: {{produtoCombo.tamanho}}</p>
+              <div class="tamanho-area-combo">
+                <div class="selecionar-tamanho">
+                  <div class="tamanhos-disponiveis" v-if="!menuTamanhos">{{produtoCombo.tamanho}}</div>
+                </div>
+                <div class="selecionar-quantidade">
+                  <div
+                    v-if="quantidadeEscolhida > 0"
+                    class="alterar-quantidade"
+                    @click="reduzirQuantidadeEscolhida"
+                  >-</div>
+                  <div v-else class="alterar-quantidade">-</div>
+                  <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                  <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="combo-conteudo">
+            <h1 class="combo-titulo">Aproveite e compre junto</h1>
+            <p class="preco-antigo">de {{precoCombo.antigo | numeroPreco}}</p>
+            <p class="preco-combo">por {{precoCombo.novo | numeroPreco}}</p>
+            <button
+              v-if="quantidadeEscolhida >0"
+              class="adicionar-ao-carrinho"
+              @click="colocarComboNoCarrinho(comboEscolhido)"
+            >Comprar</button>
+            <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
+          </div>
+        </div>
+        <PaginaCarregando v-else />
+      </section>
+    </section>
+
+    <section v-else class="mobile">
+      <div v-if="variacoesDisponiveis.length" class="area-de-compra-container">
+        <h1 class="banner-titulo">{{produto | uppercase}}</h1>
+        <div class="area-de-compra-imagens">
+          <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-area-de-compra principal" />
+          <div
+            v-for="imagem in estampaEscolhida.srcFotos"
+            :key="imagem.src"
+            class="area-de-compra-thumbnail"
+          >
+            <img
+              :src="imagem.src"
+              alt="Dog27"
+              class="img-area-de-compra"
+              @click="destacarFoto(imagem)"
+            />
+          </div>
+        </div>
+        <div class="area-de-compra-opcoes">
+          <p class="label-estampa">Escolha a estampa: {{estampaEscolhida.nome}}</p>
+          <div class="estampas-opcoes-wrapper" @mouseleave="menuEstampas = false">
+            <div class="selecionar-estampas-disponiveis" @click="mostrarEstampas">
+              <img :src="estampaEscolhida.urlThumbnail" alt="Dog27" class="estampa-selecionada" />
+              <img class="triangle-arrow-down" src="@/assets/triangle-arrow-down.png" alt />
+            </div>
+            <transition mode="out-in">
+              <ul class="estampas-opcoes" @click="mostrarEstampas" v-if="menuEstampas">
+                <li
+                  v-for="(estampa, index) in estampasDisponiveis"
+                  :key="`estampa-${index}`"
+                  @click="escolherEstampa(estampa)"
                 >
-                  <li
-                    v-for="variacao in variacoesDisponiveis"
-                    :value="variacao.tamanho"
-                    :key="variacao.tamanho"
-                    @click="escolherVariacao(variacao)"
-                  >{{variacao.tamanho}}</li>
-                </ul>
-              </div>
-              <div class="selecionar-quantidade">
-                <div
-                  v-if="quantidadeEscolhida > 0"
-                  class="alterar-quantidade"
-                  @click="reduzirQuantidadeEscolhida"
-                >-</div>
-                <div v-else class="alterar-quantidade">-</div>
-                <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
-                <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
-              </div>
-            </div>
-          </div>
-          <h1 class="banner-titulo">+</h1>
-          <div class="combo-produto indicado">
-            <img :src="produtoCombo.imgUrl" alt="Dog27" class="img-combo" />
-            <h1
-              class="combo-banner-titulo"
-            >{{nomeDoProdutoCombo}} {{estampaEscolhida.nome | uppercase}}</h1>
+                  <img :src="estampa.urlThumbnail" alt="Dog27" class="estampa-opcao" />
+                </li>
+              </ul>
+              <section v-if="!menuEstampas">
+                <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
 
-            <p class="label-estampa">Tamanho: {{produtoCombo.tamanho}}</p>
-            <div class="tamanho-area-combo">
-              <div class="selecionar-tamanho">
-                <div class="tamanhos-disponiveis" v-if="!menuTamanhos">{{produtoCombo.tamanho}}</div>
-              </div>
-              <div class="selecionar-quantidade">
-                <div
-                  v-if="quantidadeEscolhida > 0"
-                  class="alterar-quantidade"
-                  @click="reduzirQuantidadeEscolhida"
-                >-</div>
-                <div v-else class="alterar-quantidade">-</div>
-                <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
-                <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
-              </div>
-            </div>
+                <div class="tamanho-area">
+                  <div class="selecionar-tamanho">
+                    <div
+                      class="tamanhos-disponiveis"
+                      @click="mostrarTamanhos"
+                      v-if="!menuTamanhos"
+                    >{{variacaoEscolhida.tamanho}}</div>
+                    <ul
+                      v-else
+                      @click="mostrarTamanhos"
+                      name="tamanhos-disponiveis"
+                      class="tamanhos-disponiveis"
+                    >
+                      <li
+                        v-for="variacao in variacoesDisponiveis"
+                        :value="variacao.tamanho"
+                        :key="variacao.tamanho"
+                        @click="escolherVariacao(variacao)"
+                      >{{variacao.tamanho}}</li>
+                    </ul>
+                  </div>
+                  <div class="selecionar-quantidade">
+                    <div
+                      v-if="quantidadeEscolhida > 0"
+                      class="alterar-quantidade"
+                      @click="reduzirQuantidadeEscolhida"
+                    >-</div>
+                    <div v-else class="alterar-quantidade">-</div>
+                    <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                    <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+                  </div>
+                </div>
+                <div class="finalizar-compra-item">
+                  <p
+                    v-show="quantidadeEscolhida >0"
+                    class="valor-dos-itens"
+                  >{{variacaoEscolhida.preco * quantidadeEscolhida | numeroPreco}}</p>
+                  <p
+                    v-if="this.variacaoEscolhida.estoque <= 0 && this.quantidadeEscolhida==1"
+                  >Última unidade!</p>
+                  <p v-else-if="this.variacaoEscolhida.estoque <= 0">Estoque esgotado</p>
+                  <button
+                    v-if="quantidadeEscolhida >0"
+                    class="adicionar-ao-carrinho"
+                    @click="colocarNoCarrinho(variacaoEscolhida)"
+                  >Comprar</button>
+                  <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
+                </div>
+              </section>
+            </transition>
           </div>
-        </div>
-        <div class="combo-conteudo">
-          <h1 class="combo-titulo">Aproveite e compre junto</h1>
-          <p class="preco-antigo">de {{precoCombo.antigo | numeroPreco}}</p>
-          <p class="preco-combo">por {{precoCombo.novo | numeroPreco}}</p>
-          <button
-            v-if="quantidadeEscolhida >0"
-            class="adicionar-ao-carrinho"
-            @click="colocarComboNoCarrinho(comboEscolhido)"
-          >Comprar</button>
-          <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
         </div>
       </div>
       <PaginaCarregando v-else />
+      <section v-if="mostrarComboArea">
+        <div class="combo" v-if="produtoCombo">
+          <div class="combo-produtos">
+            <div class="combo-produto principal">
+              <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
+              <h1
+                class="combo-banner-titulo"
+              >{{produto | uppercase}} PARA CACHORROS {{estampaEscolhida.nome | uppercase}}</h1>
+
+              <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
+              <div class="tamanho-area-combo">
+                <div class="selecionar-tamanho">
+                  <div
+                    class="tamanhos-disponiveis"
+                    @click="mostrarTamanhos"
+                    v-if="!menuTamanhos"
+                  >{{variacaoEscolhida.tamanho}}</div>
+                  <ul
+                    v-else
+                    @click="mostrarTamanhos"
+                    name="tamanhos-disponiveis"
+                    class="tamanhos-disponiveis"
+                  >
+                    <li
+                      v-for="variacao in variacoesDisponiveis"
+                      :value="variacao.tamanho"
+                      :key="variacao.tamanho"
+                      @click="escolherVariacao(variacao)"
+                    >{{variacao.tamanho}}</li>
+                  </ul>
+                </div>
+                <div class="selecionar-quantidade">
+                  <div
+                    v-if="quantidadeEscolhida > 0"
+                    class="alterar-quantidade"
+                    @click="reduzirQuantidadeEscolhida"
+                  >-</div>
+                  <div v-else class="alterar-quantidade">-</div>
+                  <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                  <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+                </div>
+              </div>
+            </div>
+            <h1 class="banner-titulo mais">+</h1>
+            <div class="combo-produto indicado">
+              <img :src="produtoCombo.imgUrl" alt="Dog27" class="img-combo" />
+              <h1
+                class="combo-banner-titulo"
+              >{{nomeDoProdutoCombo}} {{estampaEscolhida.nome | uppercase}}</h1>
+
+              <p class="label-estampa">Tamanho: {{produtoCombo.tamanho}}</p>
+              <div class="tamanho-area-combo">
+                <div class="selecionar-tamanho">
+                  <div class="tamanhos-disponiveis" v-if="!menuTamanhos">{{produtoCombo.tamanho}}</div>
+                </div>
+                <div class="selecionar-quantidade">
+                  <div
+                    v-if="quantidadeEscolhida > 0"
+                    class="alterar-quantidade"
+                    @click="reduzirQuantidadeEscolhida"
+                  >-</div>
+                  <div v-else class="alterar-quantidade">-</div>
+                  <div class="quantidade-escolhida">{{quantidadeEscolhida}}</div>
+                  <div class="alterar-quantidade" @click="aumentarQuantidadeEscolhida">+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="combo-conteudo">
+            <h1 class="combo-titulo">Aproveite e compre junto</h1>
+            <p class="preco-antigo">de {{precoCombo.antigo | numeroPreco}}</p>
+            <p class="preco-combo">por {{precoCombo.novo | numeroPreco}}</p>
+            <button
+              v-if="quantidadeEscolhida >0"
+              class="adicionar-ao-carrinho"
+              @click="colocarComboNoCarrinho(comboEscolhido)"
+            >Comprar</button>
+            <button v-else class="adicionar-ao-carrinho" disabled>Adicione produtos</button>
+          </div>
+        </div>
+        <PaginaCarregando v-else />
+      </section>
     </section>
   </section>
 </template>
 
 <script>
 import { api } from "@/services.js";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "AreaDeCompra",
@@ -226,6 +404,7 @@ export default {
       estampaRedirecionada: state => state.areaDeCompra.estampaRedirecionada
     }),
     ...mapState(["idCategoriaSelecionada", "idCategoriaCombo"]),
+    ...mapGetters(["isMobile"]),
     precoCombo() {
       let precoCombo = {
         antigo: null,
@@ -729,10 +908,6 @@ export default {
   margin: 8px 3px;
 }
 
-.estampas-opcoes-wrapper {
-  width: fit-content;
-}
-
 .selecionar-estampas-disponiveis {
   display: flex;
   align-items: center;
@@ -927,5 +1102,89 @@ export default {
   margin: 30px;
   font-size: 1rem;
   font-weight: 100;
+}
+
+/* ///////////////////////////// MOBILE ////////////////////////////// */
+@media screen and (max-width: 700px) {
+  .area-de-compra-container {
+    grid-template-columns: 1fr;
+    padding-top: 20px;
+    height: auto;
+  }
+
+  .banner-titulo {
+    margin-bottom: 30px;
+  }
+
+  .area-de-compra-container div img.principal {
+    max-height: 200px;
+  }
+
+  .area-de-compra-thumbnail img {
+    max-height: 50px;
+    margin: 0 10px;
+  }
+
+  .area-de-compra-opcoes {
+    padding: 0 20px;
+  }
+
+  .finalizar-compra-item {
+    padding: 20px;
+  }
+
+  .combo {
+    display: block;
+  }
+
+  .combo-produtos {
+    height: auto;
+    display: grid;
+    grid-template:
+      "prod_1 soma prod_2" 1fr
+      / 1fr 1fr 1fr;
+  }
+
+  .combo-produto {
+    width: auto;
+  }
+
+  .img-combo {
+    max-width: 100px;
+  }
+
+  .combo .banner-titulo {
+    font-size: 2rem;
+  }
+
+  .tamanhos-disponiveis {
+    padding: 0;
+  }
+
+  .principal {
+    grid-area: prod_1;
+  }
+
+  .mais {
+    grid-area: soma;
+    font-size: 3rem;
+    margin: 0;
+  }
+
+  .indicado {
+    grid-area: prod_2;
+  }
+
+  .combo-titulo {
+  }
+
+  .preco-antigo {
+  }
+
+  .preco-combo {
+  }
+
+  .combo-conteudo .adicionar-ao-carrinho {
+  }
 }
 </style>
