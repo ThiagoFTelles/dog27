@@ -1196,15 +1196,7 @@ export default {
   }
 
   .combo-titulo {
-  }
-
-  .preco-antigo {
-  }
-
-  .preco-combo {
-  }
-
-  .combo-conteudo .adicionar-ao-carrinho {
+    font-size: 2.5rem;
   }
 }
 </style>
