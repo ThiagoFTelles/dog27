@@ -143,6 +143,10 @@ export default {
   grid-template: ". . . . carrinho_remover" 2px "foto titulo titulo titulo ." 1fr "foto tamanho quantidade . carrinho_preco" 1fr ". tamanho quantidade . carrinho_preco" 2px / 80px 1fr 1fr 1fr;
 }
 
+.carrinho_remover:focus {
+  outline: none;
+}
+
 .carrinho_remover {
   grid-area: carrinho_remover;
   background: none;

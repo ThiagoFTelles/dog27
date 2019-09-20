@@ -6,27 +6,18 @@
         <router-link to="/" class="logo">
           <img src="@/assets/dog27-icone-branco.svg" alt="Dog27" />
         </router-link>
-        <span name="nav2" class="nav" :class="{pesquisaAtiva: mostrarPesquisa}">
+        <span class="nav" :class="{pesquisaAtiva: mostrarPesquisa}">
           <nav v-if="!mostrarPesquisa" key="menu-nav">
             <ul class="menu">
-              <li
-                @mouseover="hoverLinkProdutos = true"
-                @mouseleave="hoverLinkProdutos = false"
-                class="menu-link"
-              >
+              <li @mouseover="resetarMenu();hoverLinkProdutos=true" class="menu-link">
                 Produtos
                 <span v-if="hoverLinkProdutos" class="menu-link-arrow"></span>
               </li>
-
-              <li
-                @mouseover="hoverLinkEstampas = true"
-                @mouseleave="hoverLinkEstampas = false"
-                class="menu-link"
-              >
+              <li @mouseover="resetarMenu();hoverLinkEstampas=true" class="menu-link">
                 Estampas
                 <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
               </li>
-              <li @click="hoverLinkContato = true" class="menu-link">
+              <li @mouseover="resetarMenu();hoverLinkContato = true" class="menu-link">
                 Fale Conosco
                 <span v-if="hoverLinkContato" class="menu-link-arrow arrow-estampas"></span>
               </li>
@@ -35,14 +26,14 @@
                 <img
                   key="menu-lupa"
                   v-if="!mostrarPesquisa"
-                  @click="mostrarAreaDePesquisa()"
+                  @click="mostrarAreaDePesquisa();resetarMenu()"
                   id="lupa"
                   src="@/assets/search.svg"
                 />
               </li>
             </ul>
           </nav>
-          <transition name="nav" key="asds">
+          <transition name="lupa" key="lupa">
             <div v-if="mostrarPesquisa" class="barra-de-pesquisa" key="menu-pesquisa">
               <a id="fechar-pesquisa" @click="mostrarPesquisa=false">X</a>
               <input
@@ -62,7 +53,7 @@
         <a
           class="icon bag"
           :data-badge="quantidadeDeItensNoCarrinho > 0 ? quantidadeDeItensNoCarrinho : null"
-          @mouseover="hoverLinkBag = true"
+          @mouseover="resetarMenu();hoverLinkBag=true"
         >
           <img src="@/assets/bag.svg" />
           <transition mode="out-in">
@@ -95,7 +86,7 @@
         <a
           class="icon bag"
           :data-badge="quantidadeDeItensNoCarrinho > 0 ? quantidadeDeItensNoCarrinho : null"
-          @mouseover="hoverLinkBag = true"
+          @mouseover="resetarMenu();hoverLinkBag=true"
         >
           <img src="@/assets/bag.svg" />
           <transition mode="out-in">
@@ -123,21 +114,21 @@
     </header>
     <transition mode="out-in">
       <SubMenuProdutos
-        @mouseover.native="hoverLinkProdutos = true"
-        @mouseleave.native="hoverLinkProdutos = false"
+        @mouseover.native="resetarMenu();hoverLinkProdutos=true"
+        @mouseleave.native="resetarMenu()"
         v-show="hoverLinkProdutos"
       />
     </transition>
     <transition mode="out-in">
       <SubMenuEstampas
-        @mouseover.native="hoverLinkEstampas = true"
-        @mouseleave.native="hoverLinkEstampas = false"
+        @mouseover.native="resetarMenu();hoverLinkEstampas=true"
+        @mouseleave.native="resetarMenu()"
         v-show="hoverLinkEstampas"
       />
     </transition>
-    <transition mode="out-in">
+    <transition name="contato" mode="out-in">
       <SubMenuContato v-show="hoverLinkContato">
-        <div class="menu-close" @click.prevent="hoverLinkContato = false">×</div>
+        <div class="menu-close" @click.prevent="resetarMenu()">×</div>
       </SubMenuContato>
     </transition>
   </section>
@@ -181,6 +172,12 @@ export default {
     MenuMobile
   },
   methods: {
+    resetarMenu() {
+      this.hoverLinkProdutos = false;
+      this.hoverLinkEstampas = false;
+      this.hoverLinkContato = false;
+      this.hoverLinkBag = false;
+    },
     finalizarCompra() {
       this.hoverLinkBag = false;
       this.$router.push({ name: "checkout" });
@@ -378,7 +375,7 @@ section {
   font-size: 35px;
   text-decoration: none;
   text-align: right;
-  margin: 10px 50px 0 0;
+  margin: 0 50px 0 0;
   cursor: pointer;
 }
 
@@ -462,6 +459,10 @@ section {
   color: white;
 }
 
+.submenu-container {
+  z-index: -1;
+}
+
 @media screen and (max-width: 700px) {
   .container-header {
     display: none;
@@ -512,13 +513,13 @@ section {
 
 .v-enter,
 .v-leave-to {
-  transform: translate3d(20px, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 .v-enter-active {
   transition: all 0s;
   animation-name: submenu;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-delay: -0.5s;
 }
 
@@ -528,24 +529,42 @@ section {
   animation-duration: 0s;
 }
 
-.nav-enter {
+.contato-enter,
+.contato-leave-to {
+  transform: translate3d(0, 0, 0);
+}
+
+.contato-enter-active {
+  transition: all 0s;
+  animation-name: submenuContato;
+  animation-duration: 1s;
+  animation-delay: -0.5s;
+}
+
+.contato-leave-active {
+  transition: all 0s;
+  animation-name: sai;
+  animation-duration: 0s;
+}
+
+.lupa-enter {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.nav-leave-to {
+.lupa-leave-to {
   opacity: 0;
   transform: translate3d(0, 0, 0);
 }
 
-.nav-enter-active {
-  transition: all 2s;
+.lupa-enter-active {
+  transition: all 1.5s;
   animation-name: entra;
-  animation-duration: 2s;
+  animation-duration: 1.5s;
   animation-delay: -0.5s;
 }
 
-.nav-leave-active {
+.lupa-leave-active {
   transition: all 0s;
   animation-name: sai;
   animation-duration: 0s;
@@ -553,12 +572,22 @@ section {
 
 @keyframes submenu {
   from {
-    transform: scaleY(0);
-    top: 103px;
+    transform: translateY(-500px);
+    /* top: 103px; */
   }
   to {
-    transform: scaleY(1);
-    top: 103px;
+    transform: translateY(0);
+    /* top: 103px; */
+  }
+}
+@keyframes submenuContato {
+  from {
+    transform: translateY(-10px);
+    /* top: 103px; */
+  }
+  to {
+    transform: translateY(0);
+    /* top: 103px; */
   }
 }
 @keyframes entra {
