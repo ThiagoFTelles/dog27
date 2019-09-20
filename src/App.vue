@@ -184,6 +184,11 @@ textarea:focus {
   transition: all 0.3s;
 }
 
+.section-form {
+  width: 90%;
+  margin: 15px auto;
+}
+
 @media screen and (max-width: 700px) {
   #main {
     background: #f7f7f9;
@@ -191,6 +196,11 @@ textarea:focus {
 
   .call-to-buy-container {
     top: 75px;
+  }
+
+  label {
+    margin: 15px auto;
+    display: block;
   }
 }
 </style>

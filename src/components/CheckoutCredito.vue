@@ -1,5 +1,5 @@
 <template>
-  <section class="checkout">
+  <section class="checkout section-form">
     <section v-if="vendaConcluida">
       <h2>Parabéns! A sua compra foi concluída!</h2>
       <h3>Verifique o e-mail informado para mais detalhes.</h3>
@@ -8,7 +8,10 @@
 
     <section v-else class="checkout2">
       <p v-if="Brand">Bandeira: {{Brand}}</p>
-      <p v-if="!Brand">Aceitamos: Visa, Master e AMEX</p>
+      <p v-if="!Brand">
+        Favor inserir um cartão
+        <b>Visa, Master ou AMEX</b>
+      </p>
 
       <label for="CardNumber">Número do Cartão</label>
       <input
@@ -48,7 +51,7 @@
             :key="`parcela-${parcela.numero}`"
           >{{ parcela.numero }}</option>
         </select>
-        <p>Parcela mínima R$50, pode parcelar em até 4x sem juros</p>
+        <p class="info-parcelas">Parcela mínima R$50, pode parcelar em até 4x sem juros</p>
         <ErroNotificacao :erros="erros" />
         <button @click="abrirOrdem" class="btn">Pagar</button>
       </section>
@@ -252,6 +255,14 @@ export default {
 
 input {
   text-transform: uppercase;
+}
+
+.info-parcelas {
+  margin: 25px 0;
+}
+.btn {
+  width: 100%;
+  font-size: x-large;
 }
 </style> 
  

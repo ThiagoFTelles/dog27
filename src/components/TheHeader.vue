@@ -504,7 +504,7 @@ section {
   }
 
   .cart-capsule {
-    left: -257px;
+    left: -255px;
   }
 }
 

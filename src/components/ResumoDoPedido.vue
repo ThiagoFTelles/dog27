@@ -1,31 +1,31 @@
 <template>
-  <section>
+  <section class="resumo">
     <h2>Seu pedido:</h2>
     <ul>
       <li v-if="ganhouPresente" class="carrinho_item">
-        <p>x 1</p>
+        <p>Quantidade: 1</p>
         <p class="green">{{nomeDoPresente}}</p>
-        <p class="carrinho_preco">{{0 | numeroPreco}}</p>
+        <p class="carrinho_preco">Total deste item: {{0 | numeroPreco}}</p>
         <br />
       </li>
       <li class="carrinho_item" v-for="(item, index) in carrinho" :key="`carrinho-item${index}`">
-        <p>x {{item.quantidade}}</p>
-        <p>{{item.nomeDoProduto}}</p>
+        <p>{{item.categoria | uppercase}} PARA CACHORROS {{item.estampa | uppercase}}</p>
+        <p class="tamanho etiqueta">Tamanho: {{item.tamanho}}</p>
+        <p class="quantidade etiqueta">Quantidade: {{item.quantidade}}</p>
         <p
           :class="{ green: item.isCombo }"
           class="carrinho_preco"
-        >{{item.valorUnitarioCobrado * item.quantidade | numeroPreco}}</p>
+        >Total deste item: {{item.valorUnitarioCobrado * item.quantidade | numeroPreco}}</p>
         <br />
       </li>
     </ul>
     <div v-if="freteEscolhido.nome" class="frete">
-      <p>Frete:</p>
-      <p>{{ freteEscolhido.nome | uppercase }} {{freteEscolhido.valor | numeroPreco}}</p>
+      <p>Frete: {{ freteEscolhido.nome | uppercase }} {{freteEscolhido.valor | numeroPreco}}</p>
     </div>
     <p v-else>Escolha o seu frete para continuar</p>
     <h2
       v-if="freteEscolhido.nome"
-      class="total"
+      class="total green"
     >Total {{valorTotalCarrinho+freteEscolhido.valor | numeroPreco}}</h2>
   </section>
 </template>
@@ -51,11 +51,27 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  margin: 15px 0;
+}
 input[type="radio"] {
   width: auto;
 }
 
 input {
   text-transform: uppercase;
+}
+
+.resumo {
+  margin-top: 25px;
+}
+
+.etiqueta {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.carrinho_preco {
+  font-size: 1rem;
 }
 </style>

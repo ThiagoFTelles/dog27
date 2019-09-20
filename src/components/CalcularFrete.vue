@@ -60,12 +60,30 @@
     <div class="opcoesDeFrete" v-if="!calculando">
       <p v-if="freteErrado">Verifique o CEP de entrega informado e tente novamente</p>
       <section v-if="pac.mostrar">
-        <label for="pac">PAC {{pac.valor | numeroPreco}} - {{pac.prazo}} dias úteis</label>
-        <input type="radio" name="opcaoDeFrete" id="pac" @click="selecionarFrete('pac')" />
+        <label
+          class="opcao-frete"
+          for="pac"
+        >PAC {{pac.valor | numeroPreco}} - {{pac.prazo}} dias úteis</label>
+        <input
+          class="opcao-frete"
+          type="radio"
+          name="opcaoDeFrete"
+          id="pac"
+          @click="selecionarFrete('pac')"
+        />
       </section>
       <section v-if="sedex.mostrar">
-        <label for="sedex">Sedex {{sedex.valor | numeroPreco}} - {{sedex.prazo}} dias úteis</label>
-        <input type="radio" name="opcaoDeFrete" id="sedex" @click="selecionarFrete('sedex')" />
+        <label
+          class="opcao-frete"
+          for="sedex"
+        >Sedex {{sedex.valor | numeroPreco}} - {{sedex.prazo}} dias úteis</label>
+        <input
+          class="opcao-frete"
+          type="radio"
+          name="opcaoDeFrete"
+          id="sedex"
+          @click="selecionarFrete('sedex')"
+        />
       </section>
     </div>
     <div class="calculando" v-else>Aguarde, calculando...</div>
@@ -407,5 +425,14 @@ input {
 
 .btn {
   margin: 15px 0;
+}
+.opcao-frete {
+  display: inline;
+}
+
+@media screen and (max-width: 700px) {
+  .btn {
+    width: 100%;
+  }
 }
 </style>

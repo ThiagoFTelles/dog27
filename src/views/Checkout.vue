@@ -1,13 +1,13 @@
 <template>
-  <section class="checkout">
-    <h1>CHECKOUT</h1>
-    <p v-if="!login">
+  <section class="checkout section-form">
+    <h1 class="titulo">CHECKOUT</h1>
+    <p class="deslogado" v-if="!login">
       Preencha os dados abaixo ou
       <router-link :to="{name: 'login'}" class="link">
         <b>faça o login.</b>
       </router-link>
     </p>
-    <p v-else>Olá {{primeiroNome | capitalize}}</p>
+    <p class="boas-vindas" v-else>Olá {{primeiroNome | capitalize}}!</p>
     <h2>Dados de Faturamento</h2>
     <label for="name">Nome</label>
     <input type="text" name="name" id="name" v-model="nome" maxlength="40" />
@@ -43,13 +43,13 @@
     <label for="state">Estado</label>
     <input type="text" name="state" id="state" v-model="estado" />
 
-    <CalcularFrete />
+    <CalcularFrete class="area-entrega" />
     <ResumoDoPedido />
-    <section v-if="freteEscolhido.nome">
+    <section class="pagar" v-if="freteEscolhido.nome">
       <h2>Forma de Pagamento:</h2>
       <router-link
         :to="{name: 'checkoutcredito'}"
-        class="opcao_de_pagamento"
+        class="opcao_de_pagamento btn"
         @click.native="newOrder({payment_method: 'cielo_credit',
         payment_method_title: 'Cartão de crédito'})"
       >Cartão de Crédito</router-link>
@@ -194,8 +194,39 @@ export default {
 };
 </script>
 <style scoped>
+.titulo {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+.area-entrega {
+  margin-top: 50px;
+}
+
+h2 {
+  margin: 15px 0;
+}
+
 input {
   text-transform: uppercase;
+}
+
+.opcao_de_pagamento {
+  width: fit-content;
+}
+
+.boas-vindas {
+  text-align: center;
+}
+
+.pagar {
+  margin-top: 50px;
+}
+@media screen and (max-width: 700px) {
+  .btn {
+    width: 100%;
+  }
 }
 </style> 
  
