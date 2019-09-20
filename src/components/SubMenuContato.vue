@@ -1,5 +1,6 @@
 <template>
   <div class="submenu-container">
+    <slot></slot>
     <div class="container">
       <p>Tem alguma dúvida ou sugestão? Manda pra a gente! Entra em contato através do chat ou mande uma mensagem que a gente responde por e-mail.</p>
       <section v-if="msgEnviada">
@@ -41,6 +42,7 @@
           name="message"
           placeholder="ESCREVE AQUI A SUA MENSAGEM"
           style="height:100px"
+          required
         ></textarea>
 
         <input type="submit" value="ENVIAR" />

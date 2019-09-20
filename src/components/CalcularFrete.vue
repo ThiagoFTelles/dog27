@@ -247,7 +247,8 @@ export default {
 
           var xmlString =
             process.env.VUE_APP_NODE_ENV === "test"
-              ? $(resposta).find("cResultado").prevObject[11].innerHTML
+              ? // eslint-disable-next-line
+                $(resposta).find("cResultado").prevObject[11].innerHTML
               : resposta; //res.data;
 
           var parser = new DOMParser();

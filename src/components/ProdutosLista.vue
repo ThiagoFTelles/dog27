@@ -68,7 +68,7 @@
 
         <div class="produto duplo">
           <div class="banner-imagem">
-            <img src="../assets/coleira.png" alt="cinto" />
+            <img src="../assets/home/cinto-para-cachorro-dog27.jpg" alt="cinto" />
           </div>
           <div class="banner-textos">
             <h1 class="banner-titulo">CINTO</h1>

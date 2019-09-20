@@ -18,7 +18,7 @@
         id="senha"
         name="senha"
         v-model="senha"
-        placeholder="deixe em branco para não alterar"
+        :placeholder="login? 'deixe em branco para não alterar' : ''"
       />
       <label for="telefone">Telefone</label>
       <input
@@ -52,6 +52,7 @@
 <script>
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
+import { mapState } from "vuex";
 
 export default {
   computed: {
@@ -71,6 +72,9 @@ export default {
       ],
       base: "usuario",
       mutation: "UPDATE_USUARIO"
+    }),
+    ...mapState({
+      login: state => state.login
     }),
     mostrarDadosLogin() {
       return !this.$store.state.login || this.$route.name === "usuario";

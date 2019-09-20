@@ -30,6 +30,9 @@
             <li class="menu-option">
               <a target="_blank" href="https://blog.dog27.com.br/">BLOG ></a>
             </li>
+            <li class="menu-option">
+              <router-link tag="a" :to="{name:'usuario'}">LOGIN ></router-link>
+            </li>
           </ul>
         </section>
         <section class="menu-content" key="estampas" v-if="menuSelecionado == 'estampas'">
@@ -56,7 +59,7 @@
             </li>
             <li class="menu-option">
               <router-link tag="a" :to="{name:'gravata'}">GRAVATAS ></router-link>
-            </li> -->
+            </li>-->
             <li class="menu-option">
               <router-link tag="a" :to="{name:'tapete'}">TAPETES ></router-link>
             </li>

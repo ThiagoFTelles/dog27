@@ -26,11 +26,7 @@
                 Estampas
                 <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
               </li>
-              <li
-                @mouseover="hoverLinkContato = true"
-                @mouseleave="hoverLinkContato = false"
-                class="menu-link"
-              >
+              <li @click="hoverLinkContato = true" class="menu-link">
                 Fale Conosco
                 <span v-if="hoverLinkContato" class="menu-link-arrow arrow-estampas"></span>
               </li>
@@ -140,11 +136,9 @@
       />
     </transition>
     <transition mode="out-in">
-      <SubMenuContato
-        @mouseover.native="hoverLinkContato = true"
-        @mouseleave.native="hoverLinkContato = false"
-        v-show="hoverLinkContato"
-      />
+      <SubMenuContato v-show="hoverLinkContato">
+        <div class="menu-close" @click.prevent="hoverLinkContato = false">×</div>
+      </SubMenuContato>
     </transition>
   </section>
 </template>
@@ -380,6 +374,14 @@ section {
   margin-left: 70px;
 }
 
+.menu-close {
+  font-size: 35px;
+  text-decoration: none;
+  text-align: right;
+  margin: 10px 50px 0 0;
+  cursor: pointer;
+}
+
 .pesquisaAtiva {
   width: 57.5%;
   margin-left: 70px;
@@ -510,17 +512,20 @@ section {
 
 .v-enter,
 .v-leave-to {
-  opacity: 0;
-}
-
-.v-enter,
-.v-leave-to {
   transform: translate3d(20px, 0, 0);
 }
 
-.v-enter-active,
+.v-enter-active {
+  transition: all 0s;
+  animation-name: submenu;
+  animation-duration: 2s;
+  animation-delay: -0.5s;
+}
+
 .v-leave-active {
-  transition: all 2s;
+  transition: all 0s;
+  animation-name: sai;
+  animation-duration: 0s;
 }
 
 .nav-enter {
@@ -546,6 +551,16 @@ section {
   animation-duration: 0s;
 }
 
+@keyframes submenu {
+  from {
+    transform: scaleY(0);
+    top: 103px;
+  }
+  to {
+    transform: scaleY(1);
+    top: 103px;
+  }
+}
 @keyframes entra {
   from {
     position: inherit;
