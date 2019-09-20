@@ -89,6 +89,33 @@
           <img src="@/assets/header/icone-logo-com-texto-branca.svg" alt="Dog27" />
         </router-link>
         <MenuMobile />
+        <a
+          class="icon bag"
+          :data-badge="quantidadeDeItensNoCarrinho > 0 ? quantidadeDeItensNoCarrinho : null"
+          @mouseover="hoverLinkBag = true"
+        >
+          <img src="@/assets/bag.svg" />
+          <transition mode="out-in">
+            <section class="cart-capsule">
+              <CarrinhoDeCompras v-show="hoverLinkBag" @mouseleave="hoverLinkBag = false">
+                <template v-slot:top>
+                  <div class="carrinho-slot">
+                    <h2 class="carrinho_titulo">Seu carrinho</h2>
+                    <button class="carrinho_fechar" @click="hoverLinkBag = false">X</button>
+                  </div>
+                </template>
+                <template v-slot:bottom>
+                  <div class="bottom" @click="finalizarCompra">
+                    <router-link
+                      :to="{name: 'checkout'}"
+                      class="carrinho_finalizar"
+                    >Finalizar Compra</router-link>
+                  </div>
+                </template>
+              </CarrinhoDeCompras>
+            </section>
+          </transition>
+        </a>
       </section>
     </header>
     <transition mode="out-in">
@@ -154,6 +181,7 @@ export default {
   },
   methods: {
     finalizarCompra() {
+      this.hoverLinkBag = false;
       this.$router.push({ name: "checkout" });
     },
     mostrarAreaDePesquisa() {
@@ -436,6 +464,17 @@ section {
   .logo img {
     width: 50px;
   }
+}
+
+.bag {
+  height: inherit;
+  margin-left: auto;
+  margin-right: 20px;
+  padding-top: 15px;
+}
+
+.cart-capsule {
+  left: -257px;
 }
 
 .v-enter,

@@ -226,4 +226,24 @@ export default {
 .cart-list-leave-active {
   transition: all 0.3s;
 }
+
+@media screen and (max-width: 700px) {
+  .items_area {
+    width: 250px;
+  }
+
+  .titulo {
+    font-size: 0.7rem;
+  }
+
+  .carrinho_item {
+    padding: 0 5px 0 0;
+    margin-right: -10px;
+  }
+
+  .total-area {
+    margin: 9px auto;
+    padding-left: 10%;
+  }
+}
 </style>
