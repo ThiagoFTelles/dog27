@@ -6,40 +6,48 @@
         <router-link to="/" class="logo">
           <img src="@/assets/dog27-icone-branco.svg" alt="Dog27" />
         </router-link>
-        <nav>
-          <ul class="menu">
-            <li
-              @mouseover="hoverLinkProdutos = true"
-              @mouseleave="hoverLinkProdutos = false"
-              class="menu-link"
-            >
-              Produtos
-              <span v-if="hoverLinkProdutos" class="menu-link-arrow"></span>
-            </li>
+        <span name="nav2" class="nav" :class="{pesquisaAtiva: mostrarPesquisa}">
+          <nav v-if="!mostrarPesquisa" key="menu-nav">
+            <ul class="menu">
+              <li
+                @mouseover="hoverLinkProdutos = true"
+                @mouseleave="hoverLinkProdutos = false"
+                class="menu-link"
+              >
+                Produtos
+                <span v-if="hoverLinkProdutos" class="menu-link-arrow"></span>
+              </li>
 
-            <li
-              @mouseover="hoverLinkEstampas = true"
-              @mouseleave="hoverLinkEstampas = false"
-              class="menu-link"
-            >
-              Estampas
-              <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
-            </li>
-            <li
-              @mouseover="hoverLinkContato = true"
-              @mouseleave="hoverLinkContato = false"
-              class="menu-link"
-            >
-              Fale Conosco
-              <span v-if="hoverLinkContato" class="menu-link-arrow"></span>
-            </li>
-            <a target="_blank" href="https://blog.dog27.com.br" class="menu-link">Blog</a>
-          </ul>
-        </nav>
-
-        <a class="icon lupa">
-          <transition>
-            <div v-if="mostrarPesquisa" class="barra-de-pesquisa">
+              <li
+                @mouseover="hoverLinkEstampas = true"
+                @mouseleave="hoverLinkEstampas = false"
+                class="menu-link"
+              >
+                Estampas
+                <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
+              </li>
+              <li
+                @mouseover="hoverLinkContato = true"
+                @mouseleave="hoverLinkContato = false"
+                class="menu-link"
+              >
+                Fale Conosco
+                <span v-if="hoverLinkContato" class="menu-link-arrow arrow-estampas"></span>
+              </li>
+              <a target="_blank" href="https://blog.dog27.com.br" class="menu-link">Blog</a>
+              <li class="icon lupa">
+                <img
+                  key="menu-lupa"
+                  v-if="!mostrarPesquisa"
+                  @click="mostrarAreaDePesquisa()"
+                  id="lupa"
+                  src="@/assets/search.svg"
+                />
+              </li>
+            </ul>
+          </nav>
+          <transition name="nav" key="asds">
+            <div v-if="mostrarPesquisa" class="barra-de-pesquisa" key="menu-pesquisa">
               <a id="fechar-pesquisa" @click="mostrarPesquisa=false">X</a>
               <input
                 ref="barraDePesquisa"
@@ -49,9 +57,8 @@
               />
               <img id="lupa-inside" src="@/assets/search.svg" @click="pesquisar(pesquisa)" />
             </div>
-            <img v-else @click="mostrarAreaDePesquisa()" id="lupa" src="@/assets/search.svg" />
           </transition>
-        </a>
+        </span>
         <router-link to="/usuario" tag="a" class="icon login-profile">
           <img v-if="logado===false" src="@/assets/person.svg" alt="login-dog27" />
           <img v-else src="@/assets/person-logged.svg" alt="login-dog27" />
@@ -266,10 +273,11 @@ section {
 }
 
 .container-header {
+  align-content: center;
   max-width: 950px;
   width: 100%;
   margin: 0 auto;
-
+  height: 73px;
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
@@ -295,11 +303,18 @@ section {
   display: block;
   padding: 25px 10px; /* isso aumenta a área de click do botão para ficar maior que apenas o texto */
   cursor: pointer;
+  position: relative;
+}
+
+.menu-link.router-link-exact-active,
+.menu-link:hover {
+  background: rgb(75, 75, 75);
+  color: #fff;
 }
 
 .menu-link-arrow {
   bottom: -2px;
-  position: relative;
+  position: absolute;
   display: table;
   border-right: 9px solid transparent;
   border-bottom: 9px solid #e5ebeb;
@@ -307,7 +322,6 @@ section {
   content: "";
   left: 40%;
   height: 100%;
-  visibility: hidden;
 }
 
 .arrow-estampas {
@@ -340,10 +354,8 @@ section {
   left: -450px;
 }
 
-.menu-link.router-link-exact-active,
-.menu-link:hover {
-  background: rgb(75, 75, 75);
-  color: #fff;
+.logo {
+  position: absolute;
 }
 
 .logo,
@@ -364,8 +376,16 @@ section {
   box-shadow: none;
 }
 
+.nav {
+  margin-left: 70px;
+}
+
+.pesquisaAtiva {
+  width: 57.5%;
+  margin-left: 70px;
+}
+
 .barra-de-pesquisa {
-  width: 300px;
   position: relative;
 }
 
@@ -376,6 +396,10 @@ section {
   border: 3px solid white;
   background: rgba(0, 0, 0, 0);
   color: white;
+}
+
+.lupa {
+  margin: auto 0 auto 70px;
 }
 
 #lupa-inside {
@@ -401,6 +425,10 @@ section {
   width: 35px;
   margin: 0;
   text-align: right;
+}
+
+.login-profile {
+  margin: auto;
 }
 
 .carrinho-slot {
@@ -454,6 +482,7 @@ section {
   }
 
   .logo {
+    position: relative;
     margin: 0 auto;
     grid-column: 2/3;
     grid-row: 1;
@@ -464,17 +493,19 @@ section {
   .logo img {
     width: 50px;
   }
-}
 
-.bag {
-  height: inherit;
-  margin-left: auto;
-  margin-right: 20px;
-  padding-top: 15px;
-}
+  .bag {
+    grid-column: 3;
+    grid-row: 1;
+    height: inherit;
+    margin-left: auto;
+    margin-right: 20px;
+    padding-top: 15px;
+  }
 
-.cart-capsule {
-  left: -257px;
+  .cart-capsule {
+    left: -257px;
+  }
 }
 
 .v-enter,
@@ -482,16 +513,70 @@ section {
   opacity: 0;
 }
 
-.v-enter {
-  transform: translate3d(0, -20px, 0);
-}
-/* um entra por cima enquanto o outro sai por baixo */
+.v-enter,
 .v-leave-to {
-  transform: translate3d(0, 20px, 0);
+  transform: translate3d(20px, 0, 0);
 }
 
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.3s;
+  transition: all 2s;
+}
+
+.nav-enter {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.nav-leave-to {
+  opacity: 0;
+  transform: translate3d(0, 0, 0);
+}
+
+.nav-enter-active {
+  transition: all 2s;
+  animation-name: entra;
+  animation-duration: 2s;
+  animation-delay: -0.5s;
+}
+
+.nav-leave-active {
+  transition: all 0s;
+  animation-name: sai;
+  animation-duration: 0s;
+}
+
+@keyframes entra {
+  from {
+    position: inherit;
+    width: 0;
+  }
+  to {
+    position: relative;
+    width: 100%;
+  }
+}
+@keyframes sai {
+  from {
+    position: relative;
+    width: 100%;
+  }
+  to {
+    position: inherit;
+    width: 0;
+  }
+}
+
+@keyframes sai2 {
+  from {
+    position: relative;
+    width: 0;
+    display: none;
+  }
+  to {
+    position: relative;
+    width: 0;
+    display: none;
+  }
 }
 </style>

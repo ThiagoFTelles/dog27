@@ -1,6 +1,7 @@
 <template>
   <section class="carrinho_container">
     <section class="carrinho_modal" :class="{ativo: carrinhoAtivo}">
+      <span class="arrow"></span>
       <div class="items_area">
         <slot name="top"></slot>
 
@@ -101,6 +102,7 @@ export default {
 
 <style scoped>
 .carrinho_modal {
+  position: relative;
   border-top: 20px solid #f5f3f2;
   border-right: 20px solid #f5f3f2;
   border-left: 20px solid #f5f3f2;
@@ -109,6 +111,19 @@ export default {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
+
+.arrow {
+  top: -29px;
+  right: 0;
+  position: absolute;
+  display: table;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid #f5f3f2;
+  border-left: 9px solid transparent;
+  content: "";
+  height: 100%;
+}
+
 .carrinho_container {
   border-radius: 20px;
   background: #f5f3f2;
