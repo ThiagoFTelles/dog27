@@ -91,11 +91,11 @@
           <img src="@/assets/bag.svg" />
           <transition mode="out-in">
             <section class="cart-capsule">
-              <CarrinhoDeCompras v-show="hoverLinkBag" @mouseleave="hoverLinkBag = false">
+              <CarrinhoDeCompras v-show="hoverLinkBag">
                 <template v-slot:top>
                   <div class="carrinho-slot">
                     <h2 class="carrinho_titulo">Seu carrinho</h2>
-                    <button class="carrinho_fechar" @click="hoverLinkBag = false">X</button>
+                    <button class="carrinho_fechar" @click="resetarMenu()">X</button>
                   </div>
                 </template>
                 <template v-slot:bottom>
