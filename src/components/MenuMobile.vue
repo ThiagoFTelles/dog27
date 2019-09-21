@@ -25,7 +25,7 @@
               <a>ESTAMPAS ></a>
             </li>
             <li class="menu-option">
-              <a>FALE CONOSCO ></a>
+              <router-link tag="a" :to="{name:'contato'}">FALE CONOSCO ></router-link>
             </li>
             <li class="menu-option">
               <a target="_blank" href="https://blog.dog27.com.br/">BLOG ></a>
@@ -59,10 +59,10 @@
             </li>
             <li class="menu-option">
               <router-link tag="a" :to="{name:'gravata'}">GRAVATAS ></router-link>
-            </li>-->
+            </li>
             <li class="menu-option">
               <router-link tag="a" :to="{name:'tapete'}">TAPETES ></router-link>
-            </li>
+            </li>-->
           </ul>
         </section>
       </transition-group>

@@ -187,6 +187,7 @@ textarea:focus {
 .section-form {
   width: 90%;
   margin: 15px auto;
+  max-width: 900px;
 }
 
 @media screen and (max-width: 700px) {

@@ -2,10 +2,10 @@
   <section class="usuario">
     <nav class="sidenav">
       <ul>
-        <li>
+        <li class="editar menu-item">
           <router-link :to="{name: 'usuario'}">Editar Usuário</router-link>
         </li>
-        <li>
+        <li class="deslogar menu-item">
           <button @click="deslogar">Deslogar</button>
         </li>
       </ul>
@@ -62,7 +62,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.sidenav ul li {
+.menu-item {
   display: block;
 }
 
@@ -81,5 +81,16 @@ export default {
 .sidenav button:hover {
   background: #24a9de;
   color: #fff;
+}
+
+@media screen and (max-width: 500px) {
+  .editar {
+    display: none;
+  }
+
+  .deslogar a {
+    background: #24a9de;
+    color: #fff;
+  }
 }
 </style>

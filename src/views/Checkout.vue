@@ -2,64 +2,66 @@
   <section class="checkout section-form">
     <h1 class="titulo">CHECKOUT</h1>
     <p class="deslogado" v-if="!login">
-      Preencha os dados abaixo ou
-      <router-link :to="{name: 'login'}" class="link">
-        <b>faça o login.</b>
-      </router-link>
+      Faça o
+      <router-link :to="{name: 'login'}" class="link green">
+        <b>&nbsp;login&nbsp;</b>
+      </router-link>&nbsp;para continuar.
     </p>
     <p class="boas-vindas" v-else>Olá {{primeiroNome | capitalize}}!</p>
-    <h2>Dados de Faturamento</h2>
-    <label for="name">Nome</label>
-    <input type="text" name="name" id="name" v-model="nome" maxlength="40" />
-    <label for="phone">Telefone</label>
-    <input
-      type="text"
-      name="phone"
-      id="phone"
-      v-model="telefone"
-      v-mask="['(##) ####-####', '(##) #-####-####']"
-    />
-    <label for="email">e-mail</label>
-    <input type="text" name="email" id="email" v-model="email" />
-    <label for="postcode">CEP</label>
-    <input
-      type="text"
-      name="postcode"
-      id="postcode"
-      v-model="cep"
-      @keyup="preencherCep"
-      v-mask="'#####-###'"
-    />
-    <label for="address_1">RUA</label>
-    <input type="text" name="address_1" id="address_1" v-model="rua" />
-    <label for="numero">Número</label>
-    <input type="text" name="numero" id="numero" v-model="numero" />
-    <label for="complemento">Complemento</label>
-    <input type="text" name="complemento" id="complemento" v-model="complemento" />
-    <label for="address_2">Bairro</label>
-    <input type="text" name="address_2" id="address_2" v-model="bairro" />
-    <label for="city">Cidade</label>
-    <input type="text" name="city" id="city" v-model="cidade" />
-    <label for="state">Estado</label>
-    <input type="text" name="state" id="state" v-model="estado" />
+    <span :style="{visibility: login ? 'visible' : 'hidden'}">
+      <h2>Dados de Faturamento</h2>
+      <label for="name">Nome</label>
+      <input type="text" name="name" id="name" v-model="nome" maxlength="40" />
+      <label for="phone">Telefone</label>
+      <input
+        type="text"
+        name="phone"
+        id="phone"
+        v-model="telefone"
+        v-mask="['(##) ####-####', '(##) #-####-####']"
+      />
+      <label for="email">e-mail</label>
+      <input type="text" name="email" id="email" v-model="email" />
+      <label for="postcode">CEP</label>
+      <input
+        type="text"
+        name="postcode"
+        id="postcode"
+        v-model="cep"
+        @keyup="preencherCep"
+        v-mask="'#####-###'"
+      />
+      <label for="address_1">RUA</label>
+      <input type="text" name="address_1" id="address_1" v-model="rua" />
+      <label for="numero">Número</label>
+      <input type="text" name="numero" id="numero" v-model="numero" />
+      <label for="complemento">Complemento</label>
+      <input type="text" name="complemento" id="complemento" v-model="complemento" />
+      <label for="address_2">Bairro</label>
+      <input type="text" name="address_2" id="address_2" v-model="bairro" />
+      <label for="city">Cidade</label>
+      <input type="text" name="city" id="city" v-model="cidade" />
+      <label for="state">Estado</label>
+      <input type="text" name="state" id="state" v-model="estado" />
 
-    <CalcularFrete class="area-entrega" />
-    <ResumoDoPedido />
-    <section class="pagar" v-if="freteEscolhido.nome">
-      <h2>Forma de Pagamento:</h2>
-      <router-link
-        :to="{name: 'checkoutcredito'}"
-        class="opcao_de_pagamento btn"
-        @click.native="newOrder({payment_method: 'cielo_credit',
+      <CalcularFrete class="area-entrega" />
+      <ResumoDoPedido />
+      <section class="pagar" v-if="freteEscolhido.nome">
+        <h2>Forma de Pagamento:</h2>
+        <router-link
+          :to="{name: 'checkoutcredito'}"
+          class="opcao_de_pagamento btn"
+          @click.native="newOrder({payment_method: 'cielo_credit',
         payment_method_title: 'Cartão de crédito'})"
-      >Cartão de Crédito</router-link>
-      <!-- <router-link
+        >Cartão de Crédito</router-link>
+        <!-- <router-link
         :to="{name: 'checkoutboleto'}"
         class="opcao_de_pagamento"
         @click.native="newOrder({payment_method: 'woo-moip-official',
         payment_method_title: 'Boleto'})"
-      >Boleto</router-link>-->
-    </section>
+        >Boleto</router-link>-->
+      </section>
+    </span>
   </section>
 </template>
 
@@ -120,6 +122,7 @@ export default {
       shipping_lines = [shipping_lines];
 
       let order = {
+        customer_id: this.usuario.id,
         payment_method: payment.payment_method,
         payment_method_title: payment.payment_method_title,
         set_paid: false,
@@ -194,6 +197,12 @@ export default {
 };
 </script>
 <style scoped>
+.link {
+  border: 1px solid green;
+  border-radius: 20px;
+  padding: 3px;
+}
+
 .titulo {
   text-align: center;
   margin-bottom: 10px;

@@ -62,29 +62,41 @@
       <div class="design-info-container">
         <div class="design-info left">
           <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <span>
+              <img src="@/assets/peitoral/icones/1.jpg" alt="Dog27" />
+            </span>
             <p>DESIGN HÍBRIDO INOVADOR</p>
           </div>
           <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <span>
+              <img src="@/assets/peitoral/icones/2.jpg" alt="Dog27" />
+            </span>
             <p>RESISTENTE AO CLIMA E POEIRA</p>
           </div>
           <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <span>
+              <img src="@/assets/peitoral/icones/3.jpg" alt="Dog27" />
+            </span>
             <p>ESTAMPAS DESENHADAS A MÃO</p>
           </div>
         </div>
         <div class="design-info right">
           <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <span>
+              <img src="@/assets/peitoral/icones/4.jpg" alt="Dog27" />
+            </span>
             <p>AJUSTÁVEL: CABE EM QUALQUER DOG</p>
           </div>
           <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <span>
+              <img src="@/assets/peitoral/icones/5.jpg" alt="Dog27" />
+            </span>
             <p>FECHO SUPER RESISTENTE</p>
           </div>
           <div class="design-info-chunk">
-            <img src="@/assets/dog27-icone-preto.svg" alt="Dog27" />
+            <span>
+              <img src="@/assets/peitoral/icones/6.jpg" alt="Dog27" />
+            </span>
             <p>TIRA SUPER RESISTENTE</p>
           </div>
         </div>
@@ -330,16 +342,25 @@ img {
   margin-bottom: 10px;
 }
 
+.design-info-chunk span {
+  border: 2px solid black;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+}
+
+.design-info-chunk span img {
+  height: 20px;
+  vertical-align: middle;
+  display: inline;
+}
+
 .design-info-chunk p {
   margin: auto 20px;
   text-align: left;
   font-size: 1.1rem;
 }
-
-.design-info-chunk img {
-  height: 40px;
-}
-
 .comprar-agora {
   display: grid;
   grid-template-rows: 175px 1fr 1fr;
@@ -372,6 +393,15 @@ img {
 @media screen and (max-width: 700px) {
   .peitoral-demonstracao {
     max-width: 100%;
+  }
+  .saiba-mais-subtitulo {
+    padding-top: 20px;
+  }
+  .peitoral-estampa {
+    margin-bottom: 50px;
+  }
+  .comprar-agora {
+    width: auto;
   }
 }
 </style>

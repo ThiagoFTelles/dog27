@@ -328,6 +328,10 @@ export default {
 }
 
 @media screen and (max-width: 500px) {
+  .banner-link {
+    font-size: 0.8rem;
+  }
+
   .banner-imagem {
     height: 200px;
   }

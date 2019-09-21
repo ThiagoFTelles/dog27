@@ -1,12 +1,6 @@
 <template>
   <section class="checkout section-form">
-    <section v-if="vendaConcluida">
-      <h2>Parabéns! A sua compra foi concluída!</h2>
-      <h3>Verifique o e-mail informado para mais detalhes.</h3>
-      <h3>Se não encontrou nosso e-mail, não se esqueça de olhar na caixa de spam.</h3>
-    </section>
-
-    <section v-else class="checkout2">
+    <section class="checkout2">
       <p v-if="Brand">Bandeira: {{Brand}}</p>
       <p v-if="!Brand">
         Favor inserir um cartão
@@ -75,8 +69,7 @@ export default {
       ExpirationDate: "",
       SecurityCode: "",
       Brand: "",
-      erros: [],
-      vendaConcluida: false
+      erros: []
     };
   },
   components: {},
@@ -167,7 +160,6 @@ export default {
             respostaCaptura
           ) {
             let resposta = JSON.parse(respostaCaptura.target.response);
-            resposta.Status === 2 ? self.esvaziarCarrinho() : "";
             resposta.Status === 2 ? self.atualizarOrder(resposta.Status) : "";
           });
         } else {
@@ -193,8 +185,11 @@ export default {
         api
           .putApiWc(data)
           .then(() => {
-            this.vendaConcluida = true;
             this.setOrderId(null);
+          })
+          .then(() => {
+            this.esvaziarCarrinho();
+            this.$router.push({ name: "PagamentoConfirmado" });
           })
           .catch(error => {
             this.erros.push(error.response.data);
@@ -229,7 +224,6 @@ export default {
     }
   },
   created() {
-    this.vendaConcluida = false;
     if (!this.order.order) {
       this.$router.push({ name: "checkout" });
     }

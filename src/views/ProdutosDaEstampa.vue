@@ -146,5 +146,14 @@ section {
 }
 
 @media screen and (max-width: 700px) {
+  .banner {
+    height: auto;
+  }
+  .produto-img {
+    height: 200px;
+  }
+  .produto-da-estampa {
+    width: auto;
+  }
 }
 </style>

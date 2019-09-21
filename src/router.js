@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/views/Home.vue";
+import Contato from "@/views/Contato.vue";
+import MensagemEnviada from "@/views/MensagemEnviada.vue";
+import PagamentoConfirmado from "@/views/PagamentoConfirmado.vue";
 import Checkout from "@/views/Checkout.vue";
 import CheckoutCredito from "@/components/CheckoutCredito.vue";
 import Login from "@/views/Login.vue";
@@ -33,6 +36,21 @@ const router = new Router({
       path: "/",
       name: "home",
       component: Home
+    },
+    {
+      path: "/contato",
+      name: "contato",
+      component: Contato
+    },
+    {
+      path: "/mensagem-enviada",
+      name: "mensagemEnviada",
+      component: MensagemEnviada
+    },
+    {
+      path: "/pagamento-confirmado",
+      name: "PagamentoConfirmado",
+      component: PagamentoConfirmado
     },
     {
       path: "/peitoral-para-cachorros-dog27",

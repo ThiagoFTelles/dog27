@@ -40,11 +40,9 @@
 
                 <div class="tamanho-area">
                   <div class="selecionar-tamanho">
-                    <div
-                      class="tamanhos-disponiveis"
-                      @click="mostrarTamanhos"
-                      v-if="!menuTamanhos"
-                    >{{variacaoEscolhida.tamanho}}</div>
+                    <div class="tamanhos-disponiveis" @click="mostrarTamanhos" v-if="!menuTamanhos">
+                      <p class="tamanho-escolhido">{{variacaoEscolhida.tamanho}}</p>
+                    </div>
                     <ul
                       v-else
                       @click="mostrarTamanhos"
@@ -95,7 +93,7 @@
       <section v-if="mostrarComboArea">
         <div class="combo" v-if="produtoCombo">
           <div class="combo-produtos">
-            <div class="combo-produto">
+            <div class="combo-produto" :class="{comboProdutoMaior : menuTamanhos}">
               <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
               <h1
                 class="combo-banner-titulo"
@@ -104,11 +102,9 @@
               <p class="label-estampa">Tamanho: {{variacaoEscolhida.tamanho}}</p>
               <div class="tamanho-area-combo">
                 <div class="selecionar-tamanho">
-                  <div
-                    class="tamanhos-disponiveis"
-                    @click="mostrarTamanhos"
-                    v-if="!menuTamanhos"
-                  >{{variacaoEscolhida.tamanho}}</div>
+                  <div class="tamanhos-disponiveis" @click="mostrarTamanhos" v-if="!menuTamanhos">
+                    <p class="tamanho-escolhido">{{variacaoEscolhida.tamanho}}</p>
+                  </div>
                   <ul
                     v-else
                     @click="mostrarTamanhos"
@@ -136,7 +132,7 @@
               </div>
             </div>
             <h1 class="banner-titulo">+</h1>
-            <div class="combo-produto indicado">
+            <div :class="{comboProdutoMaior : menuTamanhos}" class="combo-produto indicado">
               <img :src="produtoCombo.imgUrl" alt="Dog27" class="img-combo" />
               <h1
                 class="combo-banner-titulo"
@@ -145,7 +141,9 @@
               <p class="label-estampa">Tamanho: {{produtoCombo.tamanho}}</p>
               <div class="tamanho-area-combo">
                 <div class="selecionar-tamanho">
-                  <div class="tamanhos-disponiveis" v-if="!menuTamanhos">{{produtoCombo.tamanho}}</div>
+                  <div class="tamanhos-disponiveis" v-if="!menuTamanhos">
+                    <p class="tamanho-escolhido">{{produtoCombo.tamanho}}</p>
+                  </div>
                 </div>
                 <div class="selecionar-quantidade">
                   <div
@@ -216,11 +214,9 @@
 
                 <div class="tamanho-area">
                   <div class="selecionar-tamanho">
-                    <div
-                      class="tamanhos-disponiveis"
-                      @click="mostrarTamanhos"
-                      v-if="!menuTamanhos"
-                    >{{variacaoEscolhida.tamanho}}</div>
+                    <div class="tamanhos-disponiveis" @click="mostrarTamanhos" v-if="!menuTamanhos">
+                      <p class="tamanho-escolhido">{{variacaoEscolhida.tamanho}}</p>
+                    </div>
                     <ul
                       v-else
                       @click="mostrarTamanhos"
@@ -271,7 +267,7 @@
       <section v-if="mostrarComboArea">
         <div class="combo" v-if="produtoCombo">
           <div class="combo-produtos">
-            <div class="combo-produto principal">
+            <div class="combo-produto principal" :class="{comboProdutoMaior : menuTamanhos}">
               <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
               <h1
                 class="combo-banner-titulo"
@@ -312,7 +308,7 @@
               </div>
             </div>
             <h1 class="banner-titulo mais">+</h1>
-            <div class="combo-produto indicado">
+            <div class="combo-produto indicado" :class="{comboProdutoMaior : menuTamanhos}">
               <img :src="produtoCombo.imgUrl" alt="Dog27" class="img-combo" />
               <h1
                 class="combo-banner-titulo"
@@ -854,7 +850,7 @@ export default {
 }
 
 .banner-titulo {
-  margin: 10px;
+  margin: 10px auto;
   font-family: "Fira Sans", sans-serif;
   text-align: center;
   font-size: 2em;
@@ -869,6 +865,7 @@ export default {
   font-size: 1em;
   font-style: italic;
   color: black;
+  height: 50px;
 }
 
 .area-de-compra-imagens {
@@ -885,6 +882,7 @@ export default {
 
 .area-de-compra-thumbnail img {
   max-width: 100px;
+  margin: 35px 10px;
 }
 
 .area-de-compra-container div img.principal {
@@ -908,23 +906,27 @@ export default {
   margin: 8px 3px;
 }
 
+.estampas-opcoes-wrapper {
+  padding-right: 20px;
+}
+
 .selecionar-estampas-disponiveis {
   display: flex;
   align-items: center;
   height: 50px;
   border: 1px solid #ccc;
-  padding: 0 15px;
+  padding: 0 35px 0 15px;
   text-align: center;
   width: 100%;
   cursor: pointer;
 }
 
 .estampa-selecionada {
-  max-width: 300px;
   display: inline;
 }
 
 .triangle-arrow-down {
+  margin-left: 5px;
   max-width: 20px;
   display: inline;
 }
@@ -1004,7 +1006,11 @@ export default {
   padding: 0 20px;
   border: 1px solid #ccc;
   height: fit-content;
-  min-height: 30px;
+  min-height: 50px;
+}
+
+.tamanho-escolhido {
+  margin: 12px 0;
 }
 
 .finalizar-compra-item {
@@ -1046,7 +1052,6 @@ export default {
 .combo-produtos {
   display: flex;
   align-items: center;
-  height: 350px;
   grid-column: 1/3;
   padding: 20px 0;
   margin: 0 auto;
@@ -1056,11 +1061,14 @@ export default {
   display: inline-block;
   background: #fff;
   width: 300px;
-  height: 100%;
   margin: 20px 30px;
+  height: 100%;
 }
-
+.comboProdutoMaior {
+  height: 400px;
+}
 .combo .banner-titulo {
+  height: 50px;
   color: #fff;
   font-size: 5rem;
   font-style: italic;
@@ -1140,6 +1148,7 @@ export default {
   }
 
   .combo-produtos {
+    padding: 20px 10px;
     height: 300px;
     display: grid;
     grid-template:
@@ -1149,6 +1158,11 @@ export default {
 
   .combo-produto {
     width: auto;
+    margin: 0;
+  }
+
+  .comboProdutoMaior {
+    height: 300px;
   }
 
   .img-combo {
@@ -1179,8 +1193,11 @@ export default {
   .tamanhos-disponiveis {
     padding: 0;
     width: 30px;
+    min-height: 30px;
   }
-
+  .tamanho-escolhido {
+    margin: 0;
+  }
   .principal {
     grid-area: prod_1;
   }

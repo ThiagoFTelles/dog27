@@ -162,7 +162,6 @@ export default {
 </script>
 
 <style scoped>
-
 section {
   background: #fffefd;
 }
@@ -330,5 +329,8 @@ img {
 }
 
 @media screen and (max-width: 700px) {
+  .wide {
+    padding-top: 15px;
+  }
 }
 </style>

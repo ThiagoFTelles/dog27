@@ -3,11 +3,7 @@
     <slot></slot>
     <div class="container">
       <p>Tem alguma dúvida ou sugestão? Manda pra a gente! Entra em contato através do chat ou mande uma mensagem que a gente responde por e-mail.</p>
-      <section v-if="msgEnviada">
-        <p>Mensagem enviada com sucesso!</p>
-        <button class="btn" @click="msgEnviada=false">Enviar outra</button>
-      </section>
-      <form v-else :action="actionUrl" method="post" @submit="onSubmit()">
+      <form id="contato" :action="actionUrl" method="post" @submit="onSubmit()">
         <input
           class="half left"
           type="text"
@@ -44,7 +40,6 @@
           style="height:100px"
           required
         ></textarea>
-
         <input type="submit" value="ENVIAR" />
       </form>
       <erroNotificacao v-if="erros.length" />
@@ -58,7 +53,6 @@ export default {
   data() {
     return {
       actionUrl: `${process.env.VUE_APP_SITE_PREFIX}/helpers/sendmail.php`,
-      msgEnviada: false,
       name: null,
       phone: null,
       message: null,
@@ -70,8 +64,6 @@ export default {
   methods: {
     onSubmit() {
       this.erros = [];
-      let self = this;
-
       if (
         this.name &&
         this.phone &&
@@ -79,19 +71,12 @@ export default {
         this.email &&
         this.subject
       ) {
-        fetch(this.actionUrl).then(res => {
-          if (res.error) {
-            self.erros.push(res.error);
-          } else {
-            self.msgEnviada = true;
-          }
-        });
+        this.$router.push({ name: "mensagemEnviada" });
       } else {
         this.erros.push("Preencha todos os campos.");
       }
     },
     created() {
-      this.msgEnviada = false;
       this.erros = [];
     }
   }
@@ -175,5 +160,19 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #45a049;
+}
+
+@media screen and (max-width: 500px) {
+  p {
+    width: auto;
+    text-align: center;
+  }
+  form {
+    display: block;
+  }
+
+  input[type="submit"] {
+    width: 100%;
+  }
 }
 </style>

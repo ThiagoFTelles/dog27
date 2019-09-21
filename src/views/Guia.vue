@@ -320,5 +320,8 @@ img {
 }
 
 @media screen and (max-width: 700px) {
+  .wide {
+    padding-top: 15px;
+  }
 }
 </style>

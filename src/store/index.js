@@ -28,7 +28,7 @@ export default new Vuex.Store({
       valor: ""
     },
     usuario: {
-      id: "",
+      id: 0,
       nome: "",
       telefone: "",
       email: "",

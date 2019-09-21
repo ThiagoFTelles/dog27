@@ -45,7 +45,7 @@ export default {
         {
           nome: "guias",
           path: "guia"
-        },
+        }
         // {
         //   nome: "comedouros",
         //   path: "comedouro"
@@ -54,10 +54,10 @@ export default {
         //   nome: "gravatas",
         //   path: "gravata"
         // },
-        {
-          nome: "tapetes higiênicos",
-          path: "tapete"
-        }
+        // {
+        //   nome: "tapetes higiênicos",
+        //   path: "tapete"
+        // }
       ]
     };
   },

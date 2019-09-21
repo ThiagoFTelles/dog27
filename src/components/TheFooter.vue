@@ -213,5 +213,11 @@ footer {
   .separador {
     background: #f7f7f9;
   }
+  .info {
+    text-align: center;
+  }
+  .footer-banner {
+    display: none;
+  }
 }
 </style>
