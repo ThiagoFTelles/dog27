@@ -216,14 +216,6 @@ export default {
   padding: 20px;
 }
 
-.produto:hover {
-  /* box-shadow: 0 6px 12px rgba(30, 60, 90, 0.2);
-  transform: scale(1.1);
-  position: relative;
-  z-index: 1;  */
-  /* z-index: 1 para ficar na frente, caso ao aumentar a scale ele passe por cima de outro item */
-}
-
 .produto img {
   padding: 5px;
 }

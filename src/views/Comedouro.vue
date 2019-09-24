@@ -203,7 +203,7 @@ export default {
 
 <style scoped>
 section {
-  background: #fffefd;
+  background: #fff;
 }
 
 .call-to-buy {

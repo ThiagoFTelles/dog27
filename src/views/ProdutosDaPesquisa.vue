@@ -91,7 +91,7 @@ export default {
 
 <style scoped>
 section {
-  background: #fffefd;
+  background: #fff;
 }
 
 .banner {

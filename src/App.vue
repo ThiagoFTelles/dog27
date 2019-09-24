@@ -124,7 +124,7 @@ img {
 }
 
 #app {
-  background: #fffefd;
+  background: #fff;
   display: flex;
   min-height: 100vh;
   flex-direction: column; /*as partes de dividem de forma vertical */
