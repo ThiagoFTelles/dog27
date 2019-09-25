@@ -5,7 +5,7 @@
     </div>
     <section class="submenu-container-conteudo">
       <div class="arrow" @click="swapLeft()">
-        <img src="@/assets/arrow-left.svg" alt="Dog27" />
+        <img class="arrow-img" src="@/assets/arrow-left.svg" alt="Dog27" />
       </div>
       <div class="estampas-conteudo">
         <div
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="arrow" @click="swapRight()">
-        <img src="@/assets/arrow-right.svg" alt="Dog27" />
+        <img class="arrow-img" src="@/assets/arrow-right.svg" alt="Dog27" />
       </div>
     </section>
   </div>

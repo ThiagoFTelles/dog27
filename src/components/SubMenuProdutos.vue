@@ -1,27 +1,29 @@
 <template>
-  <div class="submenu-container">
-    <div class="submenu-mensagem">
-      <p>Os melhores produtos para o seu Dog</p>
+  <section class="shell">
+    <div class="submenu-container">
+      <div class="submenu-mensagem">
+        <p>Os melhores produtos para o seu Dog</p>
+      </div>
+      <div class="arrow" @click="swapLeft()">
+        <img class="arrow-img" src="@/assets/arrow-left.svg" alt="Dog27" />
+      </div>
+      <div class="produtos-icones">
+        <router-link
+          :to="{name:categoria.path}"
+          tag="div"
+          class="produto-icone"
+          v-for="categoria in categorias"
+          :key="`${categoria.nome}-dog27`"
+        >
+          <img :src="getImgUrl(categoria.nome)" :alt="`${categoria.nome} dog27`" />
+          <P class="submenu-produto-legenda">{{categoria.nome | capitalize}}</P>
+        </router-link>
+      </div>
+      <div class="arrow" @click="swapRight()">
+        <img class="arrow-img" src="@/assets/arrow-right.svg" alt="Dog27" />
+      </div>
     </div>
-    <div class="arrow" @click="swapLeft()">
-      <img class="arrow-img" src="@/assets/arrow-left.svg" alt="Dog27" />
-    </div>
-    <div class="produtos-icones">
-      <router-link
-        :to="{name:categoria.path}"
-        tag="div"
-        class="produto-icone"
-        v-for="categoria in categorias"
-        :key="`${categoria.nome}-dog27`"
-      >
-        <img :src="getImgUrl(categoria.nome)" :alt="`${categoria.nome} dog27`" />
-        <P class="submenu-produto-legenda">{{categoria.nome | capitalize}}</P>
-      </router-link>
-    </div>
-    <div class="arrow" @click="swapRight()">
-      <img class="arrow-img" src="@/assets/arrow-right.svg" alt="Dog27" />
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -81,16 +83,27 @@ export default {
 </script>
 
 <style scoped>
-.submenu-container {
+.shell {
   position: absolute;
-  z-index: 2;
+  z-index: -1;
+  width: 100%;
+  height: auto;
+  padding-bottom: 10px;
+  background: #f3f3f3;
+  box-shadow: 0 6px 6px rgba(38, 56, 74, 0.4);
+  top: 103px;
+}
+
+.submenu-container {
+  position: relative;
+  margin: 0 auto;
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   width: 100%;
-  padding-bottom: 10px;
   background: #f3f3f3;
-  box-shadow: 0 6px 6px rgba(38, 56, 74, 0.4);
+  max-width: 1200px;
 }
 
 .submenu-mensagem {
@@ -101,6 +114,7 @@ export default {
   align-items: center;
   top: -42%;
   width: 100%;
+  visibility: hidden;
 }
 
 .submenu-mensagem p {

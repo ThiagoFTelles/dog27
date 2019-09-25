@@ -58,6 +58,9 @@ export default new Vuex.Store({
     usuario_produtos: null
   },
   mutations: {
+    ADD_CARREGANDO(state) {
+      state.carregando = true;
+    },
     REMOVER_CARREGANDO(state) {
       state.carregando = false;
     },
@@ -98,6 +101,12 @@ export default new Vuex.Store({
     },
     getCategoriasProdutos(context) {
       context.commit("REMOVER_CARREGANDO");
+    },
+    removeCarregando(context) {
+      context.commit("REMOVER_CARREGANDO");
+    },
+    setCarregando(context) {
+      context.commit("ADD_CARREGANDO");
     },
     getUsuarioProdutos(context) {
       return api

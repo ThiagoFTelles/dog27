@@ -17,11 +17,18 @@
                 Estampas
                 <span v-if="hoverLinkEstampas" class="menu-link-arrow arrow-estampas"></span>
               </li>
-              <li @mouseover="resetarMenu();hoverLinkContato = true" class="menu-link">
-                Fale Conosco
-                <span v-if="hoverLinkContato" class="menu-link-arrow arrow-estampas"></span>
-              </li>
-              <a target="_blank" href="https://blog.dog27.com.br" class="menu-link">Blog</a>
+              <router-link
+                tag="li"
+                :to="{name: 'contato'}"
+                @mouseover.native="resetarMenu()"
+                class="menu-link"
+              >Fale Conosco</router-link>
+              <a
+                @mouseover="resetarMenu()"
+                target="_blank"
+                href="https://blog.dog27.com.br"
+                class="menu-link"
+              >Blog</a>
               <li class="icon lupa">
                 <img
                   key="menu-lupa"
@@ -114,6 +121,7 @@
     </header>
     <transition mode="out-in">
       <SubMenuProdutos
+        @click.native="clickSubmenu($event);"
         @mouseover.native="resetarMenu();hoverLinkProdutos=true"
         @mouseleave.native="resetarMenu()"
         v-show="hoverLinkProdutos"
@@ -121,15 +129,11 @@
     </transition>
     <transition mode="out-in">
       <SubMenuEstampas
+        @click.native="clickSubmenu($event)"
         @mouseover.native="resetarMenu();hoverLinkEstampas=true"
         @mouseleave.native="resetarMenu()"
         v-show="hoverLinkEstampas"
       />
-    </transition>
-    <transition name="contato" mode="out-in">
-      <SubMenuContato v-show="hoverLinkContato">
-        <div class="menu-close" @click.prevent="resetarMenu()">×</div>
-      </SubMenuContato>
     </transition>
   </section>
 </template>
@@ -138,10 +142,9 @@
 import BarraEngajamento from "@/components/BarraEngajamento.vue";
 import SubMenuProdutos from "@/components/SubMenuProdutos.vue";
 import SubMenuEstampas from "@/components/SubMenuEstampas.vue";
-import SubMenuContato from "@/components/SubMenuContato.vue";
 import CarrinhoDeCompras from "@/components/CarrinhoDeCompras.vue";
 import MenuMobile from "@/components/MenuMobile.vue";
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import { api } from "@/services.js";
 
 export default {
@@ -167,11 +170,17 @@ export default {
     BarraEngajamento,
     SubMenuProdutos,
     SubMenuEstampas,
-    SubMenuContato,
     CarrinhoDeCompras,
     MenuMobile
   },
   methods: {
+    ...mapActions(["setCarregando"]),
+    clickSubmenu(event) {
+      if (event.target.className !== "arrow-img") {
+        this.resetarMenu();
+        this.setCarregando();
+      }
+    },
     resetarMenu() {
       this.hoverLinkProdutos = false;
       this.hoverLinkEstampas = false;
@@ -308,7 +317,7 @@ section {
   position: absolute;
   display: table;
   border-right: 9px solid transparent;
-  border-bottom: 9px solid #e5ebeb;
+  border-bottom: 9px solid #f3f3f3;
   border-left: 9px solid transparent;
   content: "";
   left: 40%;
@@ -534,19 +543,6 @@ section {
   transform: translate3d(0, 0, 0);
 }
 
-.contato-enter-active {
-  transition: all 0s;
-  animation-name: submenuContato;
-  animation-duration: 1s;
-  animation-delay: -0.5s;
-}
-
-.contato-leave-active {
-  transition: all 0s;
-  animation-name: sai;
-  animation-duration: 0s;
-}
-
 .lupa-enter {
   opacity: 1;
   transform: translate3d(0, 0, 0);
@@ -573,23 +569,14 @@ section {
 @keyframes submenu {
   from {
     transform: translateY(-500px);
-    /* top: 103px; */
+    top: 103px;
   }
   to {
     transform: translateY(0);
-    /* top: 103px; */
+    top: 103px;
   }
 }
-@keyframes submenuContato {
-  from {
-    transform: translateY(-10px);
-    /* top: 103px; */
-  }
-  to {
-    transform: translateY(0);
-    /* top: 103px; */
-  }
-}
+
 @keyframes entra {
   from {
     position: inherit;

@@ -1,32 +1,40 @@
 <template>
   <section>
-    <div class="banner">
-      <img :src="getSrc(estampa)" alt="dog-27" />
-    </div>
-    <div class="produto-container">
-      <h1 class="produto-titulo">{{ estampa | uppercase}}</h1>
-      <div
-        class="produto-da-estampa"
-        v-for="(produto, index) in produtos"
-        :key="`produto-${estampa}-${index}`"
-        @click="direcionarProduto(produto)"
-      >
-        <img class="produto-img" :src="produto.imgSrc" alt />
-        <h2 class="produto-subtitulo">{{produto.nome | uppercase}} {{estampa | uppercase}}</h2>
-        <p class="produto-paragrafo">A parir de {{Number(produto.precoMinimo) | numeroPreco}}</p>
+    <PaginaCarregando v-if="carregando" />
+
+    <section v-else>
+      <div class="banner">
+        <img :src="getSrc(estampa)" alt="dog-27" />
       </div>
-    </div>
+      <div class="produto-container">
+        <h1 class="produto-titulo">{{ estampa | uppercase}}</h1>
+        <div
+          class="produto-da-estampa"
+          v-for="(produto, index) in produtos"
+          :key="`produto-${estampa}-${index}`"
+          @click="direcionarProduto(produto)"
+        >
+          <img class="produto-img" :src="produto.imgSrc" alt />
+          <h2 class="produto-subtitulo">{{produto.nome | uppercase}} {{estampa | uppercase}}</h2>
+          <p class="produto-paragrafo">A parir de {{Number(produto.precoMinimo) | numeroPreco}}</p>
+        </div>
+      </div>
+    </section>
   </section>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "ProdutosDaEstampa",
   props: { comprar: Boolean, estampa: String, produtos: Array },
   methods: {
-    ...mapActions(["selecionarCategoria", "redirecionarEstampa"]),
+    ...mapActions([
+      "selecionarCategoria",
+      "redirecionarEstampa",
+      "removeCarregando"
+    ]),
     getSrc(estampa) {
       let estampaNome = estampa.toLowerCase();
       let resultado = require("../assets/estampas/banner-estampas/" +
@@ -83,7 +91,18 @@ export default {
       });
     }
   },
+  computed: {
+    ...mapState({
+      carregando: state => state.carregando
+    })
+  },
+  watch: {
+    produtos() {
+      this.removeCarregando();
+    }
+  },
   created() {
+    this.removeCarregando();
     if (!this.produtos) {
       this.$router.push({ name: "home" });
     }

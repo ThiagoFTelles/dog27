@@ -162,6 +162,11 @@ input[type="submit"]:hover {
   background-color: #45a049;
 }
 
+.submenu-container,
+.container {
+  background: #fff;
+}
+
 @media screen and (max-width: 500px) {
   p {
     width: auto;

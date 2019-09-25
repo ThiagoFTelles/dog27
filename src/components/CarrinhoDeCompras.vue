@@ -134,13 +134,17 @@ export default {
   width: 450px;
 }
 
+.carrinho_fechar {
+  cursor: pointer;
+}
+
 .carrinho_item {
   background: white;
   border-radius: 10px;
   padding: 0 10px;
   margin-top: 10px;
   display: grid;
-  grid-template: ". . . . carrinho_remover" 2px "foto titulo titulo titulo ." 1fr "foto tamanho quantidade . carrinho_preco" 1fr ". tamanho quantidade . carrinho_preco" 2px / 80px 1fr 1fr 1fr;
+  grid-template: ". . . . carrinho_remover" 22px "foto titulo titulo titulo ." 1fr "foto tamanho quantidade . carrinho_preco" 1fr ". tamanho quantidade . carrinho_preco" 2px / 80px 1fr 1fr 1fr;
 }
 
 .carrinho_remover:focus {
@@ -148,6 +152,7 @@ export default {
 }
 
 .carrinho_remover {
+  cursor: pointer;
   grid-area: carrinho_remover;
   background: none;
   border: none;
