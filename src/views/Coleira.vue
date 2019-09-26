@@ -31,7 +31,7 @@
       />
 
       <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
-      <div class="produto-tamanhos-container" ref="medidas">
+      <div class="produto-tamanhos-container">
         <img
           src="@/assets/coleira/pagina de coleiras-02.jpg"
           alt="Coleira para cahorro dog27"
@@ -41,6 +41,7 @@
           src="@/assets/4 tamanhos diferentes.jpg"
           alt="Coleira para cahorro dog27"
           class="produto-tamanhos"
+          ref="medidas"
         />
       </div>
       <h1 class="saiba-mais-subtitulo wide">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
