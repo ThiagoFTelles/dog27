@@ -7,7 +7,7 @@
             <p>Peitoral Híbrido</p>
           </div>
           <div>
-            <p class="medidas">Medidas</p>
+            <p class="medidas" @click="scrollMeTo('medidas')">Medidas</p>
             <button @click="vaiComprar">Comprar</button>
           </div>
         </div>

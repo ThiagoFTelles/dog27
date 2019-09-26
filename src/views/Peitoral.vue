@@ -7,7 +7,7 @@
             <p>Peitoral Híbrido</p>
           </div>
           <div>
-            <p class="medidas">Medidas</p>
+            <p class="medidas" @click="scrollMeTo('medidas')">Medidas</p>
             <button @click="vaiComprar">Comprar</button>
           </div>
         </div>
@@ -56,6 +56,7 @@
           src="@/assets/4 tamanhos diferentes.jpg"
           alt="Peitoral para cahorro dog27"
           class="peitoral-tamanhos"
+          ref="medidas"
         />
       </div>
       <h2 class="saiba-mais-titulo">UM DESIGN PERFEITO</h2>

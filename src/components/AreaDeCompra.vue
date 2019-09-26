@@ -1102,7 +1102,7 @@ export default {
 .combo .adicionar-ao-carrinho {
   background: #fff;
   color: #0e6a8d;
-  padding: 10px 90px;
+  padding: 0 90px;
   margin: 20px;
   width: auto;
 }
@@ -1153,7 +1153,7 @@ export default {
     display: grid;
     grid-template:
       "prod_1 soma prod_2" 1fr
-      / 1fr 1fr 1fr;
+      / 1fr 25px 1fr;
   }
 
   .combo-produto {

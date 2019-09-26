@@ -170,9 +170,12 @@ section {
   }
   .produto-img {
     height: 200px;
+    margin: 0px auto;
   }
   .produto-da-estampa {
     width: auto;
+    margin: 0 auto;
+    display: block;
   }
 }
 </style>

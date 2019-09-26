@@ -7,7 +7,7 @@
             <p>Coleira</p>
           </div>
           <div>
-            <p class="medidas">Medidas</p>
+            <p class="medidas" @click="scrollMeTo('medidas')">Medidas</p>
             <button @click="vaiComprar">Comprar</button>
           </div>
         </div>
@@ -31,7 +31,7 @@
       />
 
       <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
-      <div class="produto-tamanhos-container">
+      <div class="produto-tamanhos-container" ref="medidas">
         <img
           src="@/assets/coleira/pagina de coleiras-02.jpg"
           alt="Coleira para cahorro dog27"

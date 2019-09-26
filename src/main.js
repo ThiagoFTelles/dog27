@@ -47,6 +47,19 @@ Vue.filter('numeroPreco', function (valor) {
   });
 })
 
+Vue.mixin({
+  methods: {
+    scrollMeTo(refName) {
+      var element = this.$refs[refName];
+      var top = element.offsetTop - 200;
+      window.scrollTo({
+        top: top,
+        behavior: "smooth"
+      });
+    }
+  }
+})
+
 new Vue({
   router,
   store,

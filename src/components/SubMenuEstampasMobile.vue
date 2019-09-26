@@ -142,6 +142,5 @@ export default {
 .imagem-submenu-estampas img {
   padding: 0;
   margin: 0 auto;
-  height: 50px;
 }
 </style>

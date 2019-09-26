@@ -7,7 +7,7 @@
             <p>Guia</p>
           </div>
           <div>
-            <p class="medidas">Medidas</p>
+            <p class="medidas" @click="scrollMeTo('medidas')">Medidas</p>
             <button @click="vaiComprar">Comprar</button>
           </div>
         </div>
@@ -32,6 +32,7 @@
           src="@/assets/guia/guias-tamanhos.jpg"
           alt="guia para cahorro dog27"
           class="produto-tamanhos"
+          ref="medidas"
         />
       </div>
       <h1 class="saiba-mais-subtitulo wide">UM DESIGN PERFEITO</h1>
