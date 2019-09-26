@@ -104,7 +104,9 @@ export default {
       }
     },
     getSrc(slug) {
-      return require("../assets/estampas/Coleira_de_cachorro_" + slug + ".jpg");
+      return require("../assets/estampas/coleira-para-cachorro-" +
+        slug +
+        ".png");
     },
     swapRight() {
       let first = this.estampas[0];

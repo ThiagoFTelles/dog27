@@ -561,12 +561,9 @@ export default {
       }
     },
     getImgEstampaUrl(estampa) {
-      var estampas = require.context("../assets/estampas/", false, /\.jpg$/);
-      return estampas(
-        "./Coleira_de_cachorro_" +
-          estampa.toLowerCase().replace(/\s/g, "") +
-          ".jpg"
-      );
+      return require("../assets/estampas/coleira-para-cachorro-" +
+        estampa.toLowerCase().replace(/\s/g, "") +
+        ".png");
     },
     destacarFoto(foto) {
       this.estampaEscolhida.fotoClicada = foto.src;
