@@ -3,7 +3,19 @@
     <section v-if="this.isMobile === false" class="desktop">
       <div v-if="variacoesDisponiveis.length" class="area-de-compra-container">
         <div class="area-de-compra-imagens">
-          <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-area-de-compra principal" />
+          <img
+            :src="estampaEscolhida.fotoClicada"
+            alt="Dog27"
+            class="img-area-de-compra principal"
+            @click="zoom = true"
+          />
+          <img
+            :src="estampaEscolhida.fotoClicada"
+            alt="Dog27"
+            class="img-area-de-compra zoom"
+            @click="zoom = false"
+            v-if="zoom"
+          />
           <div
             v-for="imagem in estampaEscolhida.srcFotos"
             :key="imagem.src"
@@ -362,6 +374,7 @@ export default {
       menuTamanhos: false,
       quantidadeEscolhida: 1,
       estampasDisponiveis: [],
+      zoom: false,
       estampaEscolhida: {
         nomeDoProduto: "",
         idProdutoPai: "",
@@ -867,6 +880,7 @@ export default {
 
 .area-de-compra-imagens {
   text-align: center;
+  position: relative;
 }
 
 .area-de-compra-opcoes {
@@ -886,6 +900,16 @@ export default {
   max-height: 300px;
   max-width: 90%;
   margin: 0 auto;
+  cursor: zoom-in;
+}
+
+.zoom {
+  position: absolute;
+  max-height: 100%;
+  max-width: 100%;
+  top: 0;
+  margin: 0 30px;
+  cursor: zoom-out;
 }
 
 .img-combo {
