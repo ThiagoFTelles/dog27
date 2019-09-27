@@ -38,7 +38,7 @@
           class="produto-tamanhos"
         />
         <img
-          src="@/assets/4 tamanhos diferentes.jpg"
+          src="@/assets/coleira/pagina de coleiras-03.jpg"
           alt="Coleira para cahorro dog27"
           class="produto-tamanhos"
           ref="medidas"

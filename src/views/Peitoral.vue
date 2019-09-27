@@ -53,7 +53,7 @@
           class="peitoral-tamanhos"
         />
         <img
-          src="@/assets/4 tamanhos diferentes.jpg"
+          src="@/assets/peitoral/pagina do peitoral-04.jpg"
           alt="Peitoral para cahorro dog27"
           class="peitoral-tamanhos"
           ref="medidas"
