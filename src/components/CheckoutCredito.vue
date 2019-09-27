@@ -85,11 +85,11 @@ export default {
           MerchantOrderId: r.data.id,
           Payment: {
             Type: "CreditCard",
-            Amount: Number(r.data.total),
+            Amount: Number(r.data.total) * 100,
             Installments: this.Installments,
-            SoftDescriptor: "DOG27-" + r.data.id,
+            SoftDescriptor: "DOG27" + r.data.id,
             CreditCard: {
-              CardNumber: this.CardNumber,
+              CardNumber: this.CardNumber.replace(/\./g, ""),
               Holder: this.Holder,
               ExpirationDate: this.ExpirationDate,
               SecurityCode: this.SecurityCode,
