@@ -1,8 +1,61 @@
 <template>
   <section>
     <transition mode="out-in">
-      <AreaDeCompra :produto="categoriaNome" v-show="true" key="area-de-compra"></AreaDeCompra>
+      <section class="call-to-buy-container">
+        <div class="call-to-buy" v-if="!mostrarAreaDeCompra" key="header-compra">
+          <div>
+            <p>Coleira</p>
+          </div>
+          <div>
+            <p class="medidas" @click="scrollMeTo('medidas')">Medidas</p>
+            <button @click="vaiComprar">Comprar</button>
+          </div>
+        </div>
+      </section>
     </transition>
+    <transition mode="out-in">
+      <AreaDeCompra :produto="categoriaNome" v-show="mostrarAreaDeCompra" key="area-de-compra"></AreaDeCompra>
+    </transition>
+    <div class="produto-container">
+      <div class="texto-box">
+        <h1 class="saiba-mais-titulo">CINTO DE SEGURANÇA</h1>
+        <p class="saiba-mais-paragrafo">Passeios de carro com mais segurança e estilo.</p>
+      </div>
+
+      <img
+        src="@/assets/cinto/cinto-para-cachorros-dog27-diferenciais.jpg"
+        alt="Coleira para cahorro dog27"
+        class="produto-detalhe"
+      />
+
+      <h1 class="saiba-mais-subtitulo wide">MAIS CONFORTÁVEIS E NÍTIDAS</h1>
+      <img src="@/assets/wide.jpg" alt="Coleira para cahorro dog27" class="produto-estampa" />
+
+      <h2 class="saiba-mais-subtitulo">PERFEITA PARA TODOS OS CÃES</h2>
+      <p class="saiba-mais-paragrafo">Design que garante tranquilidade no passeio desde</p>
+      <p class="saiba-mais-paragrafo">cães pequenos até os grandões.</p>
+
+      <div class="produto-tamanhos-container">
+        <img
+          src="@/assets/cinto/cinto-para-cachorros-dog27-medidas.jpg"
+          alt="Coleira para cahorro dog27"
+          class="produto-tamanhos"
+          ref="medidas"
+        />
+        <img
+          src="@/assets/cinto/cinto-para-cachorros-dog27.jpg"
+          alt="Coleira para cahorro dog27"
+          class="produto-exposicao"
+        />
+      </div>
+
+      <div class="comprar-agora">
+        <h2 class="saiba-mais-subtitulo">a segurança e o conforto que o seu dog merece!</h2>
+        <div class="btn-vazado">
+          <button @click="vaiComprar">COMPRAR AGORA</button>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -17,9 +70,9 @@ export default {
   components: { AreaDeCompra },
   data() {
     return {
+      categoriaNome: "cinto",
       produtos: null,
       produto: null,
-      categoriaNome: "Cinto",
       estampa: null,
       tamanho: null,
       estoque: null,
@@ -87,8 +140,8 @@ export default {
   computed: {
     ...mapState({
       mostrarAreaDeCompra: state => state.areaDeCompra.mostrarAreaDeCompra
-    }),
-    ...mapState(["idCategoriaSelecionada"])
+    })
+    // ...mapState(["idCategoriaSelecionada"])
   },
   created() {
     let categorias = {
@@ -96,6 +149,12 @@ export default {
       categoriaComboId: this.idCategoriaCombo
     };
     this.selecionarCategoria(categorias);
+
+    if (this.comprar === true) {
+      this.vaiComprar();
+    } else if (this.comprar === false && this.mostrarAreaDeCompra === true) {
+      this.switchAreaDeCompra(false);
+    }
   },
   watch: {
     mostrarAreaDeCompra() {
@@ -146,7 +205,8 @@ section {
 }
 
 .texto-box {
-  margin-bottom: 50px;
+  margin: 0 auto 50px auto;
+  max-width: 800px;
 }
 
 .saiba-mais-titulo {
@@ -171,6 +231,10 @@ section {
   padding-bottom: 50px;
 }
 
+.wide {
+  padding-top: 150px;
+}
+
 .saiba-mais-paragrafo {
   font-family: "Fira Sans", sans-serif;
   color: black;
@@ -187,18 +251,26 @@ img {
   margin: 0 auto;
 }
 
+.produto-demonstracao {
+  max-width: 800px;
+  padding: 50px;
+}
 
-.peitoral-estampa {
+.produto-estampa {
   margin: 0;
   width: 100%;
 }
 
-.peitoral-tamanhos-container {
+.produto-tamanhos-container {
   text-align: center;
 }
 
-.peitoral-tamanhos {
+.produto-tamanhos {
   display: inline-block;
+}
+.produto-exposicao {
+  display: inline-block;
+  margin-top: 30px;
 }
 
 .design-info-container {
@@ -241,9 +313,7 @@ img {
   grid-template-rows: 175px 1fr 1fr;
   background: url("../assets/coleira/pagina de coleiras-05.jpg") no-repeat
     center center;
-  width: 600px;
-  height: 400px;
-  margin: auto;
+  margin: 10px auto;
   text-align: center;
 }
 
@@ -266,5 +336,8 @@ img {
 }
 
 @media screen and (max-width: 700px) {
+  .wide {
+    padding-top: 15px;
+  }
 }
 </style>
