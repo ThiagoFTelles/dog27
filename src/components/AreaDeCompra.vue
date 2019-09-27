@@ -1,5 +1,13 @@
 <template>
   <section>
+    <ZoomModal v-if="zoom" @fechar="clickForaZoom">
+      <section class="zoom_modal ativo">
+        <div class="zoom_container" @click.self="clickForaZoom">
+          <button class="zoom_fechar" @click="clickForaZoom">X</button>
+        </div>
+      </section>
+      <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-area-de-compra zoom" />
+    </ZoomModal>
     <section v-if="this.isMobile === false" class="desktop">
       <div v-if="variacoesDisponiveis.length" class="area-de-compra-container">
         <div class="area-de-compra-imagens">
@@ -8,13 +16,6 @@
             alt="Dog27"
             class="img-area-de-compra principal"
             @click="zoom = true"
-          />
-          <img
-            :src="estampaEscolhida.fotoClicada"
-            alt="Dog27"
-            class="img-area-de-compra zoom"
-            @click="zoom = false"
-            v-if="zoom"
           />
           <div
             v-for="imagem in estampaEscolhida.srcFotos"
@@ -365,6 +366,7 @@
 <script>
 import { api } from "@/services.js";
 import { mapState, mapGetters, mapActions } from "vuex";
+import ZoomModal from "@/components/ZoomModal.vue";
 
 export default {
   name: "AreaDeCompra",
@@ -405,6 +407,9 @@ export default {
       mostrarComboArea: true,
       quantidadeDaVariacaoSelecionadaNoCarrinho: null
     };
+  },
+  components: {
+    ZoomModal
   },
   props: ["produto"],
   computed: {
@@ -485,6 +490,9 @@ export default {
       "switchAreaDeCompra",
       "redirecionarEstampa"
     ]),
+    clickForaZoom() {
+      this.zoom = false;
+    },
     aumentarQuantidadeEscolhida() {
       if (this.variacaoEscolhida.estoque > 0 && this.quantidadeEscolhida < 5) {
         this.quantidadeEscolhida++;
@@ -904,11 +912,10 @@ export default {
 }
 
 .zoom {
-  position: absolute;
-  max-height: 100%;
-  max-width: 100%;
-  top: 0;
-  margin: 0 30px;
+  position: relative;
+  max-width: 100vw;
+  max-height: 100vh;
+  display: block;
   cursor: zoom-out;
 }
 
