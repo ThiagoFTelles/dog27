@@ -916,7 +916,13 @@ export default {
   max-width: 100vw;
   max-height: 100vh;
   display: block;
-  cursor: zoom-out;
+}
+
+.zoom_container button {
+  background: #fff;
+  border: none;
+  margin-bottom: 10px;
+  font-weight: bolder;
 }
 
 .img-combo {
