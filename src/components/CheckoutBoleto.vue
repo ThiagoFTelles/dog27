@@ -15,6 +15,12 @@ export default {
   created() {
     let pedido = {
   "ownId": "pedido_xyz",
+  "amount": {
+    "currency": "BRL",
+    "subtotals": {
+      "shipping": 1000
+    }
+  },
   "items": [
     {
       "product": "Box de Seriado - Exterminate!",
@@ -23,10 +29,30 @@ export default {
       "price": 7300
     }
   ],
-  "customer": {
-    "ownId": "cliente_xyz",
-    "fullname": "João Silva",
-    "email": "joaosilva@email.com"
+   "customer": {
+    "ownId": "id_cliente",
+    "fullname": "Eduardo Garcia",
+    "email": "eduardo@email.com",
+    "birthDate": "1988-12-30",
+    "taxDocument": {
+      "type": "CPF",
+      "number": "59929091092"
+    },
+    "phone": {
+      "countryCode": "55",
+      "areaCode": "11",
+      "number": "22355576"
+    },
+    "shippingAddress": {
+      "street": "Avenida 23 de Maio",
+      "streetNumber": 654,
+      "complement": 12,
+      "district": "Centro",
+      "city": "Sao Paulo",
+      "state": "SP",
+      "country": "BRA",
+      "zipCode": "01244500"
+    }
   }
 };
 
