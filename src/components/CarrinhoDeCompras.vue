@@ -89,7 +89,7 @@ export default {
   },
   watch: {
     carrinho() {
-      window.localStorage.carrinho = []; // por hora, não cou salvar o carrinho no localStorage por questões de segurança.
+      window.localStorage.carrinho = []; // por hora, não vou salvar o carrinho no localStorage por questões de segurança.
       // JSON.stringify(this.carrinho);
       //(...).carrinho significa que estou salvando com o nome de "carrinho"
       // JSON.stringify é para passar o objeto carrinho para string, que é a forma que o localStorage trabalha

@@ -61,8 +61,9 @@ export default {
     },
     checarLocalStorage(context) {
       if (window.localStorage.carrinho) {
-        let carrinhoLocal = JSON.parse(window.localStorage.carrinho); // JSON.parse = passar a string de volta para objeto
-        context.commit("ATUALIZAR_CART", carrinhoLocal)
+        // let carrinhoLocal = JSON.parse(window.localStorage.carrinho); 
+        // // JSON.parse = passar a string de volta para objeto
+        // context.commit("ATUALIZAR_CART", carrinhoLocal)
       }
     },
     atualizarPresente(context, payload) {
