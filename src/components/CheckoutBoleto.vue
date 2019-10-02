@@ -1,103 +1,129 @@
 <template>
   <section class="checkout">
-    <p>Boleto</p>
+    <p>Aguarde, estamos gerando o seu boleto.</p>
   </section>
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+import { api } from "@/services.js";
+
 export default {
   name: "CheckoutBoleto",
   data() {
-    return {
-      x: "y"
+    return {};
+  },
+  methods: {
+    ...mapActions(["esvaziarCarrinho"]),
+    abrirOrdem() {
+      let data = {
+        endpoint: "/orders",
+        body: this.order.order
+      };
+      api.postApiWc(data).then(r => {
+        this.redirecionarParaMoip(r);
+      });
+    },
+    redirecionarParaMoip(r) {
+      let orderItems = [];
+
+      r.data.line_items.forEach(element => {
+        orderItems.push({
+          product: element.name,
+          quantity: element.quantity,
+          detail: element.sku,
+          price: element.price > 0 ? element.price * 100 : 1
+        });
+      });
+
+      let pedido = {
+        ownId: r.data.id,
+        amount: {
+          currency: "BRL",
+          subtotals: {
+            shipping: Math.floor(Number(r.data.shipping_total) * 100)
+          }
+        },
+        items: orderItems,
+        customer: {
+          ownId: this.usuario.id,
+          fullname: this.usuario.nome,
+          email: this.usuario.email,
+          birthDate:
+            this.usuario.nascimento.substring(6) +
+            "-" +
+            this.usuario.nascimento.substring(3, 5) +
+            "-" +
+            this.usuario.nascimento.substring(0, 2),
+          taxDocument: {
+            type: "CPF",
+            number: this.usuario.cpf
+          },
+          phone: {
+            countryCode: "55",
+            areaCode: this.usuario.telefone.substring(1, 3),
+            number: this.usuario.telefone.substring(5)
+          },
+          shippingAddress: {
+            street: this.usuario.ruaEntrega,
+            streetNumber: Number(this.usuario.numeroEntrega),
+            complement: this.usuario.complementoEntrega,
+            district: this.usuario.bairroEntrega,
+            city: this.usuario.cidadeEntrega,
+            state: this.usuario.estadoEntrega,
+            country: "BRA",
+            zipCode: this.usuario.cepEntrega
+          }
+        }
+      };
+      var settings = {
+        async: true,
+        crossDomain: true,
+        url: "https://api.moip.com.br/v2/orders",
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "cache-control": "no-cache",
+          Authorization:
+            "Basic: Q1VDUkgxVkhUQUpHSkZHQzJVWFFNTjAzUVJLT1NER046V041UkRNRUNaTFFDUUIwWlVMVVI1S05KUTZEUlhTT0FJMFNNREJVSg=="
+        },
+        data: JSON.stringify(pedido)
+      };
+      let self = this;
+      // eslint-disable-next-line
+      $.ajax(settings).done(function(response) {
+        self.esvaziarCarrinho();
+        self.$router.push({
+          name: "BoletoGerado",
+          params: { link: response._links.checkout.payBoleto.redirectHref }
+        });
+        window.open(response._links.checkout.payBoleto.redirectHref);
+      });
     }
+  },
+  computed: {
+    ...mapState({
+      order: state => state.order,
+      usuario: state => state.usuario,
+      carrinho: state => state.cart.carrinho
+    })
   },
   created() {
-    let pedido = {
-  "ownId": "pedido_xyz",
-  "amount": {
-    "currency": "BRL",
-    "subtotals": {
-      "shipping": 1000
-    }
-  },
-  "items": [
-    {
-      "product": "Box de Seriado - Exterminate!",
-      "quantity": 1,
-      "detail": "Box de seriado com 8 dvds",
-      "price": 7300
-    }
-  ],
-   "customer": {
-    "ownId": "id_cliente",
-    "fullname": "Eduardo Garcia",
-    "email": "eduardo@email.com",
-    "birthDate": "1988-12-30",
-    "taxDocument": {
-      "type": "CPF",
-      "number": "59929091092"
-    },
-    "phone": {
-      "countryCode": "55",
-      "areaCode": "11",
-      "number": "22355576"
-    },
-    "shippingAddress": {
-      "street": "Avenida 23 de Maio",
-      "streetNumber": 654,
-      "complement": 12,
-      "district": "Centro",
-      "city": "Sao Paulo",
-      "state": "SP",
-      "country": "BRA",
-      "zipCode": "01244500"
+    if (!this.order.order) {
+      this.$router.push({ name: "checkout" });
+    } else {
+      this.abrirOrdem();
     }
   }
-};
-
-    var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "https://api.moip.com.br/v2/orders",
-  "method": "POST",
-  "headers": {
-    'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    "cache-control": "no-cache",
-    "Authorization": "Basic: Q1VDUkgxVkhUQUpHSkZHQzJVWFFNTjAzUVJLT1NER046V041UkRNRUNaTFFDUUIwWlVMVVI1S05KUTZEUlhTT0FJMFNNREJVSg=="
-  },
-  "data": JSON.stringify(pedido)
-}
-
-$.ajax(settings).done(function (response) {
-  console.log(response);
-});
-
-
-
-
-//     let u = "CUCRH1VHTAJGJFGC2UXQMN03QRKOSDGN";
-//     let p = "WN5RDMECZLQCQB0ZULUR5KNJQ6DRXSOAI0SMDBUJ";
-//     let auth = u + ":" + p;
-//     $.ajax
-// ({
-//   type: "GET",
-//   url: "https://www.example.com",
-//   dataType: 'json',
-//   headers: {
-//     "Authorization", btoa(auth)
-//   },
-//   data: '{}',
-//   success: function (){
-//    console.log('boletou')
-//   }
-// });
-
-  }
-
 };
 </script>
 <style scoped>
+p {
+  margin: 200px auto;
+  text-align: center;
+  font-weight: bolder;
+  color: #1085f9;
+}
 </style> 
  

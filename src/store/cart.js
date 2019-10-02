@@ -59,6 +59,7 @@ export default {
       context.commit("ZERAR_CART");
 
     },
+    // eslint-disable-next-line
     checarLocalStorage(context) {
       if (window.localStorage.carrinho) {
         // let carrinhoLocal = JSON.parse(window.localStorage.carrinho); 

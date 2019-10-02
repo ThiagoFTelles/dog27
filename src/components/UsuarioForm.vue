@@ -20,6 +20,16 @@
         v-model="senha"
         :placeholder="login? 'deixe em branco para não alterar' : ''"
       />
+      <label for="cpf">CPF</label>
+      <input type="text" id="cpf" name="cpf" v-model="cpf" v-mask="['###.###.###-##']" />
+      <label for="nascimento">Data de Nascimento</label>
+      <input
+        type="text"
+        id="nascimento"
+        name="nascimento"
+        v-model="nascimento"
+        v-mask="['##/##/####']"
+      />
       <label for="telefone">Telefone</label>
       <input
         type="text"
@@ -59,6 +69,8 @@ export default {
     ...mapFields({
       fields: [
         "nome",
+        "cpf",
+        "nascimento",
         "email",
         "senha",
         "telefone",

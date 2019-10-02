@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue";
 import Contato from "@/views/Contato.vue";
 import MensagemEnviada from "@/views/MensagemEnviada.vue";
 import PagamentoConfirmado from "@/views/PagamentoConfirmado.vue";
+import BoletoGerado from "@/views/BoletoGerado.vue";
 import Checkout from "@/views/Checkout.vue";
 import CheckoutCredito from "@/components/CheckoutCredito.vue";
 import Login from "@/views/Login.vue";
@@ -51,6 +52,12 @@ const router = new Router({
       path: "/pagamento-confirmado",
       name: "PagamentoConfirmado",
       component: PagamentoConfirmado
+    },
+    {
+      path: "/boleto-gerado",
+      name: "BoletoGerado",
+      component: BoletoGerado,
+      props: true
     },
     {
       path: "/peitoral-para-cachorros-dog27",

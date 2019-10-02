@@ -30,6 +30,7 @@ export default new Vuex.Store({
     usuario: {
       id: 0,
       nome: "",
+      cpf: "",
       telefone: "",
       email: "",
       senha: "",
