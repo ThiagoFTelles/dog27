@@ -41,7 +41,7 @@
             </ul>
           </nav>
           <transition name="lupa" key="lupa">
-            <div v-if="mostrarPesquisa" class="barra-de-pesquisa" key="menu-pesquisa">
+            <div v-show="mostrarPesquisa" class="barra-de-pesquisa" key="menu-pesquisa">
               <a id="fechar-pesquisa" @click="mostrarPesquisa=false">X</a>
               <input
                 ref="barraDePesquisa"

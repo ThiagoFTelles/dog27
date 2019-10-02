@@ -54,11 +54,11 @@ export default {
       this.selecionarCategoria(categorias);
     },
     getImgEstampaUrl(estampa) {
-      var estampas = require.context("../assets/estampas/", false, /\.jpg$/);
+      var estampas = require.context("../assets/estampas/", false, /\.png$/);
       return estampas(
-        "./Coleira_de_cachorro_" +
+        "./coleira-para-cachorro-" +
           estampa.toLowerCase().replace(/\s/g, "") +
-          ".jpg"
+          ".png"
       );
     },
     async direcionarProduto(produto) {
