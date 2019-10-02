@@ -133,6 +133,29 @@ export default {
 
       shipping_lines = [shipping_lines];
 
+      let meta_data = [];
+      meta_data.push(        {
+      "key": "_billing_cpf",
+      "value": this.usuario.cpf
+    },
+        {
+      "key": "_billing_number",
+      "value": this.usuario.numero
+    },
+        {
+      "key": "_billing_neighborhood",
+      "value": this.usuario.bairro
+    },
+        {
+      "key": "_shipping_number",
+      "value": this.usuario.numeroEntrega
+    },
+        {
+      "key": "_shipping_neighborhood",
+      "value": this.usuario.bairroEntrega
+    },
+    );
+
       let order = {
         customer_id: this.usuario.id,
         payment_method: payment.payment_method,
@@ -145,9 +168,8 @@ export default {
             this.usuario.rua +
             ", Nº: " +
             this.usuario.numero +
-            ", Comp.: " +
-            this.usuario.complemento,
-          address_2: this.usuario.bairro,
+            ", " + this.usuario.bairro,
+          address_2: this.usuario.complemento,
           city: this.usuario.cidade,
           state: this.usuario.estado,
           postcode: this.usuario.cep,
@@ -162,16 +184,16 @@ export default {
             this.usuario.ruaEntrega +
             ", Nº: " +
             this.usuario.numeroEntrega +
-            ", Comp.: " +
-            this.usuario.complementoEntrega,
-          address_2: this.usuario.bairroEntrega,
+            ", " + this.usuario.bairroEntrega,
+          address_2: this.usuario.complementoEntrega,
           city: this.usuario.cidadeEntrega,
           state: this.usuario.estadoEntrega,
           postcode: this.usuario.cepEntrega,
           country: this.usuario.paisEntrega
         },
         line_items: this.line_items,
-        shipping_lines: shipping_lines
+        shipping_lines: shipping_lines,
+        meta_data: meta_data
       };
       this.setOrder(order);
     },

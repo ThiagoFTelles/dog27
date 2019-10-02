@@ -178,7 +178,8 @@ export default {
         const data = {
           endpoint: `/orders/${this.idOrdemAberta}`,
           body: {
-            status: "processing"
+            status: "processing",
+            customer_note: "parcelas: "+this.Installments.toString()
           }
         };
 

@@ -269,7 +269,7 @@ img {
   display: inline-block;
 }
 .produto-exposicao {
-  display: inline-block;
+  display: block;
   margin-top: 30px;
 }
 

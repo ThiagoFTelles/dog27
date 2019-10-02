@@ -116,6 +116,7 @@ export default {
         this.usuario.numero.length &&
         this.usuario.bairro.length &&
         this.usuario.cidade.length &&
+        this.usuario.nascimento.length &&
         this.usuario.estado.length
       ) {
         return true;
