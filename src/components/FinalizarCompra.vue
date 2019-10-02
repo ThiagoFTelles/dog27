@@ -2,7 +2,7 @@
   <section>
     <h3>Endereço de Envio:</h3>
     <UsuarioForm>
-      <button @click.prevent="finalizarCompra" class="btn">Finalizar Compra</button>
+      <button type="submit" @click.prevent="finalizarCompra" class="btn">Finalizar Compra</button>
     </UsuarioForm>
     <ErroNotificacao :erros="erros" />
   </section>

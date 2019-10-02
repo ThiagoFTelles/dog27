@@ -12,6 +12,16 @@
       <h2>Dados de Faturamento</h2>
       <label for="name">Nome</label>
       <input type="text" name="name" id="name" v-model="nome" maxlength="40" />
+      <label for="cpf">CPF</label>
+      <input type="text" name="cpf" id="cpf" v-model="cpf" v-mask="['###.###.###-##']" />
+      <label for="nascimento">Nascimento</label>
+      <input
+        type="text"
+        name="nascimento"
+        id="nascimento"
+        v-model="nascimento"
+        v-mask="['##/##/####']"
+      />
       <label for="phone">Telefone</label>
       <input
         type="text"
@@ -55,9 +65,9 @@
         payment_method_title: 'Cartão de crédito'})"
         >Cartão de Crédito</router-link>
         <router-link
-        :to="{name: 'checkoutboleto'}"
-        class="opcao_de_pagamento btn"
-        @click.native="newOrder({payment_method: 'woo-moip-official',
+          :to="{name: 'checkoutboleto'}"
+          class="opcao_de_pagamento btn"
+          @click.native="newOrder({payment_method: 'woo-moip-official',
         payment_method_title: 'Boleto'})"
         >Gerar Boleto</router-link>
       </section>
@@ -93,6 +103,8 @@ export default {
     ...mapFields({
       fields: [
         "nome",
+        "cpf",
+        "nascimento",
         "email",
         "telefone",
         "rua",
@@ -223,6 +235,8 @@ input {
 
 .opcao_de_pagamento {
   width: fit-content;
+  margin: 20px;
+  display: inline-block;
 }
 
 .boas-vindas {

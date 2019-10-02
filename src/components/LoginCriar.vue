@@ -4,7 +4,7 @@
     <transition mode="out-in">
       <button v-if="!criar" class="btn" @click="criar = true">Criar Conta</button>
       <UsuarioForm v-else>
-        <button class="btn btn-form" @click.prevent="criarUsuario">Criar Usuário</button>
+        <button type="submit" class="btn btn-form" @click.prevent="criarUsuario">Criar Usuário</button>
       </UsuarioForm>
     </transition>
     <ErroNotificacao :erros="erros" />
@@ -32,21 +32,17 @@ export default {
       const valorOriginal = button.value;
       button.setAttribute("disabled", "");
       button.value = "Aguarde...";
-      // const button = event.currentTarget;
-      // const valorOriginal = button.value;
-      // button.value = "Aguarde...";
-      // button.setAttribute("disabled", "");
       // async significa que tudo que retornar uma promessa será executado só depois que o "await" anterior terminar de ser executado. Garantindo assim a ordem correta das ações e evitando uma cadeia grande de .then(()=>{}).then(()=>{})... etc
       try {
         await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("getUsuario");
-        // button.removeAttribute("disabled", "");
-        // button.value = valorOriginal;
+        button.removeAttribute("disabled", "");
+        button.value = valorOriginal;
         this.$router.push({ name: "usuario" });
       } catch (e) {
-        // button.removeAttribute("disabled", "");
-        // button.value = valorOriginal;
+        button.removeAttribute("disabled", "");
+        button.value = valorOriginal;
         button.removeAttribute("disabled", "");
         button.value = valorOriginal;
         this.erros.push(e.response.data.message);

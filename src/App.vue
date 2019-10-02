@@ -92,6 +92,10 @@ img {
   color: green;
 }
 
+.red {
+  color: red;
+}
+
 .arrow,
 .produto-icone {
   cursor: pointer;

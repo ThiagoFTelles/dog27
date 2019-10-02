@@ -11,9 +11,10 @@
         placeholder="seu nome completo"
       />
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" v-model="email" />
+      <input required type="email" id="email" name="email" v-model="email" />
       <label for="senha">Senha</label>
       <input
+        required
         type="password"
         id="senha"
         name="senha"
@@ -21,9 +22,10 @@
         :placeholder="login? 'deixe em branco para não alterar' : ''"
       />
       <label for="cpf">CPF</label>
-      <input type="text" id="cpf" name="cpf" v-model="cpf" v-mask="['###.###.###-##']" />
-      <label for="nascimento">Data de Nascimento</label>
+      <input required type="text" id="cpf" name="cpf" v-model="cpf" v-mask="['###.###.###-##']" />
+      <label class="nascimento" for="nascimento">Nascimento</label>
       <input
+        required
         type="text"
         id="nascimento"
         name="nascimento"
@@ -32,6 +34,7 @@
       />
       <label for="telefone">Telefone</label>
       <input
+        required
         type="text"
         id="telefone"
         name="telefone"
@@ -40,21 +43,30 @@
       />
     </div>
     <label for="cep">Cep</label>
-    <input type="text" id="cep" name="cep" v-model="cep" @keyup="preencherCep" v-mask="'#####-###'" />
+    <input
+      required
+      type="text"
+      id="cep"
+      name="cep"
+      v-model="cep"
+      @keyup="preencherCep"
+      v-mask="'#####-###'"
+    />
     <label for="rua">Rua</label>
-    <input type="text" id="rua" name="rua" v-model="rua" />
+    <input required type="text" id="rua" name="rua" v-model="rua" />
     <label for="numero">Número</label>
-    <input type="text" id="numero" name="numero" v-model="numero" />
+    <input required type="text" id="numero" name="numero" v-model="numero" />
     <label for="complemento">Comp.</label>
     <input type="text" id="complemento" name="complemento" v-model="complemento" />
     <label for="bairro">Bairro</label>
-    <input type="text" id="bairro" name="bairro" v-model="bairro" />
+    <input required type="text" id="bairro" name="bairro" v-model="bairro" />
     <label for="cidade">Cidade</label>
-    <input type="text" id="cidade" name="cidade" v-model="cidade" />
+    <input required type="text" id="cidade" name="cidade" v-model="cidade" />
     <label for="estado">Estado</label>
-    <input type="text" id="estado" name="estado" v-model="estado" v-mask="'AA'" />
+    <input required type="text" id="estado" name="estado" v-model="estado" v-mask="'AA'" />
     <div class="button">
-      <slot></slot>
+      <slot v-if="checkForm"></slot>
+      <p class="red" v-else>preencha todos os campos</p>
     </div>
   </form>
 </template>
@@ -86,10 +98,30 @@ export default {
       mutation: "UPDATE_USUARIO"
     }),
     ...mapState({
-      login: state => state.login
+      login: state => state.login,
+      usuario: state => state.usuario
     }),
     mostrarDadosLogin() {
       return !this.$store.state.login || this.$route.name === "usuario";
+    },
+    checkForm() {
+      if (
+        this.usuario.nome.length &&
+        this.usuario.cpf.length &&
+        this.usuario.telefone.length &&
+        this.usuario.email.length &&
+        this.usuario.senha.length &&
+        this.usuario.cep.length &&
+        this.usuario.rua.length &&
+        this.usuario.numero.length &&
+        this.usuario.bairro.length &&
+        this.usuario.cidade.length &&
+        this.usuario.estado.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   methods: {
@@ -114,6 +146,10 @@ form,
   display: grid;
   grid-template-columns: 80px 1fr;
   align-items: center;
+}
+
+.nascimento {
+  word-break: break-all;
 }
 
 .usuario {

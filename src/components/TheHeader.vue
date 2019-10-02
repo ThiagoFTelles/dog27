@@ -241,6 +241,8 @@ export default {
         this.mostrarBadgeCarrinho = false;
       } else {
         this.mostrarBadgeCarrinho = true;
+        this.resetarMenu();
+        this.hoverLinkBag = true;
       }
       return quantidade;
     }
