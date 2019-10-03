@@ -4,7 +4,7 @@
       <p v-if="Brand">Bandeira: {{Brand}}</p>
       <p v-if="!Brand">
         Favor inserir um cartão
-        <b>Visa, Master ou AMEX</b>
+        <b>Visa, Master, Diners, Elo ou AMEX</b>
       </p>
 
       <label for="CardNumber">Número do Cartão</label>

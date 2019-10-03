@@ -28,10 +28,10 @@
       </div>
       <div class="cartoes">
         <img src="@/assets/footer/cartoes/visa.png" alt="dog-27" />
-        <img src="@/assets/footer/cartoes/visa.png" alt="dog-27" />
-        <img src="@/assets/footer/cartoes/visa.png" alt="dog-27" />
-        <img src="@/assets/footer/cartoes/visa.png" alt="dog-27" />
-        <img src="@/assets/footer/cartoes/visa.png" alt="dog-27" />
+        <img src="@/assets/footer/cartoes/master.png" alt="dog-27" />
+        <img src="@/assets/footer/cartoes/diners.png" alt="dog-27" />
+        <img src="@/assets/footer/cartoes/elo.png" alt="dog-27" />
+        <img src="@/assets/footer/cartoes/american.png" alt="dog-27" />
       </div>
       <div class="copyright-area">
         <p
