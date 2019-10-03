@@ -59,17 +59,17 @@ export default {
       var metaAtual = metaMenor;
       var freteGratis = false;
       var ganhouPresente = false;
-      var corDaBarra = "#fffb00";
+      var corDaBarra = "#87d7f4";
 
       if (valorDoCarrinho >= metaMaior) {
         freteGratis = true;
         ganhouPresente = true;
         progresso = 1;
-        corDaBarra = "#00d13f";
+        corDaBarra = "#59c8e2";
       } else if (valorDoCarrinho >= metaMenor) {
         metaAtual = metaMaior;
         freteGratis = true;
-        corDaBarra = "#4bd6ff";
+        corDaBarra = "#6cd3ef";
       }
 
       this.atualizarPresente(ganhouPresente);

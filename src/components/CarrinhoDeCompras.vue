@@ -1,7 +1,7 @@
 <template>
   <section class="carrinho_container">
     <section class="carrinho_modal" :class="{ativo: carrinhoAtivo}">
-      <span class="arrow"></span>
+      <!-- <span class="arrow"></span> -->
       <div class="items_area">
         <slot name="top"></slot>
 

@@ -47,7 +47,7 @@
         </select>
         <p class="info-parcelas">Parcela mínima R$50, pode parcelar em até 4x sem juros</p>
         <ErroNotificacao :erros="erros" />
-        <button @click="abrirOrdem" class="btn">Pagar</button>
+        <button @click="abrirOrdem" class="btn" :disabled="disabled">Pagar</button>
       </section>
     </section>
     <div class="separador2" v-if="Brand"></div>
@@ -63,6 +63,7 @@ export default {
   name: "CheckoutCredito",
   data() {
     return {
+      disabled: false,
       Installments: 1,
       CardNumber: "",
       Holder: "",
@@ -76,6 +77,7 @@ export default {
   methods: {
     ...mapActions(["esvaziarCarrinho", "setOrderId"]),
     abrirOrdem() {
+      this.disabled = true;
       let data = {
         endpoint: "/orders",
         body: this.order.order
@@ -119,6 +121,7 @@ export default {
               status: resposta[0].Code,
               resposta: "Erro de preenchimento: " + resposta[0].Message
             };
+            this.disabled = false;
           } else if (statusDaResposta != 200 && statusDaResposta != 201) {
             let erro = resposta[0].Message;
             this.erros.push(erro);
@@ -126,6 +129,7 @@ export default {
               status: resposta[0].Code,
               resposta: "Erro de preenchimento - " + resposta[0].Message
             };
+            this.disabled = false;
           } else if (resposta.Payment.Status === 1) {
             let links = resposta.Payment.Links;
             let objLinkCaptura = links.filter(
@@ -139,6 +143,7 @@ export default {
               status: resposta.Payment.Status,
               resposta: resposta.Payment.ReturnMessage
             };
+            this.disabled = false;
           }
         })
         .catch(erro => {
@@ -146,6 +151,7 @@ export default {
             status: "00",
             resposta: "erro no cartão. " + erro
           };
+          this.disabled = false;
         });
     },
     capturarCielo(oderPayment) {
@@ -172,14 +178,43 @@ export default {
         "Houve um problema com o pagamento. Por favor, verifique o cartão e tente novamente. " +
         resposta;
       this.erros.push(erro);
+      this.disabled = false;
     },
     atualizarOrder(statusCaptura) {
       if (statusCaptura === 2) {
+    //     let meta_data = [];
+    //   meta_data.push(        {
+    //   "key": "_billing_cpf",
+    //   "value": this.usuario.cpf
+    // },
+    //     {
+    //   "key": "_billing_number",
+    //   "value": this.usuario.numero
+    // },
+    //     {
+    //   "key": "_billing_neighborhood",
+    //   "value": this.usuario.bairro
+    // },
+    //     {
+    //   "key": "_shipping_number",
+    //   "value": this.usuario.numeroEntrega
+    // },
+    //     {
+    //   "key": "_shipping_neighborhood",
+    //   "value": this.usuario.bairroEntrega
+    // },
+    //     {
+    //   "key": "_payment",
+    //   "value": "2x"
+    // },
+    // );
+
         const data = {
           endpoint: `/orders/${this.idOrdemAberta}`,
           body: {
             status: "processing",
-            customer_note: "parcelas: "+this.Installments.toString()
+            customer_note: "parcelas: "+this.Installments.toString(),
+            // meta_data: meta_data
           }
         };
 
@@ -202,6 +237,7 @@ export default {
     ...mapState({
       idOrdemAberta: state => state.order.idOrdemAberta,
       order: state => state.order,
+      usuario: state => state.usuario,
       carrinho: state => state.cart.carrinho
     }),
     ...mapGetters(["parcelasDisponiveis"])
