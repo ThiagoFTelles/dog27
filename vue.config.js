@@ -3,6 +3,10 @@
 //     '/dog27' : '/'
 // }
 
+// module.exports = {
+//   publicPath: "/dog27"
+// };
+
 module.exports = {
-  publicPath: "/dog27"
+  publicPath: "/"
 };
