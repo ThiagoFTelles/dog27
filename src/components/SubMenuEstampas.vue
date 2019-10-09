@@ -110,13 +110,19 @@ export default {
     },
     swapRight() {
       let first = this.estampas[0];
+      let second = this.estampas[1];
       this.estampas.push(first);
+      this.estampas.push(second);
       this.estampas.shift();
     },
     swapLeft() {
       let lastIndex = this.estampas.length - 1;
+      let penultIndex = this.estampas.length - 2;
       let last = this.estampas[lastIndex];
+      let penult = this.estampas[penultIndex];
       this.estampas.unshift(last);
+      this.estampas.unshift(penult);
+      this.estampas.pop();
       this.estampas.pop();
     }
   },

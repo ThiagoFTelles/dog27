@@ -15,7 +15,7 @@
       <div class="texto-info">
         <div class="info">
           <h1>FRETE GRÁTIS</h1>
-          <h2>em compras acima de {{metaMaior | numeroPreco}}</h2>
+          <h2>em compras acima de {{metaMenor | numeroPreco}}</h2>
         </div>
         <div class="info">
           <h1>ENTREGA EXPRESSA</h1>
@@ -36,7 +36,7 @@
       <div class="copyright-area">
         <p
           class="copyright"
-        >Copyright {{ano}} dog27. Todos os direitos reservado. {{nomeEmpresarial}}. {{endereco}} {{cnpj}}</p>
+        >Copyright {{ano}} dog27. Todos os direitos reservados. {{nomeEmpresarial}}. {{endereco}} {{cnpj}}</p>
         <div class="links">
           <a
             href="http://www.planalto.gov.br/ccivil_03/leis/l8078.htm"
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapState({
-      metaMaior: state => state.order.metaMaior
+      metaMenor: state => state.order.metaMenor
     })
   }
 };

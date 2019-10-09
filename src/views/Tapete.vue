@@ -23,7 +23,7 @@ export default {
       estampa: null,
       tamanho: null,
       estoque: null,
-      categoriaId: 38,
+      categoriaId: 54,
       idCategoriaCombo: 35
     };
   },
@@ -31,6 +31,7 @@ export default {
     ...mapActions(["selecionarCategoria", "switchAreaDeCompra"]),
     vaiComprar() {
       this.switchAreaDeCompra(true);
+      this.scrollBehavior();
     },
     getProdutos() {
       var page = 1;

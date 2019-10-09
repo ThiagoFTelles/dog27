@@ -2,7 +2,7 @@
   <div class="submenu-container">
     <slot></slot>
     <div class="container">
-      <p>Tem alguma dúvida ou sugestão? Manda pra a gente! Entra em contato através do chat ou mande uma mensagem que a gente responde por e-mail.</p>
+      <p>Tem alguma dúvida ou sugestão? Manda pra a gente! Entre em contato através do chat ou mande uma mensagem que a gente responde por e-mail.</p>
       <form id="contato" :action="actionUrl" method="post" @submit="onSubmit()">
         <input
           class="half left"
@@ -36,7 +36,7 @@
           v-model="message"
           id="message"
           name="message"
-          placeholder="ESCREVE AQUI A SUA MENSAGEM"
+          placeholder="ESCREVA AQUI A SUA MENSAGEM"
           style="height:100px"
           required
         ></textarea>

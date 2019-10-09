@@ -21,7 +21,7 @@
         <h1 class="saiba-mais-titulo">COLEIRAS</h1>
         <p
           class="saiba-mais-paragrafo"
-        >Nossas coleiras oferecem uma sensação de qualidade e estilo, bem como uma série de outras adições para manter você e seu cão felizes.</p>
+        >Nossas coleiras oferecem qualidade e estilo, bem como uma série de outras adições para manter você e seu cão felizes.</p>
       </div>
 
       <img
@@ -74,7 +74,7 @@ export default {
       estampa: null,
       tamanho: null,
       estoque: null,
-      categoriaId: 34,
+      categoriaId: 49,
       idCategoriaCombo: 35
     };
   },
@@ -82,6 +82,7 @@ export default {
     ...mapActions(["selecionarCategoria", "switchAreaDeCompra"]),
     vaiComprar() {
       this.switchAreaDeCompra(true);
+      this.scrollBehavior();
     },
     getProdutos() {
       var page = 1;
