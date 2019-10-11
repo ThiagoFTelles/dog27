@@ -4,10 +4,7 @@
     <div class="footer-banner">
       <div class="inscricao">
         <p>Faça parte da dog27</p>
-        <form action="https://your-mautic.com/api/contacts/new" method="post">
-          <input type="email" placeholder="seu melhor e-mail" />
-          <button type="submit">Cadastrar</button>
-        </form>
+        <SubscribeEmail />
       </div>
     </div>
     <img class="icone-dog-27" src="../assets/footer/icone-logo.svg" alt="Dog-27" />
@@ -50,6 +47,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import SubscribeEmail from "@/components/SubscribeEmail.vue";
 
 export default {
   name: "TheFooter",
@@ -62,6 +60,7 @@ export default {
       cnpj: "25.069.492.0001/91"
     };
   },
+  components: { SubscribeEmail },
   computed: {
     ...mapState({
       metaMenor: state => state.order.metaMenor
@@ -92,9 +91,6 @@ footer {
   max-width: 1200px;
   height: 283px;
   margin: 0 auto;
-}
-
-.inscricao {
 }
 
 .icone-dog-27 {
@@ -183,32 +179,6 @@ footer {
   font-weight: 600;
 }
 
-.inscricao form input {
-  width: 350px;
-  height: 30px;
-  background: black;
-  color: #ccc;
-  border: none;
-  border-radius: 0;
-  vertical-align: top;
-}
-
-.inscricao form input::placeholder {
-  color: rgb(218, 218, 218);
-  font-style: italic;
-  font-family: sans-serif;
-  font-size: 0.8rem;
-}
-
-.inscricao form button {
-  background: black;
-  margin: 0 8px;
-  border: none;
-  width: 120px;
-  height: 30px;
-  font-weight: 600;
-  color: white;
-}
 @media screen and (max-width: 700px) {
   .separador {
     background: #f7f7f9;

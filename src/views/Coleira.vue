@@ -21,7 +21,7 @@
         <h1 class="saiba-mais-titulo">COLEIRAS</h1>
         <p
           class="saiba-mais-paragrafo"
-        >Nossas coleiras oferecem qualidade e estilo, bem como uma série de outras adições para manter você e seu cão felizes.</p>
+        >Nossas coleiras oferecem qualidade, estilo e muitas vantagens para manter você e seu cão felizes.</p>
       </div>
 
       <img

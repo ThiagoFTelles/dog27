@@ -11,6 +11,7 @@
         <div
           class="area-submenu-estampas"
           v-for="(estampa, index) in chunkEstampas"
+          :class="`area${index+1}`"
           :key="`estampa-link-${index}`"
           @click="getEstampa(estampa)"
         >
@@ -111,8 +112,8 @@ export default {
     swapRight() {
       let first = this.estampas[0];
       let second = this.estampas[1];
-      this.estampas.push(first);
-      this.estampas.push(second);
+      this.estampas.push(first, second); //adds new items to the end of an array, and returns the new length.
+      this.estampas.shift(); //Remove the first item of an array
       this.estampas.shift();
     },
     swapLeft() {
@@ -120,9 +121,8 @@ export default {
       let penultIndex = this.estampas.length - 2;
       let last = this.estampas[lastIndex];
       let penult = this.estampas[penultIndex];
-      this.estampas.unshift(last);
-      this.estampas.unshift(penult);
-      this.estampas.pop();
+      this.estampas.unshift(last, penult); //Add new items to the beginning of an array
+      this.estampas.pop(); //Remove the last element of an array
       this.estampas.pop();
     }
   },
@@ -182,10 +182,24 @@ export default {
 .estampas-conteudo {
   grid-column: 2/4;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr;  */
+  grid-template: "a c" 1fr "b d" 1fr / 1fr 1fr;
   grid-gap: 0 40px;
   width: 100%;
   margin: 0 auto;
+}
+
+.area1 {
+  grid-area: a;
+}
+.area2 {
+  grid-area: b;
+}
+.area3 {
+  grid-area: c;
+}
+.area4 {
+  grid-area: d;
 }
 
 .submenu-container-conteudo {

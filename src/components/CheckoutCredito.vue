@@ -116,20 +116,20 @@ export default {
           let resposta = JSON.parse(e.target.response);
           let statusDaResposta = JSON.parse(e.target.status);
 
-          if (statusDaResposta == 400) {
+          if (statusDaResposta == 400) {this.disabled = false;
             return {
               status: resposta[0].Code,
               resposta: "Erro de preenchimento: " + resposta[0].Message
             };
-            this.disabled = false;
+            
           } else if (statusDaResposta != 200 && statusDaResposta != 201) {
             let erro = resposta[0].Message;
-            this.erros.push(erro);
+            this.erros.push(erro);this.disabled = false;
             return {
               status: resposta[0].Code,
               resposta: "Erro de preenchimento - " + resposta[0].Message
             };
-            this.disabled = false;
+            
           } else if (resposta.Payment.Status === 1) {
             let links = resposta.Payment.Links;
             let objLinkCaptura = links.filter(
@@ -138,20 +138,20 @@ export default {
             let linkCaptura = objLinkCaptura[0].Href;
 
             return { status: resposta.Payment.Status, resposta: linkCaptura };
-          } else {
+          } else {this.disabled = false;
             return {
               status: resposta.Payment.Status,
               resposta: resposta.Payment.ReturnMessage
             };
-            this.disabled = false;
+            
           }
         })
-        .catch(erro => {
+        .catch(erro => {this.disabled = false;
           return {
             status: "00",
             resposta: "erro no cartão. " + erro
           };
-          this.disabled = false;
+          
         });
     },
     capturarCielo(oderPayment) {

@@ -21,7 +21,7 @@
         <h1 class="saiba-mais-titulo">GUIAS</h1>
         <p
           class="saiba-mais-paragrafo"
-        >Nossas guias oferecem uma sensação de qualidade e estilo, bem como uma série de outras adições para manter você e seu cão felizes.</p>
+        >Nossas guias oferecem qualidade, estilo e muitas vantagens para manter você e seu cão felizes.</p>
       </div>
 
       <img src="@/assets/guia/guias-03.jpg" alt="guia para cahorro dog27" class="produto-detalhe" />

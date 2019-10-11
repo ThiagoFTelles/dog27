@@ -121,7 +121,6 @@
     </header>
     <transition mode="out-in">
       <SubMenuProdutos
-        @click.native="clickSubmenu($event);"
         @mouseover.native="resetarMenu();hoverLinkProdutos=true"
         @mouseleave.native="resetarMenu()"
         v-show="hoverLinkProdutos"
@@ -129,7 +128,6 @@
     </transition>
     <transition mode="out-in">
       <SubMenuEstampas
-        @click.native="clickSubmenu($event)"
         @mouseover.native="resetarMenu();hoverLinkEstampas=true"
         @mouseleave.native="resetarMenu()"
         v-show="hoverLinkEstampas"
@@ -175,12 +173,6 @@ export default {
   },
   methods: {
     ...mapActions(["setCarregando"]),
-    clickSubmenu(event) {
-      if (event.target.className !== "arrow-img") {
-        this.resetarMenu();
-        this.setCarregando();
-      }
-    },
     resetarMenu() {
       this.hoverLinkProdutos = false;
       this.hoverLinkEstampas = false;
@@ -234,7 +226,13 @@ export default {
       this.produtosDaPesquisa.unshift(obj);
     }
   },
+
   watch: {
+    // eslint-disable-next-line
+    $route(to, from) {
+      this.resetarMenu();
+      this.setCarregando();
+    },
     carrinho() {
       let quantidade = this.quantidadeDeItensNoCarrinho;
       if (quantidade === 0) {
