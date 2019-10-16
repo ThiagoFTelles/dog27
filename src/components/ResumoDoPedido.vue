@@ -23,29 +23,77 @@
       <p>Frete: {{ freteEscolhido.nome | uppercase }} {{freteEscolhido.valor | numeroPreco}}</p>
     </div>
     <p v-else>Escolha o seu frete para continuar</p>
-    <h2
-      v-if="freteEscolhido.nome"
-      class="total green"
-    >Total {{valorTotalCarrinho+freteEscolhido.valor | numeroPreco}}</h2>
+    <div v-if="freteEscolhido.nome">
+      <div class="cupom">
+        <div class="cupomCode" v-if="alterarCupom">
+          <label for="cupomCode">Cupom:</label>
+          <input type="text" id="cupomCode" name="cupom" v-model="couponCode" />
+          <button @click="buscarCupom()">OK</button>
+          <p v-if="cupomInvalido" class="erroCupom red">cupom inválido</p>
+        </div>
+        <div class="cupomAplicado" v-else>
+          <p>{{cupom.code | uppercase}}: - R$ {{String(desconto.valor).replace(".", ",") }}</p>
+          <p class="trocar-cupom" @click="trocarCupom">Trocar cupom</p>
+        </div>
+
+        <h2
+          class="total green"
+        >Total {{carrinhoTotalComDesconto+freteEscolhido.valor | numeroPreco}}</h2>
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ResumoDoPedido",
   data() {
-    return {};
+    return {
+      alterarCupom: true,
+      cupomInvalido: false,
+      couponCode: ""
+    };
+  },
+  methods: {
+    ...mapActions(["deleteCupom", "getCupom"]),
+    trocarCupom() {
+      this.deleteCupom();
+      this.alterarCupom = true;
+    },
+    buscarCupom() {
+      this.cupomInvalido = false;
+      this.getCupom(this.couponCode).then(r => {
+        if (r) {
+          this.cupomInvalido = false;
+          this.alterarCupom = false;
+        } else {
+          this.cupomInvalido = true;
+        }
+      });
+    }
   },
   computed: {
     ...mapState({
       carrinho: state => state.cart.carrinho,
+      cupom: state => state.cart.cupom,
       nomeDoPresente: state => state.cart.nomeDoPresente,
       ganhouPresente: state => state.cart.ganhouPresente,
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
       freteEscolhido: state => state.freteEscolhido
-    })
+    }),
+    ...mapGetters(["desconto", "carrinhoTotalComDesconto"])
+  },
+  watch: {
+    couponCode() {
+      this.cupomInvalido = false;
+    }
+  },
+  created() {
+    if (this.cupom.amount > 0) {
+      this.alterarCupom = false;
+    }
   }
 };
 </script>
@@ -73,5 +121,38 @@ input {
 
 .carrinho_preco {
   font-size: 1rem;
+}
+
+.cupom {
+  margin: 10px 0;
+}
+
+.trocar-cupom {
+  font-size: 0.9rem;
+  color: #24a9de;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.cupomCode input {
+  max-width: 150px;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+.cupomCode button {
+  width: 50px;
+  height: 41px;
+  border: none;
+  background: #2f2c2c;
+  color: #fff;
+  margin-left: 10px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.erroCupom {
+  font-size: 0.8rem;
+  font-weight: bolder;
 }
 </style>

@@ -44,9 +44,13 @@
               <br />
             </li>
           </transition-group>
+          <div class="cupom" v-if="desconto.valor">
+            <p class="descricao">{{cupom.code | uppercase}}: {{desconto.descricao}}</p>
+            <p class="valor">- {{String(desconto.valor).replace(".", ",") }}</p>
+          </div>
           <div class="total-area">
             <h2 class="carrinho_total">TOTAL</h2>
-            <h2 class="carrinho_total">{{carrinhoTotal | numeroPreco}}</h2>
+            <h2 class="carrinho_total valor">{{carrinhoTotalComDesconto | numeroPreco}}</h2>
           </div>
         </div>
       </div>
@@ -61,7 +65,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: "CarrinhoDeCompras",
@@ -74,18 +78,21 @@ export default {
     ...mapActions([
       "atualizarCarrinhoTotal",
       "checarLocalStorage",
-      "removerItemDoCarrinho"
+      "removerItemDoCarrinho",
+      "getCupom"
     ])
   },
   computed: {
     ...mapState({
       carrinho: state => state.cart.carrinho,
+      cupom: state => state.cart.cupom,
       ganhouPresente: state => state.cart.ganhouPresente,
       nomeDoPresente: state => state.cart.nomeDoPresente,
       fotoDoPresente: state => state.cart.fotoDoPresente,
       metaMaior: state => state.order.metaMaior,
       carrinhoTotal: state => state.cart.carrinhoTotal
-    })
+    }),
+    ...mapGetters(["desconto", "carrinhoTotalComDesconto"])
   },
   watch: {
     carrinho() {
@@ -97,7 +104,11 @@ export default {
     }
   },
   created() {
-    this.checarLocalStorage();
+    // this.checarLocalStorage();
+    let cupomCode = this.$route.query.cupom;
+    if (cupomCode) {
+      this.getCupom(cupomCode);
+    }
   }
 };
 </script>
@@ -143,10 +154,10 @@ export default {
 .carrinho_item {
   background: white;
   border-radius: 10px;
-  padding: 0 10px;
+  padding: 3px 10px 0 10px;
   margin-top: 10px;
   display: grid;
-  grid-template: ". . . . carrinho_remover" 22px "foto titulo titulo titulo ." 1fr "foto tamanho quantidade . carrinho_preco" 1fr ". tamanho quantidade . carrinho_preco" 2px / 80px 1fr 1fr 1fr;
+  grid-template: "foto . . . carrinho_remover" 22px "foto titulo titulo titulo ." 1fr "foto tamanho quantidade . carrinho_preco" 1fr ". tamanho quantidade . carrinho_preco" 2px / 80px 1fr 1fr 1fr;
 }
 
 .carrinho_remover:focus {
@@ -216,12 +227,32 @@ export default {
   border-bottom-left-radius: 20px;
 }
 
+.cupom {
+  display: flex;
+  margin-top: 5px;
+}
+
+.cupom .descricao {
+  flex: 1;
+  font-size: 1rem;
+}
+
+.cupom .valor {
+  font-size: 1rem;
+  font-weight: 600;
+  padding-right: 10px;
+  color: #2d7a38;
+}
+
 .total-area {
   display: flex;
   margin: 9px 0;
-  padding-left: 53%;
+  /* padding-left: 53%; */
 }
 
+.total-area .valor {
+  flex: 0;
+}
 .carrinho_total {
   color: #565656;
   flex: 1;

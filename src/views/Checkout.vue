@@ -93,6 +93,7 @@ export default {
   computed: {
     ...mapState({
       carrinho: state => state.cart.carrinho,
+      cupom: state => state.cart.cupom,
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
       metaMaior: state => state.order.metaMaior,
       usuario: state => state.usuario,
@@ -133,28 +134,33 @@ export default {
 
       shipping_lines = [shipping_lines];
 
+      let coupon_lines = { code: this.cupom.code };
+
+      coupon_lines = [coupon_lines];
+
       let meta_data = [];
-      meta_data.push(        {
-      "key": "_billing_cpf",
-      "value": this.usuario.cpf
-    },
+      meta_data.push(
         {
-      "key": "_billing_number",
-      "value": this.usuario.numero
-    },
+          key: "_billing_cpf",
+          value: this.usuario.cpf
+        },
         {
-      "key": "_billing_neighborhood",
-      "value": this.usuario.bairro
-    },
+          key: "_billing_number",
+          value: this.usuario.numero
+        },
         {
-      "key": "_shipping_number",
-      "value": this.usuario.numeroEntrega
-    },
+          key: "_billing_neighborhood",
+          value: this.usuario.bairro
+        },
         {
-      "key": "_shipping_neighborhood",
-      "value": this.usuario.bairroEntrega
-    },
-    );
+          key: "_shipping_number",
+          value: this.usuario.numeroEntrega
+        },
+        {
+          key: "_shipping_neighborhood",
+          value: this.usuario.bairroEntrega
+        }
+      );
 
       let order = {
         customer_id: this.usuario.id,
@@ -168,7 +174,8 @@ export default {
             this.usuario.rua +
             ", Nº: " +
             this.usuario.numero +
-            ", " + this.usuario.bairro,
+            ", " +
+            this.usuario.bairro,
           address_2: this.usuario.complemento,
           city: this.usuario.cidade,
           state: this.usuario.estado,
@@ -184,7 +191,8 @@ export default {
             this.usuario.ruaEntrega +
             ", Nº: " +
             this.usuario.numeroEntrega +
-            ", " + this.usuario.bairroEntrega,
+            ", " +
+            this.usuario.bairroEntrega,
           address_2: this.usuario.complementoEntrega,
           city: this.usuario.cidadeEntrega,
           state: this.usuario.estadoEntrega,
@@ -193,6 +201,7 @@ export default {
         },
         line_items: this.line_items,
         shipping_lines: shipping_lines,
+        coupon_lines: coupon_lines,
         meta_data: meta_data
       };
       this.setOrder(order);
