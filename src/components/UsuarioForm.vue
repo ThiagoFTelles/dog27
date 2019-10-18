@@ -110,7 +110,6 @@ export default {
         this.usuario.cpf.length &&
         this.usuario.telefone.length &&
         this.usuario.email.length &&
-        this.usuario.senha.length &&
         this.usuario.cep.length &&
         this.usuario.rua.length &&
         this.usuario.numero.length &&
