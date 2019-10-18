@@ -118,10 +118,10 @@ export default {
         this.usuario.nascimento.length &&
         this.usuario.estado.length
       ) {
-        if (this.$route.path === "/login" && this.usuario.senha.length) {
-          return true;
+        if (this.$route.path === "/login" && !this.usuario.senha.length) {
+          return false;
         }
-        return false;
+        return true;
       } else {
         return false;
       }
