@@ -134,7 +134,7 @@ export default {
 
       shipping_lines = [shipping_lines];
 
-      let coupon_lines = this.cupom.code ? { code: this.cupom.code } : "";
+      let coupon_lines = { code: this.cupom.code };
 
       coupon_lines = [coupon_lines];
 
@@ -201,7 +201,7 @@ export default {
         },
         line_items: this.line_items,
         shipping_lines: shipping_lines,
-        coupon_lines: coupon_lines,
+        coupon_lines: this.cupom.code ? coupon_lines : null,
         meta_data: meta_data
       };
       this.setOrder(order);
