@@ -134,7 +134,7 @@ export default {
 
       shipping_lines = [shipping_lines];
 
-      let coupon_lines = { code: this.cupom.code };
+      let coupon_lines = this.cupom.code ? { code: this.cupom.code } : "";
 
       coupon_lines = [coupon_lines];
 
