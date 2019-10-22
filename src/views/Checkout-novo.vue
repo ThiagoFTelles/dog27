@@ -11,6 +11,47 @@
         <p class="toppreco maincontent-header">Preço</p>
         <p class="topquantidade maincontent-header">Quantidade</p>
         <p class="toptotal maincontent-header">Total</p>
+
+        <div class="itensarea">
+          <li v-if="ganhouPresente" class="carrinho_item" key="carrinho-presente">
+            <p class="quantidade">- 1 +</p>
+            <p class="titulo">{{nomeDoPresente | capitalize}} U</p>
+            <img :src="fotoDoPresente" :alt="nomeDoPresente" class="foto" />
+
+            <p class="valorunitarioitem green">{{0 | numeroPreco}}</p>
+            <p class="valortotalitem">{{0 | numeroPreco}}</p>
+            <button class="carrinho_remover"></button>
+          </li>
+          <li
+            class="carrinho_item"
+            v-for="(item, index) in carrinho"
+            :key="`carrinho-item${index}`"
+          >
+            <p class="quantidade">- {{item.quantidade}} +</p>
+            <p
+              class="titulo"
+            >{{item.categoria | capitalize}} para cachorros {{item.estampa | lowercase}} {{item.tamanho | uppercase}}</p>
+            <img
+              :src="item.fotoUrl"
+              :alt="`${item.categoria} para cachorros ${item.estampa}`"
+              class="foto"
+            />
+
+            <p
+              :class="{ green: item.isCombo }"
+              class="valorunitarioitem"
+            >{{item.valorUnitarioCobrado | numeroPreco}}</p>
+            <p class="valortotalitem">{{item.valorUnitarioCobrado * item.quantidade | numeroPreco}}</p>
+            <button
+              class="carrinho_remover"
+              @click="removerItemDoCarrinho({index:index, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
+            >X</button>
+          </li>
+        </div>
+
+        <div class="totalarea"></div>
+
+        <div class="bottom"></div>
       </div>
     </div>
   </section>
@@ -35,7 +76,11 @@ export default {
     ...mapState({
       carrinho: state => state.cart.carrinho,
       cupom: state => state.cart.cupom,
+      ganhouPresente: state => state.cart.ganhouPresente,
+      nomeDoPresente: state => state.cart.nomeDoPresente,
+      fotoDoPresente: state => state.cart.fotoDoPresente,
       valorTotalCarrinho: state => state.cart.carrinhoTotal,
+      carrinhoTotal: state => state.cart.carrinhoTotal,
       metaMaior: state => state.order.metaMaior,
       usuario: state => state.usuario,
       freteEscolhido: state => state.freteEscolhido,
@@ -236,6 +281,7 @@ export default {
   font-style: italic;
   color: black;
   margin: auto;
+  font-weight: bold;
 }
 
 .topprodutos {
@@ -271,6 +317,77 @@ export default {
   grid-area: bottom;
   align-self: center; /* alinhamento vertical */
 }
+
+/* //////////////////  CARRINHO ITEM ////////////////////////// */
+
+.carrinho_item {
+  background: white;
+  padding: 3px 10px 0 10px;
+  margin-top: 10px;
+  display: grid;
+  grid-template:
+    "foto titulo valorunitarioitem quantidade valortotalitem carrinho_remover" 116px /
+    100px 400px 120px 190px 120px 70px;
+}
+
+.carrinho_remover:focus {
+  outline: none;
+}
+
+.carrinho_remover {
+  cursor: pointer;
+  grid-area: carrinho_remover;
+  background: none;
+  border: none;
+  text-align: center;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: bolder;
+  font-family: sans-serif, cursive;
+  font-style: italic;
+}
+.titulo,
+.tamanho,
+.quantidade,
+.valorunitarioitem,
+.valortotalitem {
+  padding-top: 9px;
+  font-size: 1.2rem;
+  color: #000;
+  font-style: italic;
+  align-self: center;
+  text-align: center;
+}
+
+.titulo {
+  grid-area: titulo;
+  text-align: left;
+}
+
+.valorunitarioitem {
+  grid-area: valorunitarioitem;
+}
+
+.valortotalitem {
+  grid-area: valortotalitem;
+}
+
+.foto {
+  grid-area: foto;
+  width: 100px;
+  height: 100px;
+  align-self: center;
+}
+
+.tamanho {
+  grid-area: tamanho;
+}
+.quantidade {
+  grid-area: quantidade;
+}
+
+/* //////////////////  FIM CARRINHO ITEM ////////////////////////// */
 
 @media screen and (max-width: 700px) {
   .btn {

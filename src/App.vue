@@ -89,11 +89,11 @@ img {
 }
 
 .green {
-  color: green;
+  color: green !important;
 }
 
 .red {
-  color: red;
+  color: red !important;
 }
 
 .arrow,

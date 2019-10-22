@@ -5,7 +5,7 @@ import Contato from "@/views/Contato.vue";
 import MensagemEnviada from "@/views/MensagemEnviada.vue";
 import PagamentoConfirmado from "@/views/PagamentoConfirmado.vue";
 import BoletoGerado from "@/views/BoletoGerado.vue";
-import Checkout from "@/views/Checkout.vue";
+import Checkout from "@/views/Checkout-novo.vue";
 import CheckoutCredito from "@/components/CheckoutCredito.vue";
 import Login from "@/views/Login.vue";
 import Usuario from "@/views/usuario/Usuario.vue";
