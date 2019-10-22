@@ -5,7 +5,7 @@
       <div class="items_area">
         <slot name="top"></slot>
 
-        <div v-if="carrinho.length > 0">
+        <div class="scroller" v-if="carrinho.length > 0">
           <transition-group class="carrinho_lista" name="cart-list" tag="ul">
             <li v-if="ganhouPresente" class="carrinho_item" key="carrinho-presente">
               <p class="quantidade">Quantidade: 1</p>
@@ -145,6 +145,15 @@ export default {
 .items_area {
   background: #f5f3f2;
   width: 450px;
+}
+
+.scroller {
+  overflow-y: scroll;
+  max-height: 400px;
+}
+
+.scroller::-webkit-scrollbar {
+  width: 0;
 }
 
 .carrinho_fechar {
@@ -295,12 +304,21 @@ export default {
 
   .carrinho_item {
     padding: 0 5px 0 0;
-    margin-right: -10px;
+    margin-right: 0px;
+  }
+
+  .carrinho_preco {
+    font-size: 0.8rem;
   }
 
   .total-area {
     margin: 9px auto;
     padding-left: 10%;
+  }
+
+  .scroller {
+    overflow-y: scroll;
+    max-height: 200px;
   }
 }
 </style>
