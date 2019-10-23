@@ -13,7 +13,7 @@
         <p class="toptotal maincontent-header">Total</p>
 
         <div class="itensarea">
-          <li v-if="ganhouPresente" class="carrinho_item" key="carrinho-presente">
+          <div v-if="ganhouPresente" class="carrinho_item" key="carrinho-presente">
             <p class="quantidade">- 1 +</p>
             <p class="titulo">{{nomeDoPresente | capitalize}} U</p>
             <img :src="fotoDoPresente" :alt="nomeDoPresente" class="foto" />
@@ -21,8 +21,8 @@
             <p class="valorunitarioitem green">{{0 | numeroPreco}}</p>
             <p class="valortotalitem">{{0 | numeroPreco}}</p>
             <button class="carrinho_remover"></button>
-          </li>
-          <li
+          </div>
+          <div
             class="carrinho_item"
             v-for="(item, index) in carrinho"
             :key="`carrinho-item${index}`"
@@ -46,30 +46,76 @@
               class="carrinho_remover"
               @click="removerItemDoCarrinho({index:index, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
             >X</button>
-          </li>
+          </div>
         </div>
 
-        <div class="totalarea"></div>
+        <div class="totalarea">
+          <div class="cupom">
+            <section class="cupom-vazio" v-if="!desconto.valor && alterarCupom">
+              <div v-if="carregandoCupom" class="carregando-cupom">aguarde...</div>
+              <p class="label">Cupom de desconto:</p>
+              <input
+                class="input-cupom"
+                type="text"
+                v-model="couponCode"
+                :class="{error: cupomInvalido}"
+              />
+              <button class="btn-cupom" @click="buscarCupom()">ok</button>
+            </section>
+            <section v-else class="cupom-aplicado">
+              <p class="label">Cupom de desconto:</p>
+              <section>
+                <p class="label-black">{{cupom.code | uppercase}}</p>
+                <p class="trocar-cupom" @click="trocarCupom">X</p>
+              </section>
+            </section>
+          </div>
+          <div class="frete">
+            <section class="frete-vazio">
+              <p class="label">Digite o CEP</p>
+              <input class="input-frete" type="text" />
+              <button class="btn-frete">ok</button>
+            </section>
+          </div>
+          <div class="total">
+            <div v-if="desconto.valor" class="descontotexto label-black">DESCONTO</div>
+            <div
+              v-if="desconto.valor"
+              class="descontovalor red"
+            >- {{String(desconto.valor).replace(".", ",") }}</div>
+            <div class="totaltexto label-black">Total</div>
+            <div class="totalvalor">{{carrinhoTotalComDesconto+freteEscolhido.valor | numeroPreco}}</div>
+          </div>
+        </div>
 
-        <div class="bottom"></div>
+        <div class="bottom">
+          <div class="continuarcomprando">
+            <p>Continuar comprando</p>
+          </div>
+          <div class="fecharcompra">
+            <p>Fechar compra</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import CalcularFrete from "@/components/CalcularFrete.vue";
-import ResumoDoPedido from "@/components/ResumoDoPedido.vue";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
 
 export default {
   name: "Checkout",
-  components: { CalcularFrete, ResumoDoPedido },
+  components: {},
   data() {
     return {
-      line_items: []
+      line_items: [],
+      alterarCupom: true,
+      cupomInvalido: false,
+      couponCode: "",
+      carregandoCupom: false
     };
   },
   computed: {
@@ -87,6 +133,7 @@ export default {
       presente: state => state.cart.presente,
       login: state => state.login
     }),
+    ...mapGetters(["desconto", "carrinhoTotalComDesconto"]),
     ...mapFields({
       fields: [
         "nome",
@@ -109,8 +156,38 @@ export default {
       return this.usuario.nome.replace(/ .*/, "");
     }
   },
+  watch: {
+    couponCode() {
+      this.cupomInvalido = false;
+    }
+  },
   methods: {
-    ...mapActions(["setOrder"]),
+    ...mapActions([
+      "setOrder",
+      "deleteCupom",
+      "getCupom",
+      "removerItemDoCarrinho",
+      "atualizarCarrinhoTotal",
+      "checarLocalStorage"
+    ]),
+    trocarCupom() {
+      this.deleteCupom();
+      this.alterarCupom = true;
+    },
+    buscarCupom() {
+      this.cupomInvalido = false;
+      this.carregandoCupom = true;
+      this.getCupom(this.couponCode).then(r => {
+        if (r) {
+          this.cupomInvalido = false;
+          this.alterarCupom = false;
+          this.carregandoCupom = false;
+        } else {
+          this.cupomInvalido = true;
+          this.carregandoCupom = false;
+        }
+      });
+    },
     newOrder(payment) {
       let shipping_lines = {
         method_id: this.freteEscolhido.nome,
@@ -222,6 +299,9 @@ export default {
   created() {
     document.title = "Checkout";
     this.setCart();
+    if (this.cupom.amount > 0) {
+      this.alterarCupom = false;
+    }
   }
 };
 </script>
@@ -270,8 +350,8 @@ export default {
   grid-template:
     "topprodutos toppreco topquantidade toptotal ." 35px
     "itensarea itensarea itensarea itensarea itensarea " 1fr
-    ". totalarea totalarea totalarea ." 75px
-    ". bottom bottom bottom bottom" 50px /
+    "totalarea totalarea totalarea totalarea totalarea" 180px
+    ". bottom bottom bottom bottom" 70px /
     500px 120px 190px 120px 70px;
 }
 
@@ -309,13 +389,198 @@ export default {
 }
 
 .totalarea {
+  display: grid;
   grid-area: totalarea;
+  grid-template:
+    ". cupom frete frete ." 95px
+    ". . total total ." 70px /
+    500px 170px 140px 1fr 70px;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: bolder;
+  margin-bottom: 3px;
+}
+
+.label-black {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 0.9em;
+  font-style: italic;
+  color: black;
+  font-weight: bold;
+}
+
+.cupom-vazio {
+  padding-top: 50px;
+  position: relative;
+}
+
+.carregando-cupom {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 1rem;
+  width: 100%;
+  height: 100%;
+  padding: 25%;
+  border-radius: 20px;
+}
+
+.cupom {
+  grid-area: cupom;
+  align-self: center; /* alinhamento vertical */
+
+  text-align: center;
+}
+
+.input-cupom {
+  border: none;
+  width: 100%;
+  height: 30px;
+  margin: 0;
+  box-shadow: none;
+  background: #e5e5e5;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.btn-cupom {
+  width: 95px;
+  height: 20px;
+  margin: 5px auto;
+  display: block;
+  background: #a0a0a0;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cupom-aplicado {
+  position: relative;
+  height: 30px;
+}
+
+.cupom-aplicado .label-black {
+  display: inline;
+}
+
+.trocar-cupom {
+  position: absolute;
+  margin-left: 10px;
+  display: inline;
+  font-size: 0.7rem;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.frete-vazio {
+  padding-top: 20px;
+}
+
+.frete {
+  grid-area: frete;
+  align-self: center; /* alinhamento vertical */
+  margin-left: auto;
+}
+
+.input-frete {
+  width: 135px;
+  border: 1px solid #e5e5e5;
+  height: 30px;
+  margin: 0;
+  box-shadow: none;
+  background: #e5e5e5;
+  display: inline-block;
+  border: none;
+  padding-right: 35px;
+}
+
+.btn-frete {
+  width: 35px;
+  height: 31px;
+  margin: 0;
+  margin-left: -35px;
+  display: inline-block;
+  background: #a0a0a0;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.total {
+  padding-top: 50px;
+  grid-area: total;
+  align-self: center; /* alinhamento vertical */
+  display: grid;
+  grid-template:
+    "descontotexto descontovalor" 1fr
+    "totaltexto totalvalor" 1fr /
+    1fr 1fr;
+}
+
+.descontovalor,
+.totalvalor {
+  text-align: right;
+  font-weight: bolder;
+}
+
+.descontotexto {
+  grid-area: descontotexto;
+  align-self: center; /* alinhamento vertical */
+}
+
+.descontovalor {
+  grid-area: descontovalor;
+  align-self: center; /* alinhamento vertical */
+  text-decoration: line-through;
+}
+
+.totaltexto {
+  grid-area: totaltexto;
+  align-self: center; /* alinhamento vertical */
+}
+
+.totalvalor {
+  grid-area: totalvalor;
   align-self: center; /* alinhamento vertical */
 }
 
 .bottom {
   grid-area: bottom;
   align-self: center; /* alinhamento vertical */
+  display: grid;
+  grid-template:
+    "continuarcomprando fecharcompra" 1fr /
+    300px 1fr;
+}
+
+.bottom .continuarcomprando {
+  grid-area: continuarcomprando;
+  align-self: center; /* alinhamento vertical */
+  width: 240px;
+  height: 40px;
+  background: #f4f4f4;
+  color: #9e9e9e;
+  text-align: center;
+  border-radius: 5px;
+  padding: 7px;
+  cursor: pointer;
+}
+
+.bottom .fecharcompra {
+  grid-area: fecharcompra;
+  align-self: center; /* alinhamento vertical */
+  width: 175px;
+  height: 40px;
+  background: #33873c;
+  color: #f4f4f4;
+  text-align: center;
+  border-radius: 5px;
+  padding: 7px;
+  cursor: pointer;
 }
 
 /* //////////////////  CARRINHO ITEM ////////////////////////// */

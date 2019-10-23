@@ -96,6 +96,10 @@ img {
   color: red !important;
 }
 
+.error {
+  border: 1px solid red !important;
+}
+
 .arrow,
 .produto-icone {
   cursor: pointer;
