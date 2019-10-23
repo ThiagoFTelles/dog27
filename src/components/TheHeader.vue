@@ -240,7 +240,9 @@ export default {
       } else {
         this.mostrarBadgeCarrinho = true;
         this.resetarMenu();
-        this.hoverLinkBag = true;
+        this.$route.matched.some(({ name }) => name === "checkout")
+          ? null
+          : (this.hoverLinkBag = true);
       }
       return quantidade;
     }

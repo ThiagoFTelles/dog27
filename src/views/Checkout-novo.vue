@@ -159,6 +159,12 @@ export default {
   watch: {
     couponCode() {
       this.cupomInvalido = false;
+    },
+    carrinho() {
+      let quantidade = this.carrinho.length;
+      if (quantidade === 0) {
+        this.$router.push({ name: "home" });
+      }
     }
   },
   methods: {
