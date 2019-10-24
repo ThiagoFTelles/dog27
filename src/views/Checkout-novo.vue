@@ -14,7 +14,7 @@
 
         <div class="itensarea">
           <div v-if="ganhouPresente" class="carrinho_item" key="carrinho-presente">
-            <p class="quantidade">- 1 +</p>
+            <p class="quantidade">1</p>
             <p class="titulo">{{nomeDoPresente | capitalize}} U</p>
             <img :src="fotoDoPresente" :alt="nomeDoPresente" class="foto" />
 
@@ -27,7 +27,7 @@
             v-for="(item, index) in carrinho"
             :key="`carrinho-item${index}`"
           >
-            <p class="quantidade">- {{item.quantidade}} +</p>
+            <p class="quantidade">{{item.quantidade}}</p>
             <p
               class="titulo"
             >{{item.categoria | capitalize}} para cachorros {{item.estampa | lowercase}} {{item.tamanho | uppercase}}</p>
@@ -52,7 +52,7 @@
         <div class="totalarea">
           <div class="cupom">
             <section class="cupom-vazio" v-if="!desconto.valor && alterarCupom">
-              <div v-if="carregandoCupom" class="carregando-cupom">aguarde...</div>
+              <div v-if="carregandoCupom" class="carregando-area">aguarde...</div>
               <p class="label">Cupom de desconto:</p>
               <input
                 class="input-cupom"
@@ -60,7 +60,12 @@
                 v-model="couponCode"
                 :class="{error: cupomInvalido}"
               />
-              <button class="btn-cupom" @click="buscarCupom()">ok</button>
+              <button
+                :class="{bg_green: this.couponCode.length >= 1}"
+                :disabled="this.couponCode.length < 1"
+                class="btn-cupom"
+                @click="buscarCupom()"
+              >ok</button>
             </section>
             <section v-else class="cupom-aplicado">
               <p class="label">Cupom de desconto:</p>
@@ -70,12 +75,55 @@
               </section>
             </section>
           </div>
-          <div class="frete">
+          <div class="frete" v-if="!pac.mostrar && !sedex.mostrar">
             <section class="frete-vazio">
+              <div v-if="calculandoFrete" class="carregando-area">calculando...</div>
               <p class="label">Digite o CEP</p>
-              <input class="input-frete" type="text" />
-              <button class="btn-frete">ok</button>
+              <input
+                class="input-frete"
+                :class="{error: freteErrado}"
+                type="text"
+                name="postcodeEntrega"
+                id="postcodeEntrega"
+                v-model="cepEntrega"
+                @keyup="preencherCepEntrega"
+                v-mask="'#####-###'"
+              />
+              <button
+                class="btn-frete"
+                :class="{bg_green: this.cepEntrega.length === 9}"
+                :disabled="this.cepEntrega.length < 9"
+                @click="calcularPrecoPrazo"
+              >ok</button>
             </section>
+          </div>
+          <div class="frete frete-selecionado" v-else>
+            <label v-if="pac.mostrar" class="pac_tag" for="pac">PAC: {{pac.prazo}} d.u.</label>
+            <label v-if="pac.mostrar" class="label_pac" for="pac">
+              <input
+                v-if="pac.mostrar"
+                class="radio input_pac"
+                type="radio"
+                name="opcaoDeFrete"
+                id="pac"
+                @click="selecionarFrete('pac')"
+              />
+              <p v-if="pac.mostrar" class="valor_frete valor_pac">{{pac.valor | numeroPreco}}</p>
+            </label>
+            <label v-if="sedex.mostrar" class="sedex_tag" for="sedex">Sedex: {{sedex.prazo}} d.u.</label>
+            <label v-if="sedex.mostrar" class="label_sedex" for="sedex">
+              <input
+                v-if="sedex.mostrar"
+                class="radio input_sedex"
+                type="radio"
+                name="opcaoDeFrete"
+                id="sedex"
+                @click="selecionarFrete('sedex')"
+                checked="checked"
+              />
+              <p v-if="sedex.mostrar" class="valor_frete valor_sedex">{{sedex.valor | numeroPreco}}</p>
+            </label>
+            <p class="mudar_cep" @click="resetarFrete();">Mudar o cep</p>
           </div>
           <div class="total">
             <div v-if="desconto.valor" class="descontotexto label-black">DESCONTO</div>
@@ -89,10 +137,10 @@
         </div>
 
         <div class="bottom">
-          <div class="continuarcomprando">
+          <router-link class="continuarcomprando" tag="div" :to="{name:'home'}">
             <p>Continuar comprando</p>
-          </div>
-          <div class="fecharcompra">
+          </router-link>
+          <div class="fecharcompra" :class="{bg_green: this.habilitarBtn}">
             <p>Fechar compra</p>
           </div>
         </div>
@@ -105,6 +153,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
+import axios from "axios";
 
 export default {
   name: "Checkout",
@@ -115,7 +164,20 @@ export default {
       alterarCupom: true,
       cupomInvalido: false,
       couponCode: "",
-      carregandoCupom: false
+      carregandoCupom: false,
+      pac: {
+        valor: null,
+        prazo: null,
+        mostrar: false
+      },
+      sedex: {
+        valor: null,
+        prazo: null,
+        mostrar: false
+      },
+      calculandoFrete: false,
+      freteErrado: false,
+      tempoDePostagem: 2 //dias úteis
     };
   },
   computed: {
@@ -147,24 +209,43 @@ export default {
         "complemento",
         "bairro",
         "cidade",
-        "estado"
+        "estado",
+        "nomeEntrega",
+        "telefoneEntrega",
+        "emailEntrega",
+        "ruaEntrega",
+        "cepEntrega",
+        "numeroEntrega",
+        "complementoEntrega",
+        "bairroEntrega",
+        "cidadeEntrega",
+        "estadoEntrega"
       ],
       base: "usuario",
       mutation: "UPDATE_USUARIO"
     }),
     primeiroNome() {
       return this.usuario.nome.replace(/ .*/, "");
+    },
+    habilitarBtn() {
+      if (this.freteEscolhido.valor > 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   watch: {
     couponCode() {
       this.cupomInvalido = false;
     },
+    cepEntrega() {
+      this.pac.mostrar = false;
+      this.sedex.mostrar = false;
+      this.resetarFrete();
+    },
     carrinho() {
-      let quantidade = this.carrinho.length;
-      if (quantidade === 0) {
-        this.$router.push({ name: "home" });
-      }
+      this.checkCart();
     }
   },
   methods: {
@@ -174,8 +255,19 @@ export default {
       "getCupom",
       "removerItemDoCarrinho",
       "atualizarCarrinhoTotal",
-      "checarLocalStorage"
+      "checarLocalStorage",
+      "escolherFrete"
     ]),
+    checkCart() {
+      let quantidade = this.carrinho.length;
+      if (quantidade === 0) {
+        this.$router.push({ name: "home" });
+      }
+      this.pac.mostrar = false;
+      this.sedex.mostrar = false;
+      this.resetarFrete();
+    },
+
     trocarCupom() {
       this.deleteCupom();
       this.alterarCupom = true;
@@ -193,6 +285,231 @@ export default {
           this.carregandoCupom = false;
         }
       });
+    },
+    preencherCepEntrega() {
+      const cep = this.cepEntrega.replace(
+        /\D/g,
+        ""
+      ); /* pegará apenas dígitos */
+      if (cep.length >= 8) {
+        getCep(cep).then(r => {
+          this.ruaEntrega = r.data.logradouro;
+          this.bairroEntrega = r.data.bairro;
+          this.estadoEntrega = r.data.uf;
+          this.cidadeEntrega = r.data.localidade;
+        });
+      }
+    },
+    calcularPrecoPrazo() {
+      this.calculandoFrete = true;
+      // Changes XML to JSON
+      function xmlToJson(xml) {
+        // Create the return object
+        var obj = {};
+
+        if (xml.nodeType == 1) {
+          // element
+          // do attributes
+          if (xml.attributes.length > 0) {
+            obj["@attributes"] = {};
+            for (var j = 0; j < xml.attributes.length; j++) {
+              var attribute = xml.attributes.item(j);
+              obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+            }
+          }
+        } else if (xml.nodeType == 3) {
+          // text
+          obj = xml.nodeValue;
+        }
+
+        // do children
+        if (xml.hasChildNodes()) {
+          for (var i = 0; i < xml.childNodes.length; i++) {
+            var item = xml.childNodes.item(i);
+            var nodeName = item.nodeName;
+            if (typeof obj[nodeName] == "undefined") {
+              obj[nodeName] = xmlToJson(item);
+            } else {
+              if (typeof obj[nodeName].push == "undefined") {
+                var old = obj[nodeName];
+                obj[nodeName] = [];
+                obj[nodeName].push(old);
+              }
+              obj[nodeName].push(xmlToJson(item));
+            }
+          }
+        }
+        return obj;
+      }
+
+      // Documentação: http://m.correios.com.br/solucoes-empresariais/comercio-eletronico/palestras-correios-1/pdf/ManualdeImplementacaodoCalculoRemotodePrecosePrazos.pdf
+
+      let nCdEmpresa = `${process.env.VUE_APP_CORREIOS_NCD_EMRPESA}`;
+      let sDsSenha = `${process.env.VUE_APP_CORREIOS_SDS_SENHA}`;
+      let nCdServico = "04596,04553"; //PAC 04596, SEDEX 04553
+
+      let cepOrigem = "29163165";
+      let cepDestino = this.cepEntrega.replace(/\D/g, "");
+      let nVlPeso = this.calcularPesoDaCaixa();
+      let nCdFormato = 1; //int
+      let nVlComprimento = this.quantidadeDeCaixas === 1 ? 27 : 46; //decimal
+      let nVlAltura = this.quantidadeDeCaixas === 1 ? 9 : 9; //decimal
+      let nVlLargura = this.quantidadeDeCaixas === 1 ? 18 : 28; //decimal
+      let nVlDiametro = this.quantidadeDeCaixas === 1 ? 32.44 : 53.85; //decimal
+      let sCdMaoPropria = "N";
+      let nVlValorDeclarado = this.valorTotalCarrinho; //decimal
+      let sCdAvisoRecebimento = "N";
+
+      let url = `${process.env.VUE_APP_SITE_PREFIX}/miniproxy.php?http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&nCdServico=${nCdServico}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=${nVlPeso}&nCdFormato=${nCdFormato}&nVlComprimento=${nVlComprimento}&nVlAltura=${nVlAltura}&nVlLargura=${nVlLargura}&nVlDiametro=${nVlDiametro}&sCdMaoPropria=${sCdMaoPropria}&nVlValorDeclarado=${nVlValorDeclarado}&sCdAvisoRecebimento=${sCdAvisoRecebimento}`;
+
+      axios
+        .get(url)
+        .then(res => {
+          const resposta = res.data;
+
+          var xmlString =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? // eslint-disable-next-line
+                $(resposta).find("cResultado").prevObject[11].innerHTML
+              : resposta; //res.data;
+
+          var parser = new DOMParser();
+          var xml = parser.parseFromString(xmlString, "text/xml");
+          var obj = xmlToJson(xml);
+
+          let valorPac =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? obj.servicos.cservico[0].valor["#text"]
+              : obj.cResultado.Servicos.cServico[0].Valor["#text"];
+          let prazoPac =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? Number(obj.servicos.cservico[0].prazoentrega["#text"])
+              : Number(
+                  obj.cResultado.Servicos.cServico[0].PrazoEntrega["#text"]
+                );
+
+          let valorSedex =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? obj.servicos.cservico[1].valor["#text"]
+              : obj.cResultado.Servicos.cServico[1].Valor["#text"];
+          let prazoSedex =
+            process.env.VUE_APP_NODE_ENV === "test"
+              ? Number(obj.servicos.cservico[1].prazoentrega["#text"])
+              : Number(
+                  obj.cResultado.Servicos.cServico[1].PrazoEntrega["#text"]
+                );
+
+          this.pac.mostrar = false;
+          this.sedex.mostrar = false;
+          this.freteErrado = false;
+
+          this.freteGratis
+            ? this.mostrarValoresDeFreteGratis(
+                valorPac,
+                valorSedex,
+                prazoPac,
+                prazoSedex
+              )
+            : this.mostrarValoresDeFrete(
+                valorPac,
+                valorSedex,
+                prazoPac,
+                prazoSedex
+              );
+        })
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err);
+        });
+    },
+    mostrarValoresDeFrete(valorPac, valorSedex, prazoPac, prazoSedex) {
+      valorPac !== "0,00"
+        ? ((this.pac.valor = Number(valorPac.replace(",", "."))),
+          (this.pac.mostrar = true))
+        : 100;
+      this.pac.prazo = prazoPac !== 0 ? prazoPac + this.tempoDePostagem : 100;
+
+      valorSedex !== "0,00"
+        ? ((this.sedex.valor = Number(valorSedex.replace(",", "."))),
+          (this.sedex.mostrar = true))
+        : 10;
+      this.sedex.prazo =
+        prazoSedex !== 0 ? prazoSedex + this.tempoDePostagem : 100;
+
+      this.verificaSeFreteEstaErrado();
+    },
+    mostrarValoresDeFreteGratis(valorPac, valorSedex, prazoPac, prazoSedex) {
+      valorSedex !== "0,00"
+        ? ((this.sedex.valor = Number(valorSedex.replace(",", "."))),
+          (this.sedex.mostrar = true))
+        : "10";
+      this.sedex.prazo =
+        prazoSedex !== 0 ? prazoSedex + this.tempoDePostagem : 100;
+
+      valorPac !== "0,00"
+        ? ((this.pac.valor = 0.0), (this.pac.mostrar = true))
+        : ((this.pac.mostrar = false), (this.sedex.valor = 0.0));
+      this.pac.prazo = prazoPac !== 0 ? prazoPac + this.tempoDePostagem : 100;
+
+      this.verificaSeFreteEstaErrado();
+    },
+    verificaSeFreteEstaErrado() {
+      if (
+        (this.pac.mostrar == false && this.sedex.mostrar == false) ||
+        this.usuario.estadoEntrega === undefined
+      ) {
+        this.resetarFrete();
+        this.freteErrado = true;
+      } else {
+        this.selecionarFrete("sedex");
+      }
+      this.calculandoFrete = false;
+    },
+    calcularPesoDaCaixa() {
+      let pesoTotalDoPedido = 0;
+      this.carrinho.forEach(item => {
+        let pesoDoItem = Number(item.pesoTotal);
+        pesoTotalDoPedido += pesoDoItem;
+      });
+
+      return pesoTotalDoPedido;
+    },
+    igualarDados() {
+      this.nomeEntrega = this.usuario.nome;
+      this.telefoneEntrega = this.usuario.telefone;
+      this.emailEntrega = this.usuario.email;
+      this.ruaEntrega = this.usuario.rua;
+      this.cepEntrega = this.usuario.cep;
+      this.numeroEntrega = this.usuario.numero;
+      this.complementoEntrega = this.usuario.complemento;
+      this.bairroEntrega = this.usuario.bairro;
+      this.cidadeEntrega = this.usuario.cidade;
+      this.estadoEntrega = this.usuario.estado;
+    },
+    selecionarFrete(tipoDeFrete) {
+      let freteEscolhido = {
+        nome: "",
+        valor: ""
+      };
+
+      if (tipoDeFrete === "pac") {
+        freteEscolhido.nome = "pac";
+        freteEscolhido.valor = this.pac.valor;
+        this.escolherFrete(freteEscolhido);
+      } else if (tipoDeFrete === "sedex") {
+        freteEscolhido.nome = "sedex";
+        freteEscolhido.valor = this.sedex.valor;
+        this.escolherFrete(freteEscolhido);
+      }
+    },
+    resetarFrete() {
+      this.pac.mostrar = false;
+      this.sedex.mostrar = false;
+      let freteEmBranco = {
+        nome: "",
+        valor: ""
+      };
+      this.escolherFrete(freteEmBranco);
     },
     newOrder(payment) {
       let shipping_lines = {
@@ -303,6 +620,8 @@ export default {
     }
   },
   created() {
+    this.resetarFrete();
+    this.checkCart();
     document.title = "Checkout";
     this.setCart();
     if (this.cupom.amount > 0) {
@@ -422,15 +741,15 @@ export default {
   position: relative;
 }
 
-.carregando-cupom {
+.carregando-area {
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   font-size: 1rem;
   width: 100%;
   height: 100%;
-  padding: 25%;
-  border-radius: 20px;
+  padding: 20%;
+  border-radius: 2px;
 }
 
 .cupom {
@@ -483,12 +802,77 @@ export default {
 
 .frete-vazio {
   padding-top: 20px;
+  position: relative;
 }
 
 .frete {
   grid-area: frete;
   align-self: center; /* alinhamento vertical */
   margin-left: auto;
+}
+
+.frete-selecionado {
+  margin-top: 30px;
+  display: grid;
+  grid-template:
+    "sedex_tag valor_sedex" 1fr
+    "pac_tag valor_pac" 1fr
+    "mudar_cep ." 25px /
+    1fr 1fr;
+}
+
+.frete-selecionado * {
+  margin-bottom: 0;
+}
+
+.sedex_tag {
+  grid-area: sedex_tag;
+}
+.valor_sedex {
+  grid-area: valor_sedex;
+}
+.label_sedex {
+  grid-area: valor_sedex;
+}
+.input_sedex {
+  grid-area: valor_sedex;
+}
+.pac_tag {
+  grid-area: pac_tag;
+}
+.valor_pac {
+  grid-area: valor_pac;
+}
+.label_pac {
+  grid-area: valor_pac;
+}
+.input_pac {
+  grid-area: valor_pac;
+}
+.mudar_cep {
+  grid-area: mudar_cep;
+  font-size: 0.8rem;
+  font-style: italic;
+  cursor: pointer;
+}
+.valor_frete,
+.sedex_tag,
+.pac_tag {
+  color: black;
+  font-style: italic;
+}
+
+.valor_frete {
+  display: inline;
+  text-align: right;
+}
+
+.radio {
+  width: 3px;
+  height: fit-content;
+  margin-left: 25px;
+  margin-top: 0px;
+  vertical-align: middle;
 }
 
 .input-frete {
@@ -581,7 +965,7 @@ export default {
   align-self: center; /* alinhamento vertical */
   width: 175px;
   height: 40px;
-  background: #33873c;
+  background: #a0a0a0;
   color: #f4f4f4;
   text-align: center;
   border-radius: 5px;

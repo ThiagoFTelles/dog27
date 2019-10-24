@@ -100,6 +100,35 @@ img {
   border: 1px solid red !important;
 }
 
+.bg_green {
+  background: #31873c !important;
+}
+
+.radio {
+  /* secret sauce to styling radio buttons */
+  appearance: none;
+  /* Aligning your label text and your radio */
+  vertical-align: text-bottom;
+  border: 1px solid black;
+  border-radius: 100%;
+  width: auto;
+  padding: 5px;
+}
+/* Setting the checked styles */
+.radio:checked {
+  border-color: black;
+  border-width: 6px;
+  padding: 0;
+}
+
+/* radio inner negative circle */
+.radio:checked:before {
+  content: "";
+  height: 0;
+  width: 0;
+  display: block;
+}
+
 .arrow,
 .produto-icone {
   cursor: pointer;
