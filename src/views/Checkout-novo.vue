@@ -1,7 +1,7 @@
 <template>
   <section class="checkout-container">
     <img src="../assets/footer/icone-logo.svg" alt="Dog-27" class="logo" />
-    <div class="main">
+    <div class="main" v-if="!finalizar">
       <div class="mainheader">
         <p class="main-titulo">Meu carrinho</p>
       </div>
@@ -140,12 +140,17 @@
           <router-link class="continuarcomprando" tag="div" :to="{name:'home'}">
             <p>Continuar comprando</p>
           </router-link>
-          <div class="fecharcompra" :class="{bg_green: this.habilitarBtn}">
+          <div
+            class="fecharcompra"
+            :class="{bg_green: this.habilitarBtn}"
+            @click="habilitarBtn ? finalizar = true : null"
+          >
             <p>Fechar compra</p>
           </div>
         </div>
       </div>
     </div>
+    <div class="finalizar" v-else></div>
   </section>
 </template>
 
@@ -160,6 +165,7 @@ export default {
   components: {},
   data() {
     return {
+      finalizar: false,
       line_items: [],
       alterarCupom: true,
       cupomInvalido: false,
@@ -620,6 +626,7 @@ export default {
     }
   },
   created() {
+    this.finalizar = false;
     this.resetarFrete();
     this.checkCart();
     document.title = "Checkout";
