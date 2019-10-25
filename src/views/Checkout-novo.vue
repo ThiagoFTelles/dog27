@@ -150,7 +150,87 @@
         </div>
       </div>
     </div>
-    <div class="finalizar" v-else></div>
+    <div class="finalizar" v-else>
+      <div class="dados_cliente">
+        <p class="top_dados maincontent-header">Dados</p>
+        <div class="dados_area">
+          <div class="linha_dados">
+            <div class="input_area left">
+              <label for="nome" class="label_finalizar">Nome:</label>
+              <input type="text" class="input_finalizar nome" value="THIAGO FERNANDES TELLES" />
+            </div>
+            <div class="input_area">
+              <label for="cpf" class="label_finalizar">CPF:</label>
+              <input type="text" class="input_finalizar cpf" value="116.639.647-93" />
+            </div>
+          </div>
+          <div class="linha_dados">
+            <div class="input_area left">
+              <label for="nascimento" class="label_finalizar">Data de nascimento:</label>
+              <input type="text" class="input_finalizar nascimento" value="10/03/1989" />
+            </div>
+            <div class="input_area">
+              <label for="celular" class="label_finalizar">Celular:</label>
+              <input type="text" class="input_finalizar celular" value="(27) 9-9923-9423" />
+            </div>
+          </div>
+          <div class="linha_dados">
+            <div class="input_area full">
+              <label for="email" class="label_finalizar">E-mail:</label>
+              <input type="text" class="input_finalizar email" value="atendimento.telles@gmail.com" />
+            </div>
+            <div class="input_area full">
+              <label for="senha" class="label_finalizar">Senha:</label>
+              <input type="password" class="input_finalizar senha" value="minhasenha123" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="endereco_entrega">
+        <p class="top_endereco_entrega maincontent-header">Entrega</p>
+        <div class="dados_area">
+          <div class="linha_dados">
+            <div class="input_area full">
+              <label for="endereco_entrega" class="label_finalizar">Endereço:</label>
+              <input
+                type="text"
+                class="input_finalizar endereco_entrega"
+                value="Rua Filomeno Ribeiro"
+              />
+            </div>
+          </div>
+          <div class="linha_dados">
+            <div class="input_area left">
+              <label for="cep_entrega" class="label_finalizar">CEP:</label>
+              <input type="text" class="input_finalizar cep_entrega" value="29016-130" />
+            </div>
+            <div class="input_area left">
+              <label for="numero_entrega" class="label_finalizar">Número:</label>
+              <input type="text" class="input_finalizar numero_entrega" value="90" />
+            </div>
+            <div class="input_area">
+              <label for="complemento" class="label_finalizar">Complemento:</label>
+              <input type="text" class="input_finalizar complemento_entrega" value="201" />
+            </div>
+          </div>
+          <div class="linha_dados">
+            <div class="input_area left">
+              <label for="bairro" class="label_finalizar">Bairro:</label>
+              <input type="text" class="input_finalizar bairro_entrega" value="centro" />
+            </div>
+            <div class="input_area">
+              <label for="uf" class="label_finalizar">UF:</label>
+              <input type="text" class="input_finalizar uf_entrega" value="ES" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="formas_de_pagamento"></div>
+      <div class="resumo_finalizar">
+        <p class="top_resumo_finalizar maincontent-header">Resumo da compra</p>
+        <div class="carrinho_finalizar"></div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -644,7 +724,7 @@ export default {
     ". logo ." 150px
     ". main ." 1fr
     ". . ." 50px /
-    1fr 1000px 1fr;
+    1fr minmax(1000px, 1500px) 1fr;
 }
 
 .logo {
@@ -652,7 +732,7 @@ export default {
   height: 100px;
   margin: auto;
 }
-
+/* *************** MAIN AREA *************** */
 .main {
   grid-area: main;
   min-height: 400px;
@@ -979,6 +1059,128 @@ export default {
   padding: 7px;
   cursor: pointer;
 }
+/* ******************* FIM MAIN AREA *************************/
+
+/* ******************* FINALIZAR AREA *************************/
+
+.finalizar {
+  grid-area: main;
+  margin: 0 auto;
+  min-height: 400px;
+  display: grid;
+  grid-template:
+    "dados_cliente endereco_entrega resumo_finalizar" 1fr
+    "formas_de_pagamento formas_de_pagamento resumo_finalizar" 150px /
+    365px 365px 365px;
+}
+
+.top_dados,
+.top_endereco_entrega,
+.top_resumo_finalizar {
+  margin: 10px auto 5px 0px;
+  font-size: 1.5rem;
+}
+
+.label_finalizar {
+  font-size: 0.8rem;
+  font-weight: bolder;
+  color: black;
+  margin-left: 5px;
+}
+
+.input_finalizar {
+  border: 2px solid #eeedef;
+  background: none;
+  box-shadow: none;
+  background: none;
+  box-shadow: none;
+  padding: 5px;
+  display: block;
+  margin-bottom: 0;
+}
+
+.input_area {
+  display: inline-block;
+}
+
+.input_area.left {
+  margin-right: 5px;
+}
+
+.input_area.full {
+  width: 100%;
+}
+
+.dados_cliente {
+  grid-area: dados_cliente;
+  display: grid;
+  grid-template:
+    "header" 35px
+    "linha" 1fr /
+    1fr;
+  background: #fafafa;
+  padding: 0 10px 10px 20px;
+}
+
+.input_finalizar.cpf {
+  max-width: 115px;
+  max-width: 130px;
+}
+.input_finalizar.nascimento {
+  max-width: 130px;
+}
+.input_finalizar.cep_entrega {
+  max-width: 100px;
+}
+.input_finalizar.numero_entrega {
+  max-width: 65px;
+}
+.input_finalizar.complemento_entrega {
+  max-width: 150px;
+}
+.input_finalizar.bairro_entrega {
+  max-width: 170px;
+}
+.input_finalizar.uf_entrega {
+  max-width: 150px;
+}
+
+.endereco_entrega {
+  grid-area: endereco_entrega;
+  display: grid;
+  grid-template:
+    "header" 35px
+    "linha" 1fr /
+    1fr;
+  background: #f1f1f2;
+  padding: 0 20px;
+}
+
+.resumo_finalizar {
+  grid-area: resumo_finalizar;
+  display: grid;
+  grid-template:
+    "header" 35px
+    "carrinho_finalizar" 1fr /
+    1fr;
+  background: #e8e8e8;
+  padding: 0 20px;
+}
+
+.carrinho_finalizar {
+  grid-area: carrinho_finalizar;
+}
+
+.formas_de_pagamento {
+  grid-area: formas_de_pagamento;
+  display: grid;
+  grid-template:
+    "ddd" 1fr
+    "ddd" 1fr;
+  background: #2c823a;
+}
+
+/* ******************* FIM FINALIZAR AREA *************************/
 
 /* //////////////////  CARRINHO ITEM ////////////////////////// */
 
