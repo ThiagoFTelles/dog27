@@ -1479,6 +1479,7 @@ input {
   color: #fff;
   font-weight: bolder;
   font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .formas_de_pagamento {
@@ -1508,6 +1509,7 @@ input {
   display: flex;
   align-items: center;
   padding-left: 15px;
+  cursor: pointer;
 }
 
 .pagamento_opcao.active {
