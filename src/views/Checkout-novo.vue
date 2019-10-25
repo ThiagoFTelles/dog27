@@ -194,7 +194,7 @@
               <label for="endereco_entrega" class="label_finalizar">Endereço:</label>
               <input
                 type="text"
-                class="input_finalizar endereco_entrega"
+                class="input_finalizar input_endereco_entrega"
                 value="Rua Filomeno Ribeiro"
               />
             </div>
@@ -225,7 +225,102 @@
           </div>
         </div>
       </div>
-      <div class="formas_de_pagamento"></div>
+      <div class="formas_de_pagamento">
+        <div class="pagamento_menu">
+          <div class="pagamento_header">
+            <p>Pagamento</p>
+          </div>
+          <div
+            class="pagamento_opcao"
+            :class="[pagamento_selecionado == 'cartao' ? 'active' : '']"
+            @click="pagamento_selecionado = 'cartao'"
+          >
+            <p>Cartão de crédito</p>
+          </div>
+          <div
+            class="pagamento_opcao"
+            :class="[pagamento_selecionado == 'boleto' ? 'active' : '']"
+            @click="pagamento_selecionado = 'boleto'"
+          >
+            <p>Boleto</p>
+          </div>
+        </div>
+        <div class="pagamento_dados">
+          <section class="cartao_dados" v-if="pagamento_selecionado == 'cartao'">
+            <div class="linha_dados">
+              <div class="input_area left">
+                <label for="numero_cartao" class="label_finalizar">Número do cartão:</label>
+                <input
+                  type="text"
+                  class="input_finalizar numero_cartao"
+                  v-mask="'####.####.####.####'"
+                  name="CardNumber"
+                  id="CardNumber"
+                  v-model="CardNumber"
+                />
+              </div>
+              <div class="input_area left">
+                <label for="codigo_cartao" class="label_finalizar">Código:</label>
+                <input
+                  type="text"
+                  class="input_finalizar codigo_cartao"
+                  name="SecurityCode"
+                  id="SecurityCode"
+                  v-model="SecurityCode"
+                  v-mask="'####'"
+                  placeholder="CVV"
+                />
+              </div>
+              <div class="input_area left">
+                <label for="validade_cartao" class="label_finalizar">Validade:</label>
+                <input
+                  type="text"
+                  class="input_finalizar validade_cartao"
+                  name="ExpirationDate"
+                  id="ExpirationDate"
+                  placeholder="MM/AAAA"
+                  v-mask="'##/20##'"
+                  v-model="ExpirationDate"
+                />
+              </div>
+              <div class="input_area">
+                <label for="Installments" class="label_finalizar">Parcelas:</label>
+                <select
+                  class="input_finalizar"
+                  name="Installments"
+                  id="parcelas_cartao"
+                  v-model="Installments"
+                >
+                  <option
+                    v-for="parcela in parcelasDisponiveis"
+                    :value="parcela.numero"
+                    :key="`parcela-${parcela.numero}`"
+                  >{{ parcela.numero }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="linha_dados">
+              <div class="input_area full">
+                <label for="Holder" class="label_finalizar">Nome impresso no cartão:</label>
+                <input
+                  type="text"
+                  class="input_finalizar nome_cartao"
+                  name="Holder"
+                  id="Holder"
+                  v-model="Holder"
+                  maxlength="40"
+                />
+              </div>
+              <div class="input_area full">
+                <label class="label_finalizar">asdas das das das dasd asd?</label>
+              </div>
+            </div>
+          </section>
+          <section class="boleto_dados" v-if="pagamento_selecionado == 'boleto'">
+            <p>Ok! Ao clicar em "finalizar compra" iremos gerar o seu boleto.</p>
+          </section>
+        </div>
+      </div>
       <div class="resumo_finalizar">
         <p class="top_resumo_finalizar maincontent-header">Resumo da compra</p>
         <div class="carrinho_finalizar"></div>
@@ -239,12 +334,23 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
 import axios from "axios";
+import { api } from "@/services.js";
+import { requestCielo } from "@/helpers.js";
 
 export default {
   name: "Checkout",
   components: {},
   data() {
     return {
+      pagamento_selecionado: "cartao",
+      disabled: false,
+      Installments: 1,
+      CardNumber: "",
+      Holder: "",
+      ExpirationDate: "",
+      SecurityCode: "",
+      Brand: "",
+      erros: [],
       finalizar: false,
       line_items: [],
       alterarCupom: true,
@@ -279,9 +385,15 @@ export default {
       usuario: state => state.usuario,
       freteEscolhido: state => state.freteEscolhido,
       presente: state => state.cart.presente,
-      login: state => state.login
+      login: state => state.login,
+      idOrdemAberta: state => state.order.idOrdemAberta,
+      order: state => state.order
     }),
-    ...mapGetters(["desconto", "carrinhoTotalComDesconto"]),
+    ...mapGetters([
+      "desconto",
+      "carrinhoTotalComDesconto",
+      "parcelasDisponiveis"
+    ]),
     ...mapFields({
       fields: [
         "nome",
@@ -332,6 +444,19 @@ export default {
     },
     carrinho() {
       this.checkCart();
+    },
+    CardNumber() {
+      {
+        if (this.CardNumber.charAt() == 4) {
+          this.Brand = "Visa";
+        } else if (this.CardNumber.charAt() == 5) {
+          this.Brand = "Master";
+        } else if (this.CardNumber.charAt() == 3) {
+          this.Brand = "Amex";
+        } else {
+          this.Brand = "";
+        }
+      }
     }
   },
   methods: {
@@ -342,7 +467,9 @@ export default {
       "removerItemDoCarrinho",
       "atualizarCarrinhoTotal",
       "checarLocalStorage",
-      "escolherFrete"
+      "escolherFrete",
+      "esvaziarCarrinho",
+      "setOrderId"
     ]),
     checkCart() {
       let quantidade = this.carrinho.length;
@@ -703,6 +830,163 @@ export default {
           this.cidade = r.data.localidade;
         });
       }
+    },
+    /*************************    METHODS CARTÃO ABAIXO     ****************************************/
+    abrirOrdem() {
+      this.disabled = true;
+      let data = {
+        endpoint: "/orders",
+        body: this.order.order
+      };
+      api.postApiWc(data).then(r => {
+        let cobranca = {
+          MerchantOrderId: r.data.id,
+          Payment: {
+            Type: "CreditCard",
+            Amount: Number(r.data.total) * 100,
+            Installments: this.Installments,
+            SoftDescriptor: "DOG27" + r.data.id,
+            CreditCard: {
+              CardNumber: this.CardNumber.replace(/\./g, ""),
+              Holder: this.Holder,
+              ExpirationDate: this.ExpirationDate,
+              SecurityCode: this.SecurityCode,
+              Brand: this.Brand
+            }
+          }
+        };
+        this.setOrderId(cobranca.MerchantOrderId);
+        this.capturarCielo(cobranca);
+      });
+    },
+    solicitarAutorizacaoCielo(oderPayment) {
+      this.erros = [];
+      var data = JSON.stringify(oderPayment);
+
+      return requestCielo(
+        "POST",
+        `${process.env.VUE_APP_REQUISICOES_API_CIELO}/1/sales`,
+        data
+      )
+        .then(function(e) {
+          let resposta = JSON.parse(e.target.response);
+          let statusDaResposta = JSON.parse(e.target.status);
+
+          if (statusDaResposta == 400) {
+            this.disabled = false;
+            return {
+              status: resposta[0].Code,
+              resposta: "Erro de preenchimento: " + resposta[0].Message
+            };
+          } else if (statusDaResposta != 200 && statusDaResposta != 201) {
+            let erro = resposta[0].Message;
+            this.erros.push(erro);
+            this.disabled = false;
+            return {
+              status: resposta[0].Code,
+              resposta: "Erro de preenchimento - " + resposta[0].Message
+            };
+          } else if (resposta.Payment.Status === 1) {
+            let links = resposta.Payment.Links;
+            let objLinkCaptura = links.filter(
+              element => element.Rel === "capture"
+            );
+            let linkCaptura = objLinkCaptura[0].Href;
+
+            return { status: resposta.Payment.Status, resposta: linkCaptura };
+          } else {
+            this.disabled = false;
+            return {
+              status: resposta.Payment.Status,
+              resposta: resposta.Payment.ReturnMessage
+            };
+          }
+        })
+        .catch(erro => {
+          this.disabled = false;
+          return {
+            status: "00",
+            resposta: "erro no cartão. " + erro
+          };
+        });
+    },
+    capturarCielo(oderPayment) {
+      let self = this; //preciso desta variável para acessar o "this." nas funções inferiores
+      this.erros = [];
+      this.solicitarAutorizacaoCielo(oderPayment).then(r => {
+        let autorizacaoStatus = r.status;
+        let autorizacaoResposta = r.resposta;
+
+        if (autorizacaoStatus === 1) {
+          requestCielo("PUT", autorizacaoResposta).then(function(
+            respostaCaptura
+          ) {
+            let resposta = JSON.parse(respostaCaptura.target.response);
+            resposta.Status === 2 ? self.atualizarOrder(resposta.Status) : "";
+          });
+        } else {
+          this.erroNoPagamentoCielo(autorizacaoResposta);
+        }
+      });
+    },
+    erroNoPagamentoCielo(resposta) {
+      let erro =
+        "Houve um problema com o pagamento. Por favor, verifique o cartão e tente novamente. " +
+        resposta;
+      this.erros.push(erro);
+      this.disabled = false;
+    },
+    atualizarOrder(statusCaptura) {
+      if (statusCaptura === 2) {
+        //     let meta_data = [];
+        //   meta_data.push(        {
+        //   "key": "_billing_cpf",
+        //   "value": this.usuario.cpf
+        // },
+        //     {
+        //   "key": "_billing_number",
+        //   "value": this.usuario.numero
+        // },
+        //     {
+        //   "key": "_billing_neighborhood",
+        //   "value": this.usuario.bairro
+        // },
+        //     {
+        //   "key": "_shipping_number",
+        //   "value": this.usuario.numeroEntrega
+        // },
+        //     {
+        //   "key": "_shipping_neighborhood",
+        //   "value": this.usuario.bairroEntrega
+        // },
+        //     {
+        //   "key": "_payment",
+        //   "value": "2x"
+        // },
+        // );
+
+        const data = {
+          endpoint: `/orders/${this.idOrdemAberta}`,
+          body: {
+            status: "processing",
+            customer_note: "parcelas: " + this.Installments.toString()
+            // meta_data: meta_data
+          }
+        };
+
+        api
+          .putApiWc(data)
+          .then(() => {
+            this.setOrderId(null);
+          })
+          .then(() => {
+            this.esvaziarCarrinho();
+            this.$router.push({ name: "PagamentoConfirmado" });
+          })
+          .catch(error => {
+            this.erros.push(error.response.data);
+          });
+      }
     }
   },
   created() {
@@ -844,6 +1128,10 @@ export default {
   align-self: center; /* alinhamento vertical */
 
   text-align: center;
+}
+
+input {
+  text-transform: uppercase;
 }
 
 .input-cupom {
@@ -1175,9 +1463,99 @@ export default {
   grid-area: formas_de_pagamento;
   display: grid;
   grid-template:
-    "ddd" 1fr
-    "ddd" 1fr;
+    "pagamento_menu pagamento_dados" 1fr /
+    minmax(175px, 1fr) 550px;
+  background: #247133;
+}
+
+.formas_de_pagamento ::placeholder {
+  color: #fff;
+}
+
+.pagamento_menu {
+  grid-area: pagamento_menu;
+  padding-top: 10px;
+}
+
+.pagamento_header {
+  height: 50px;
+  padding-left: 15px;
+}
+.pagamento_opcao {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+
+.pagamento_opcao.active {
   background: #2c823a;
+}
+
+.pagamento_header p {
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bolder;
+  font-style: italic;
+}
+.pagamento_opcao p {
+  color: #fff;
+  font-weight: bolder;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.pagamento_dados {
+  grid-area: pagamento_dados;
+  background: #2c823a;
+  padding: 7px 50px 0 50px;
+}
+
+.pagamento_dados .label_finalizar {
+  color: #f9f9f9;
+  font-weight: normal;
+}
+.pagamento_dados .input_finalizar {
+  border: 1px solid #eeedef;
+  color: white;
+}
+
+.nome_cartao {
+  text-align: center;
+  max-width: 390px;
+}
+
+.validade_cartao {
+  max-width: 85px;
+}
+
+.codigo_cartao {
+  max-width: 50px;
+}
+
+.numero_cartao {
+  max-width: 180px;
+}
+
+.parcelas_cartao {
+  max-width: 60px;
+}
+
+select {
+  border-radius: 5px;
+  width: 60px;
+}
+
+.boleto_dados {
+  color: #fff;
+  padding: 40px;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.boleto_dados p {
+  font-size: 1rem;
+  font-style: italic;
 }
 
 /* ******************* FIM FINALIZAR AREA *************************/
