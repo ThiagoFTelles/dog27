@@ -323,7 +323,10 @@
       </div>
       <div class="resumo_finalizar">
         <p class="top_resumo_finalizar maincontent-header">Resumo da compra</p>
-        <div class="carrinho_finalizar"></div>
+        <div class="carrinho_finalizar">
+          <div class="carrinho_finalizar_main"></div>
+          <button class="carrinho_finalizar_btn">FINALIZAR COMPRA</button>
+        </div>
       </div>
     </div>
   </section>
@@ -1448,7 +1451,7 @@ input {
   grid-area: resumo_finalizar;
   display: grid;
   grid-template:
-    "header" 35px
+    "header" 45px
     "carrinho_finalizar" 1fr /
     1fr;
   background: #e8e8e8;
@@ -1457,6 +1460,25 @@ input {
 
 .carrinho_finalizar {
   grid-area: carrinho_finalizar;
+  display: grid;
+  grid-template:
+    "carrinho_finalizar_main" 320px
+    "carrinho_finalizar_btn" 40px /
+    320px;
+}
+
+.carrinho_finalizar_main {
+  grid-area: carrinho_finalizar_main;
+  background: #f6f5f4;
+}
+
+.carrinho_finalizar_btn {
+  grid-area: carrinho_finalizar_btn;
+  border: none;
+  background: #2c823a;
+  color: #fff;
+  font-weight: bolder;
+  font-size: 1.2rem;
 }
 
 .formas_de_pagamento {
