@@ -103,6 +103,9 @@ img {
 .bg_green {
   background: #31873c !important;
 }
+.bg_red {
+  background: red !important;
+}
 
 .radio {
   /* secret sauce to styling radio buttons */

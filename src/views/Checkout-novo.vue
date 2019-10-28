@@ -324,8 +324,152 @@
       <div class="resumo_finalizar">
         <p class="top_resumo_finalizar maincontent-header">Resumo da compra</p>
         <div class="carrinho_finalizar">
-          <div class="carrinho_finalizar_main"></div>
-          <button class="carrinho_finalizar_btn">FINALIZAR COMPRA</button>
+          <div class="carrinho_finalizar_main">
+            <div class="fechar_area">
+              <p class="seu_carrinho">Seu carrinho</p>
+              <p class="fechar_carrinho"></p>
+            </div>
+            <div class="carrinho_items">
+              <div class="scroller" v-if="carrinho.length > 0">
+                <transition-group class="carrinho_lista" name="cart-list" tag="ul">
+                  <li v-if="ganhouPresente" class="carrinho_item" key="carrinho-presente">
+                    <p class="quantidade">Quantidade: 1</p>
+                    <p class="titulo">{{nomeDoPresente | uppercase}}</p>
+                    <p class="tamanho">Tamanho: U</p>
+                    <img :src="fotoDoPresente" :alt="nomeDoPresente" class="foto" />
+
+                    <p class="carrinho_preco green">{{0 | numeroPreco}}</p>
+                    <button class="carrinho_remover"></button>
+                    <br />
+                  </li>
+                  <li
+                    class="carrinho_item"
+                    v-for="(item, index) in carrinho"
+                    :key="`carrinho-item${index}`"
+                  >
+                    <p class="quantidade">Quantidade: {{item.quantidade}}</p>
+                    <p
+                      class="titulo"
+                    >{{item.categoria | uppercase}} PARA CACHORROS {{item.estampa | uppercase}}</p>
+                    <p class="tamanho">Tamanho: {{item.tamanho}}</p>
+                    <img
+                      :src="item.fotoUrl"
+                      :alt="`${item.categoria} para cachorros ${item.estampa}`"
+                      class="foto"
+                    />
+
+                    <p
+                      :class="{ green: item.isCombo }"
+                      class="carrinho_preco"
+                    >{{item.valorUnitarioCobrado * item.quantidade | numeroPreco}}</p>
+                    <button
+                      class="carrinho_remover"
+                      @click="removerItemDoCarrinho({index:index, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
+                    >X</button>
+                    <br />
+                  </li>
+                </transition-group>
+              </div>
+            </div>
+
+            <div class="cupom_carriho">
+              <section class="cupom-vazio" v-if="!desconto.valor && alterarCupom">
+                <div v-if="carregandoCupom" class="carregando-area">aguarde...</div>
+                <p class="label">Cupom de desconto:</p>
+                <input
+                  class="input-cupom"
+                  type="text"
+                  v-model="couponCode"
+                  :class="{error: cupomInvalido}"
+                />
+                <button
+                  :class="{bg_green: this.couponCode.length >= 1}"
+                  :disabled="this.couponCode.length < 1"
+                  class="btn-cupom"
+                  @click="buscarCupom()"
+                >ok</button>
+              </section>
+              <section v-else class="cupom-aplicado">
+                <p class="label">Cupom de desconto:</p>
+                <section>
+                  <p class="label-black">{{cupom.code | uppercase}}</p>
+                  <p class="trocar-cupom" @click="trocarCupom">X</p>
+                </section>
+              </section>
+            </div>
+            <div class="frete_carrinho">
+              <div class="frete" v-if="!pac.mostrar && !sedex.mostrar">
+                <section class="frete-vazio">
+                  <div v-if="calculandoFrete" class="carregando-area">calculando...</div>
+                  <p class="label">Digite o CEP</p>
+                  <input
+                    class="input-frete"
+                    :class="{error: freteErrado}"
+                    type="text"
+                    name="postcodeEntrega"
+                    id="postcodeEntrega"
+                    v-model="cepEntrega"
+                    @keyup="preencherCepEntrega"
+                    v-mask="'#####-###'"
+                  />
+                  <button
+                    class="btn-frete bg_red"
+                    :disabled="this.cepEntrega.length < 9"
+                    @click="calcularPrecoPrazo"
+                  >ok</button>
+                </section>
+              </div>
+              <div class="frete frete-selecionado" v-else>
+                <label v-if="pac.mostrar" class="pac_tag" for="pac">PAC: {{pac.prazo}} d.u.</label>
+                <label v-if="pac.mostrar" class="label_pac" for="pac">
+                  <input
+                    v-if="pac.mostrar"
+                    class="radio input_pac"
+                    type="radio"
+                    name="opcaoDeFrete"
+                    id="pac"
+                    @click="selecionarFrete('pac')"
+                  />
+                  <p v-if="pac.mostrar" class="valor_frete valor_pac">{{pac.valor | numeroPreco}}</p>
+                </label>
+                <label
+                  v-if="sedex.mostrar"
+                  class="sedex_tag"
+                  for="sedex"
+                >Sedex: {{sedex.prazo}} d.u.</label>
+                <label v-if="sedex.mostrar" class="label_sedex" for="sedex">
+                  <input
+                    v-if="sedex.mostrar"
+                    class="radio input_sedex"
+                    type="radio"
+                    name="opcaoDeFrete"
+                    id="sedex"
+                    @click="selecionarFrete('sedex')"
+                    checked="checked"
+                  />
+                  <p
+                    v-if="sedex.mostrar"
+                    class="valor_frete valor_sedex"
+                  >{{sedex.valor | numeroPreco}}</p>
+                </label>
+              </div>
+              <div class="total">
+                <div v-if="desconto.valor" class="descontotexto label-black">DESCONTO</div>
+                <div
+                  v-if="desconto.valor"
+                  class="descontovalor red"
+                >- {{String(desconto.valor).replace(".", ",") }}</div>
+                <div class="totaltexto label-black">Total</div>
+                <div
+                  class="totalvalor"
+                >{{carrinhoTotalComDesconto+freteEscolhido.valor | numeroPreco}}</div>
+              </div>
+            </div>
+          </div>
+          <button
+            class="carrinho_finalizar_btn"
+            :class="{bg_green: this.finalizarOk}"
+          >FINALIZAR COMPRA</button>
         </div>
       </div>
     </div>
@@ -355,6 +499,7 @@ export default {
       Brand: "",
       erros: [],
       finalizar: false,
+      finalizarOk: false,
       line_items: [],
       alterarCupom: true,
       cupomInvalido: false,
@@ -994,6 +1139,7 @@ export default {
   },
   created() {
     this.finalizar = false;
+    this.finalizarOk = false;
     this.resetarFrete();
     this.checkCart();
     document.title = "Checkout";
@@ -1025,13 +1171,15 @@ export default {
   min-height: 400px;
   display: grid;
   grid-template:
-    "mainheader" 50px
-    "maincontent" 1fr;
+    ". mainheader ." 50px
+    ". maincontent ." 1fr
+    / 1fr 1100px 1fr;
 }
 
 .mainheader {
   grid-area: mainheader;
   align-self: center; /* alinhamento vertical */
+  margin: 0 30px;
 }
 
 .main-titulo {
@@ -1052,6 +1200,8 @@ export default {
     "totalarea totalarea totalarea totalarea totalarea" 180px
     ". bottom bottom bottom bottom" 70px /
     500px 120px 190px 120px 70px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .maincontent-header {
@@ -1470,13 +1620,168 @@ input {
 .carrinho_finalizar_main {
   grid-area: carrinho_finalizar_main;
   background: #f6f5f4;
+  display: grid;
+  grid-template:
+    "fechar_area fechar_area" 25px
+    "carrinho_items carrinho_items" 1fr
+    "cupom_carriho frete_carrinho" 90px /
+    1fr 1fr;
+  padding: 5px 10px;
+}
+
+.fechar_area {
+  grid-area: fechar_area;
+}
+.seu_carrinho {
+  display: inline;
+}
+.fechar_carrinho {
+  float: right;
+}
+
+.scroller {
+  overflow-y: scroll;
+  max-height: 185px;
+}
+
+.scroller::-webkit-scrollbar {
+  width: 0;
+}
+
+.carrinho_items {
+  grid-area: carrinho_items;
+}
+.carrinho_items .carrinho_item {
+  display: grid;
+  grid-template: "foto . . . carrinho_remover" 10px "foto titulo titulo titulo ." 20px "foto tamanho quantidade . ." 20px "foto  tamanho quantidade . carrinho_preco" 20px / 60px 60px 60px 1fr;
+  background: white;
+  border-radius: 10px;
+  padding: 3px 10px 0 10px;
+  margin-top: 10px;
+}
+.carrinho_items .carrinho_item .carrinho_preco {
+  font-size: 0.8rem;
+  grid-area: carrinho_preco;
+}
+.carrinho_items .carrinho_item .tamanho {
+  font-size: 0.6rem;
+  grid-area: tamanho;
+  text-align: left;
+}
+.carrinho_items .carrinho_item .quantidade {
+  font-size: 0.6rem;
+  grid-area: quantidade;
+  text-align: left;
+}
+.carrinho_items .carrinho_item .titulo {
+  font-size: 0.7rem;
+  grid-area: titulo;
+}
+.carrinho_items .carrinho_item .carrinho_remover {
+  font-size: 0.6rem;
+  text-align: right;
+  grid-area: carrinho_remover;
+}
+.carrinho_items .carrinho_item .foto {
+  width: 55px;
+  height: 55px;
+  grid-area: foto;
+}
+
+.cupom_carriho {
+  grid-area: cupom_carriho;
+}
+.cupom_carriho .cupom-vazio {
+  padding: 0;
+}
+.cupom_carriho .label {
+  font-size: 0.8rem;
+  text-align: center;
+}
+.cupom_carriho .cupom-vazio,
+.cupom_carriho .cupom-aplicado {
+  text-align: center;
+}
+.cupom_carriho .cupom-vazio .input-cupom {
+  height: 20px;
+  font-size: 0.9rem;
+  padding: 5px;
+  width: 110px;
+}
+.cupom_carriho .cupom-vazio .btn-cupom {
+  width: 60px;
+  height: 15px;
+  padding: 0;
+  font-size: 0.7rem;
+}
+.frete_carrinho {
+  grid-area: frete_carrinho;
+}
+
+.frete_carrinho .frete-vazio {
+  padding: 0;
+  text-align: center;
+}
+.frete_carrinho .label {
+  font-size: 0.8rem;
+}
+.frete_carrinho .input-frete {
+  height: 20px;
+  width: 110px;
+  padding: 10px;
+  font-size: 0.8rem;
+}
+.frete_carrinho .btn-frete {
+  height: 21px;
+}
+
+.frete_carrinho .frete-selecionado {
+  margin: 0 0 15px 0;
+  grid-template: "sedex_tag valor_sedex" 15px "pac_tag valor_pac" 15px / 1fr 1fr;
+}
+.frete_carrinho .radio {
+  margin: 0;
+  padding: 2px;
+  margin-right: 3px;
+}
+.frete_carrinho .radio:checked {
+  border-width: 4px;
+  padding: 0px;
+  margin-right: 1px;
+}
+.frete_carrinho .valor_frete,
+.frete_carrinho .sedex_tag,
+.frete_carrinho .pac_tag,
+.frete_carrinho .label_pac,
+.frete_carrinho .label_sedex {
+  font-size: 0.75rem;
+  align-self: center;
+}
+.frete_carrinho .valor_frete {
+  margin-left: 3px;
+}
+
+.frete_carrinho .total {
+  padding: 0;
+}
+.frete_carrinho .total .descontotexto {
+  font-size: 0.6em;
+}
+.frete_carrinho .total .descontovalor {
+  font-size: 0.8em;
+}
+.frete_carrinho .total .totaltexto {
+  font-size: 1em;
+  text-transform: uppercase;
+  font-style: normal;
+  color: #345;
 }
 
 .carrinho_finalizar_btn {
   grid-area: carrinho_finalizar_btn;
   border: none;
-  background: #2c823a;
-  color: #fff;
+  background: #a0a0a0;
+  color: #f4f4f4;
   font-weight: bolder;
   font-size: 1.2rem;
   cursor: pointer;
