@@ -267,7 +267,7 @@ export default {
 section {
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 95;
 }
 
 .container-header-mobile {

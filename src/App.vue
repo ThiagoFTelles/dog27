@@ -88,6 +88,10 @@ img {
   display: block;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 .green {
   color: green !important;
 }

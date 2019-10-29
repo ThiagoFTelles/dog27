@@ -1,5 +1,40 @@
 <template>
   <section class="checkout-container">
+    <div class="verificarLogin" v-if="verificarLogin">
+      <div class="loginArea">
+        <p class="loginTitulo">Digite seu email</p>
+        <p class="loginFechar" @click="verificarLogin = false">X</p>
+        <form class="loginInput">
+          <input
+            required
+            type="email"
+            id="email"
+            name="email"
+            v-model="loginData.email"
+            class="emailLogin inputModal"
+          />
+          <label for="senha" class="labelEmailSenha">Senha</label>
+          <input
+            required
+            type="password"
+            id="senhaModal"
+            name="senha"
+            v-model="loginData.senha"
+            class="emailSenha inputModal"
+          />
+          <button
+            @click.prevent="logar"
+            class="btnEmailSenha"
+            :class="{bg_green: this.loginData.senha.length >= 1}"
+          >entrar</button>
+          <ErroNotificacao :erros="erros" />
+        </form>
+        <div
+          class="continuarSemLogin"
+          @click="verificarLogin = false;finalizar = true;"
+        >>> ainda não tenho cadastro</div>
+      </div>
+    </div>
     <img src="../assets/footer/icone-logo.svg" alt="Dog-27" class="logo" />
     <div class="main" v-if="!finalizar">
       <div class="mainheader">
@@ -143,7 +178,7 @@
           <div
             class="fecharcompra"
             :class="{bg_green: this.habilitarBtn}"
-            @click="habilitarBtn ? finalizar = true : null"
+            @click="habilitarBtn ? fecharCompra() : null"
           >
             <p>Fechar compra</p>
           </div>
@@ -157,31 +192,77 @@
           <div class="linha_dados">
             <div class="input_area left">
               <label for="nome" class="label_finalizar">Nome:</label>
-              <input type="text" class="input_finalizar nome" value="THIAGO FERNANDES TELLES" />
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                v-model="nome"
+                maxlength="40"
+                placeholder="seu nome completo"
+                class="input_finalizar nome"
+              />
             </div>
             <div class="input_area">
               <label for="cpf" class="label_finalizar">CPF:</label>
-              <input type="text" class="input_finalizar cpf" value="116.639.647-93" />
+              <input
+                class="input_finalizar cpf"
+                required
+                type="text"
+                id="cpf"
+                name="cpf"
+                v-model="cpf"
+                v-mask="['###.###.###-##']"
+              />
             </div>
           </div>
           <div class="linha_dados">
             <div class="input_area left">
               <label for="nascimento" class="label_finalizar">Data de nascimento:</label>
-              <input type="text" class="input_finalizar nascimento" value="10/03/1989" />
+              <input
+                required
+                type="text"
+                id="nascimento"
+                name="nascimento"
+                v-model="nascimento"
+                v-mask="['##/##/####']"
+                class="input_finalizar nascimento"
+              />
             </div>
             <div class="input_area">
               <label for="celular" class="label_finalizar">Celular:</label>
-              <input type="text" class="input_finalizar celular" value="(27) 9-9923-9423" />
+              <input
+                required
+                type="text"
+                id="telefone"
+                name="telefone"
+                v-model="telefone"
+                v-mask="['(##) ####-####', '(##) #-####-####']"
+                class="input_finalizar celular"
+              />
             </div>
           </div>
           <div class="linha_dados">
             <div class="input_area full">
               <label for="email" class="label_finalizar">E-mail:</label>
-              <input type="text" class="input_finalizar email" value="atendimento.telles@gmail.com" />
+              <input
+                class="input_finalizar email"
+                required
+                type="email"
+                id="input_finalizar_email"
+                name="email"
+                v-model="email"
+              />
             </div>
-            <div class="input_area full">
+            <div class="input_area full" :class="{invisible: login}">
               <label for="senha" class="label_finalizar">Senha:</label>
-              <input type="password" class="input_finalizar senha" value="minhasenha123" />
+              <input
+                required
+                type="password"
+                id="senha"
+                name="senha"
+                v-model="senha"
+                class="input_finalizar senha"
+              />
             </div>
           </div>
         </div>
@@ -190,37 +271,97 @@
         <p class="top_endereco_entrega maincontent-header">Entrega</p>
         <div class="dados_area">
           <div class="linha_dados">
+            <div class="linha_dados">
+              <div class="input_area left">
+                <label for="nameEntrega" class="label_finalizar">Nome:</label>
+                <input
+                  type="text"
+                  class="input_finalizar bairro_entrega"
+                  name="nameEntrega"
+                  id="nameEntrega"
+                  v-model="nomeEntrega"
+                  maxlength="40"
+                />
+              </div>
+              <div class="input_area">
+                <label for="phoneEntrega" class="label_finalizar">Telefone:</label>
+                <input
+                  type="text"
+                  name="phoneEntrega"
+                  id="phoneEntrega"
+                  v-model="telefoneEntrega"
+                  v-mask="['(##) ####-####', '(##) #-####-####']"
+                  class="input_finalizar uf_entrega"
+                />
+              </div>
+            </div>
+
             <div class="input_area full">
               <label for="endereco_entrega" class="label_finalizar">Endereço:</label>
               <input
                 type="text"
+                name="address_1Entrega"
+                id="address_1Entrega"
+                v-model="ruaEntrega"
                 class="input_finalizar input_endereco_entrega"
-                value="Rua Filomeno Ribeiro"
               />
             </div>
           </div>
           <div class="linha_dados">
             <div class="input_area left">
-              <label for="cep_entrega" class="label_finalizar">CEP:</label>
-              <input type="text" class="input_finalizar cep_entrega" value="29016-130" />
+              <label for="postcodeEntrega" class="label_finalizar">CEP:</label>
+              <input
+                type="text"
+                name="postcodeEntrega"
+                id="postcodeEntrega"
+                v-model="cepEntrega"
+                @keyup="preencherCepEntrega"
+                v-mask="'#####-###'"
+                class="input_finalizar cep_entrega"
+              />
             </div>
             <div class="input_area left">
               <label for="numero_entrega" class="label_finalizar">Número:</label>
-              <input type="text" class="input_finalizar numero_entrega" value="90" />
+              <input
+                type="text"
+                name="numeroEntrega"
+                id="numeroEntrega"
+                class="input_finalizar numero_entrega"
+                v-model="numeroEntrega"
+              />
             </div>
             <div class="input_area">
               <label for="complemento" class="label_finalizar">Complemento:</label>
-              <input type="text" class="input_finalizar complemento_entrega" value="201" />
+              <input
+                type="text"
+                name="complementoEntrega"
+                id="complementoEntrega"
+                v-model="complementoEntrega"
+                class="input_finalizar complemento_entrega"
+              />
             </div>
           </div>
           <div class="linha_dados">
             <div class="input_area left">
               <label for="bairro" class="label_finalizar">Bairro:</label>
-              <input type="text" class="input_finalizar bairro_entrega" value="centro" />
+              <input
+                type="text"
+                name="address_2Entrega"
+                id="address_2Entrega"
+                class="input_finalizar bairro_entrega"
+                v-model="bairroEntrega"
+              />
             </div>
             <div class="input_area">
               <label for="uf" class="label_finalizar">UF:</label>
-              <input type="text" class="input_finalizar uf_entrega" value="ES" />
+              <input
+                type="text"
+                name="stateEntrega"
+                id="stateEntrega"
+                v-model="estadoEntrega"
+                v-mask="'AA'"
+                class="input_finalizar uf_entrega"
+              />
             </div>
           </div>
         </div>
@@ -249,7 +390,7 @@
           <section class="cartao_dados" v-if="pagamento_selecionado == 'cartao'">
             <div class="linha_dados">
               <div class="input_area left">
-                <label for="numero_cartao" class="label_finalizar">Número do cartão:</label>
+                <label for="CardNumber" class="label_finalizar">Número do cartão:</label>
                 <input
                   type="text"
                   class="input_finalizar numero_cartao"
@@ -260,7 +401,7 @@
                 />
               </div>
               <div class="input_area left">
-                <label for="codigo_cartao" class="label_finalizar">Código:</label>
+                <label for="SecurityCode" class="label_finalizar">Código:</label>
                 <input
                   type="text"
                   class="input_finalizar codigo_cartao"
@@ -272,7 +413,7 @@
                 />
               </div>
               <div class="input_area left">
-                <label for="validade_cartao" class="label_finalizar">Validade:</label>
+                <label for="ExpirationDate" class="label_finalizar">Validade:</label>
                 <input
                   type="text"
                   class="input_finalizar validade_cartao"
@@ -489,6 +630,11 @@ export default {
   components: {},
   data() {
     return {
+      verificarLogin: false,
+      loginData: {
+        email: "",
+        senha: ""
+      },
       pagamento_selecionado: "cartao",
       disabled: false,
       Installments: 1,
@@ -545,6 +691,7 @@ export default {
     ...mapFields({
       fields: [
         "nome",
+        "senha",
         "cpf",
         "nascimento",
         "email",
@@ -619,6 +766,28 @@ export default {
       "esvaziarCarrinho",
       "setOrderId"
     ]),
+    fecharCompra() {
+      if (this.login) {
+        this.finalizar = true;
+      } else {
+        this.verificarLogin = true;
+      }
+    },
+    logar() {
+      this.erros = [];
+      this.$store
+        .dispatch("logarUsuario", this.loginData)
+        .then(() => {
+          this.$store.dispatch("getUsuario");
+        })
+        .then(() => {
+          this.verificarLogin = false;
+          this.finalizar = true;
+        })
+        .catch(e => {
+          this.erros.push(e.response.data.message);
+        });
+    },
     checkCart() {
       let quantidade = this.carrinho.length;
       if (quantidade === 0) {
@@ -1165,6 +1334,146 @@ export default {
   height: 100px;
   margin: auto;
 }
+
+.verificarLogin::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 96;
+}
+
+.verificarLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 80px;
+}
+
+.loginArea {
+  margin-top: 50px;
+  position: relative;
+  z-index: 99;
+  animation: fadeIn 0.3s forwards;
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 20px;
+  box-shadow: 0 6px 6px rgba(38, 56, 74, 0.7);
+  width: 700px;
+  height: 300px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate3D(50px, 0, 0);
+    /* translate3d(Eixo X, Y, Z) */
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3D(0px, 0, 0);
+    /* translate3d(Eixo X, Y, Z) */
+  }
+}
+
+.loginTitulo {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 1.2em;
+  font-style: italic;
+  color: black;
+  margin: auto;
+  font-weight: bold;
+  margin-top: 20px;
+  float: left;
+}
+
+.loginFechar {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 0.9em;
+  font-weight: bolder;
+  color: black;
+  margin: auto;
+  float: right;
+  margin-top: -10px;
+  cursor: pointer;
+}
+
+.loginInputs {
+  color: #000;
+}
+
+.inputModal {
+  background: #ebebec;
+  height: 38px;
+  margin: 5px 0 10px 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-transform: uppercase;
+  text-align: center;
+  border: none;
+  padding: 5px 0 0 0;
+}
+.emailLogin {
+  width: 475px;
+}
+
+.btnEmailLogin {
+  width: 115px;
+  background: #747474;
+  height: 38px;
+  border: none;
+  text-align: center;
+  color: #fff;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 1.2em;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.sectionSenha {
+  margin: 0 50px;
+}
+
+.labelEmailSenha {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 0.9em;
+  font-style: italic;
+  color: black;
+  margin: auto;
+  font-weight: bold;
+  display: block;
+}
+
+.emailSenha {
+  width: 345px;
+}
+
+.btnEmailSenha {
+  width: 115px;
+  background: #747474;
+  height: 38px;
+  border: none;
+  text-align: center;
+  color: #fff;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 1.2em;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.continuarSemLogin {
+  cursor: pointer;
+  font-size: 1rem;
+}
+
 /* *************** MAIN AREA *************** */
 .main {
   grid-area: main;
