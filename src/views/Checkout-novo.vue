@@ -1,18 +1,41 @@
 <template>
   <section class="checkout-container">
-    <div class="verificarLogin" v-if="verificarLogin">
+    <div class="finalizandoCompra modal" v-if="finalizandoCompra">
+      <div class="loginArea" v-if="!erros">
+        <p class="loginTitulo">Aguarde</p>
+        <p
+          v-if="erros"
+          class="loginFechar"
+          @click="verificarLogin = false; erros = []; mostrarDadosCobranca = false; finalizar = false;"
+        >X</p>
+        <ErroNotificacao :erros="erros" />
+      </div>
+    </div>
+    <div class="verificarLogin modal" v-if="verificarLogin">
       <div class="loginArea">
         <p class="loginTitulo">Digite seu email</p>
-        <p class="loginFechar" @click="verificarLogin = false">X</p>
+        <p
+          class="loginFechar"
+          @click="verificarLogin = false; mostrarDadosCobranca = false; finalizar = false;"
+        >X</p>
         <form class="loginInput">
           <input
             required
             type="email"
             id="email"
             name="email"
-            v-model="loginData.email"
+            v-model="email"
             class="emailLogin inputModal"
+            :disabled="usuarioCadastrado"
           />
+          <button
+            @click.prevent="verificarSeTemLogin"
+            class="btnEmailSenha"
+            :class="{bg_green: emailValido}"
+            :disabled="!emailValido"
+          >ok</button>
+        </form>
+        <form class="senhaInput" v-if="usuarioCadastrado">
           <label for="senha" class="labelEmailSenha">Senha</label>
           <input
             required
@@ -29,10 +52,125 @@
           >entrar</button>
           <ErroNotificacao :erros="erros" />
         </form>
+      </div>
+    </div>
+    <div class="modal dadosCobranca" v-if="mostrarDadosCobranca">
+      <div class="cobrancaContainer">
+        <div class="cobrancaArea">
+          <div class="dados_cobranca_area">
+            <p class="cobrancaTitulo">Endereço de cobrança</p>
+            <p
+              class="loginFechar"
+              @click="mostrarDadosCobranca = false; verificarLogin = true; finalizar = false;"
+            >X</p>
+            <div class="linha_dados">
+              <div class="linha_dados">
+                <div class="input_area left">
+                  <label for="name" class="label_finalizar">Nome:</label>
+                  <input
+                    type="text"
+                    class="input_finalizar bairro_entrega"
+                    name="name"
+                    id="nameCobranca"
+                    v-model="nome"
+                    maxlength="40"
+                    :class="{error: !nome}"
+                  />
+                </div>
+                <div class="input_area">
+                  <label for="phone" class="label_finalizar">Telefone:</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    id="phoneCobranca"
+                    v-model="telefone"
+                    v-mask="['(##) ####-####', '(##) #-####-####']"
+                    class="input_finalizar uf_entrega"
+                    :class="{error: !telefone}"
+                  />
+                </div>
+              </div>
+
+              <div class="input_area full">
+                <label for="endereco" class="label_finalizar">Endereço:</label>
+                <input
+                  type="text"
+                  name="address_1"
+                  id="address_1"
+                  v-model="rua"
+                  class="input_finalizar input_endereco_entrega"
+                  :class="{error: !rua}"
+                />
+              </div>
+            </div>
+            <div class="linha_dados">
+              <div class="input_area left">
+                <label for="postcode" class="label_finalizar">CEP:</label>
+                <input
+                  type="text"
+                  name="postcode"
+                  id="postcode"
+                  v-model="cep"
+                  @keyup="preencherCep"
+                  v-mask="'#####-###'"
+                  class="input_finalizar cep_entrega"
+                  :class="{error: !cep}"
+                />
+              </div>
+              <div class="input_area left">
+                <label for="numero" class="label_finalizar">Número:</label>
+                <input
+                  type="text"
+                  name="numero"
+                  id="numero"
+                  class="input_finalizar numero_entrega"
+                  v-model="numero"
+                  :class="{error: !numero}"
+                />
+              </div>
+              <div class="input_area">
+                <label for="complemento" class="label_finalizar">Complemento:</label>
+                <input
+                  type="text"
+                  name="complemento"
+                  id="complemento"
+                  v-model="complemento"
+                  class="input_finalizar complemento_entrega"
+                />
+              </div>
+            </div>
+            <div class="linha_dados">
+              <div class="input_area left">
+                <label for="bairro" class="label_finalizar">Bairro:</label>
+                <input
+                  type="text"
+                  name="address_2"
+                  id="address_2"
+                  class="input_finalizar bairro_entrega"
+                  v-model="bairro"
+                  :class="{error: !bairro}"
+                />
+              </div>
+              <div class="input_area">
+                <label for="uf" class="label_finalizar">UF:</label>
+                <input
+                  type="text"
+                  name="state"
+                  id="state"
+                  v-model="estado"
+                  v-mask="'AA'"
+                  class="input_finalizar uf_entrega"
+                  :class="{error: !estado}"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <div
-          class="continuarSemLogin"
-          @click="verificarLogin = false;finalizar = true;"
-        >>> ainda não tenho cadastro</div>
+          class="cobrancaAreaBottom"
+          @click="dadosCobranca ? mostrarDadosCobranca=false : null"
+          :class="{bg_blue:dadosCobranca}"
+        >ok</div>
       </div>
     </div>
     <img src="../assets/footer/icone-logo.svg" alt="Dog-27" class="logo" />
@@ -200,6 +338,7 @@
                 maxlength="40"
                 placeholder="seu nome completo"
                 class="input_finalizar nome"
+                :class="{error: !nome}"
               />
             </div>
             <div class="input_area">
@@ -212,6 +351,7 @@
                 name="cpf"
                 v-model="cpf"
                 v-mask="['###.###.###-##']"
+                :class="{error: !cpf}"
               />
             </div>
           </div>
@@ -226,6 +366,7 @@
                 v-model="nascimento"
                 v-mask="['##/##/####']"
                 class="input_finalizar nascimento"
+                :class="{error: !nascimento}"
               />
             </div>
             <div class="input_area">
@@ -238,6 +379,7 @@
                 v-model="telefone"
                 v-mask="['(##) ####-####', '(##) #-####-####']"
                 class="input_finalizar celular"
+                :class="{error: !telefone}"
               />
             </div>
           </div>
@@ -251,18 +393,33 @@
                 id="input_finalizar_email"
                 name="email"
                 v-model="email"
+                :class="{error: !email}"
               />
             </div>
-            <div class="input_area full" :class="{invisible: login}">
-              <label for="senha" class="label_finalizar">Senha:</label>
-              <input
-                required
-                type="password"
-                id="senha"
-                name="senha"
-                v-model="senha"
-                class="input_finalizar senha"
-              />
+            <div class="linha_dados">
+              <div class="input_area left" :class="{invisible: login}">
+                <label for="senha" class="label_finalizar">Senha:</label>
+                <input
+                  required
+                  type="password"
+                  id="senha"
+                  name="senha"
+                  v-model="senha"
+                  class="input_finalizar bairro_entrega"
+                  :class="{error: !senha}"
+                />
+              </div>
+              <div class="input_area" :class="{invisible: login}">
+                <label for="confirmar_senha" class="label_finalizar">Confirme sua senha:</label>
+                <input
+                  type="password"
+                  name="confirmar_senha"
+                  id="confirmar_senha"
+                  v-model="confirmar_senha"
+                  class="input_finalizar uf_entrega"
+                  :class="{error: !senha_confirmada}"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -281,6 +438,7 @@
                   id="nameEntrega"
                   v-model="nomeEntrega"
                   maxlength="40"
+                  :class="{error: !nomeEntrega}"
                 />
               </div>
               <div class="input_area">
@@ -292,6 +450,7 @@
                   v-model="telefoneEntrega"
                   v-mask="['(##) ####-####', '(##) #-####-####']"
                   class="input_finalizar uf_entrega"
+                  :class="{error: !telefoneEntrega}"
                 />
               </div>
             </div>
@@ -304,6 +463,7 @@
                 id="address_1Entrega"
                 v-model="ruaEntrega"
                 class="input_finalizar input_endereco_entrega"
+                :class="{error: !ruaEntrega}"
               />
             </div>
           </div>
@@ -318,6 +478,7 @@
                 @keyup="preencherCepEntrega"
                 v-mask="'#####-###'"
                 class="input_finalizar cep_entrega"
+                :class="{error: !cepEntrega}"
               />
             </div>
             <div class="input_area left">
@@ -328,6 +489,7 @@
                 id="numeroEntrega"
                 class="input_finalizar numero_entrega"
                 v-model="numeroEntrega"
+                :class="{error: !numeroEntrega}"
               />
             </div>
             <div class="input_area">
@@ -350,6 +512,7 @@
                 id="address_2Entrega"
                 class="input_finalizar bairro_entrega"
                 v-model="bairroEntrega"
+                :class="{error: !bairroEntrega}"
               />
             </div>
             <div class="input_area">
@@ -361,6 +524,7 @@
                 v-model="estadoEntrega"
                 v-mask="'AA'"
                 class="input_finalizar uf_entrega"
+                :class="{error: !estadoEntrega}"
               />
             </div>
           </div>
@@ -398,6 +562,7 @@
                   name="CardNumber"
                   id="CardNumber"
                   v-model="CardNumber"
+                  :class="{error: !CardNumber}"
                 />
               </div>
               <div class="input_area left">
@@ -410,6 +575,7 @@
                   v-model="SecurityCode"
                   v-mask="'####'"
                   placeholder="CVV"
+                  :class="{error: !SecurityCode}"
                 />
               </div>
               <div class="input_area left">
@@ -422,6 +588,7 @@
                   placeholder="MM/AAAA"
                   v-mask="'##/20##'"
                   v-model="ExpirationDate"
+                  :class="{error: !ExpirationDate}"
                 />
               </div>
               <div class="input_area">
@@ -450,6 +617,7 @@
                   id="Holder"
                   v-model="Holder"
                   maxlength="40"
+                  :class="{error: !Holder}"
                 />
               </div>
               <div class="input_area full">
@@ -609,7 +777,9 @@
           </div>
           <button
             class="carrinho_finalizar_btn"
-            :class="{bg_green: this.finalizarOk}"
+            :class="{bg_green: finalizarOk}"
+            :disabled="!finalizarOk"
+            @click="finalizarCompra"
           >FINALIZAR COMPRA</button>
         </div>
       </div>
@@ -630,7 +800,11 @@ export default {
   components: {},
   data() {
     return {
+      finalizandoCompra: false,
       verificarLogin: false,
+      mostrarDadosCobranca: false,
+      usuarioCadastrado: false,
+      confirmar_senha: "",
       loginData: {
         email: "",
         senha: ""
@@ -645,7 +819,6 @@ export default {
       Brand: "",
       erros: [],
       finalizar: false,
-      finalizarOk: false,
       line_items: [],
       alterarCupom: true,
       cupomInvalido: false,
@@ -717,6 +890,102 @@ export default {
       base: "usuario",
       mutation: "UPDATE_USUARIO"
     }),
+    senha_confirmada() {
+      if (this.confirmar_senha === this.senha) {
+        return true;
+      }
+      return false;
+    },
+    emailValido() {
+      if (
+        this.email.length >= 5 &&
+        this.email.includes("@") &&
+        this.email.includes(".") &&
+        this.usuarioCadastrado == false
+      ) {
+        return true;
+      }
+      return false;
+    },
+    finalizarOk() {
+      if (this.dadosOk && this.pagamentoOk && this.freteOk) {
+        return true;
+      }
+      return false;
+    },
+    pagamentoOk() {
+      if (this.pagamento_selecionado === "boleto") {
+        return true;
+      } else if (this.pagamento_selecionado === "cartao") {
+        if (
+          this.Installments &&
+          this.CardNumber &&
+          this.Holder &&
+          this.ExpirationDate &&
+          this.SecurityCode
+        ) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    },
+    freteOk() {
+      if (this.freteEscolhido.valor && this.freteEscolhido.nome) {
+        return true;
+      }
+      return false;
+    },
+    dadosCobranca() {
+      if (
+        this.nome &&
+        this.telefone &&
+        this.rua &&
+        this.cep &&
+        this.numero &&
+        this.bairro &&
+        this.cidade &&
+        this.estado
+      ) {
+        return true;
+      }
+      return false;
+    },
+    dadosEntrega() {
+      if (
+        this.nomeEntrega &&
+        this.telefoneEntrega &&
+        this.ruaEntrega &&
+        this.cepEntrega &&
+        this.numeroEntrega &&
+        this.bairroEntrega &&
+        this.cidadeEntrega &&
+        this.estadoEntrega
+      ) {
+        return true;
+      }
+      return false;
+    },
+    dadosOk() {
+      if (
+        this.dadosCobranca &&
+        this.dadosEntrega &&
+        this.cpf &&
+        this.nascimento &&
+        this.email
+      ) {
+        if (!this.login && !this.senha) {
+          return false;
+        } else if (this.login && !this.senha) {
+          return true;
+        } else if (!this.login && this.senha && this.senha_confirmada) {
+          return true;
+        }
+      } else {
+        return false;
+      }
+      return false;
+    },
     primeiroNome() {
       return this.usuario.nome.replace(/ .*/, "");
     },
@@ -729,6 +998,11 @@ export default {
     }
   },
   watch: {
+    verificarLogin() {
+      if (this.verificarLogin === false && this.finalizar === true) {
+        this.mostrarDadosCobranca = true;
+      }
+    },
     couponCode() {
       this.cupomInvalido = false;
     },
@@ -770,8 +1044,38 @@ export default {
       if (this.login) {
         this.finalizar = true;
       } else {
-        this.verificarLogin = true;
+        this.email = "";
+        this.usuarioCadastrado = false;
+
+        if (this.login) {
+          this.finalizar = true;
+        } else {
+          this.verificarLogin = true;
+        }
       }
+    },
+    verificarSeTemLogin() {
+      this.loginData.email = this.email;
+
+      let loginTestData = {
+        email: this.email,
+        senha: "1j2jh44jb6b"
+      };
+      this.$store
+        .dispatch("logarUsuario", loginTestData)
+        .then(() => {
+          this.usuarioCadastrado = true;
+          this.erros = [];
+        })
+        .catch(e => {
+          if (e.response.data.code == "[jwt_auth] invalid_email") {
+            this.verificarLogin = false;
+            this.finalizar = true;
+          } else {
+            this.usuarioCadastrado = true;
+            this.erros = [];
+          }
+        });
     },
     logar() {
       this.erros = [];
@@ -1149,7 +1453,8 @@ export default {
       }
     },
     /*************************    METHODS CARTÃO ABAIXO     ****************************************/
-    abrirOrdem() {
+    abrirOrdemCreditoCielo() {
+      this.erros = [];
       this.disabled = true;
       let data = {
         endpoint: "/orders",
@@ -1304,11 +1609,131 @@ export default {
             this.erros.push(error.response.data);
           });
       }
+    },
+    finalizarCompra() {
+      this.finalizandoCompra = true;
+      this.verificarCadastro();
+    },
+    verificarCadastro() {
+      if (this.login) {
+        this.pagar();
+      } else {
+        this.criarUsuario();
+      }
+    },
+    async criarUsuario() {
+      this.erros = [];
+      try {
+        await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
+        await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
+        await this.$store.dispatch("getUsuario");
+        await this.pagar();
+      } catch (e) {
+        this.erros.push(e.response.data.message);
+      }
+    },
+    pagar() {
+      if (this.pagamento_selecionado === "cartao") {
+        this.abrirOrdemCreditoCielo();
+      } else if (this.pagamento_selecionado === "boleto") {
+        this.abrirOrdemBoleto();
+      }
+    },
+    /*************     FIM METHODS CARTAO CIELO     **********************/
+
+    /*************     METHODS BOLETO ABAIXO     **********************/
+    abrirOrdemBoleto() {
+      let data = {
+        endpoint: "/orders",
+        body: this.order.order
+      };
+      api.postApiWc(data).then(r => {
+        this.redirecionarParaMoip(r);
+      });
+    },
+    redirecionarParaMoip(r) {
+      let orderItems = [];
+
+      r.data.line_items.forEach(element => {
+        orderItems.push({
+          product: element.name,
+          quantity: element.quantity,
+          detail: element.sku,
+          price: element.price > 0 ? element.price * 100 : 1
+        });
+      });
+
+      let pedido = {
+        ownId: r.data.id,
+        amount: {
+          currency: "BRL",
+          subtotals: {
+            shipping: Math.floor(Number(r.data.shipping_total) * 100)
+          }
+        },
+        items: orderItems,
+        customer: {
+          ownId: this.usuario.id,
+          fullname: this.usuario.nome,
+          email: this.usuario.email,
+          birthDate:
+            this.usuario.nascimento.substring(6) +
+            "-" +
+            this.usuario.nascimento.substring(3, 5) +
+            "-" +
+            this.usuario.nascimento.substring(0, 2),
+          taxDocument: {
+            type: "CPF",
+            number: this.usuario.cpf
+          },
+          phone: {
+            countryCode: "55",
+            areaCode: this.usuario.telefone.substring(1, 3),
+            number: this.usuario.telefone.substring(5)
+          },
+          shippingAddress: {
+            street: this.usuario.ruaEntrega,
+            streetNumber: Number(this.usuario.numeroEntrega),
+            complement: this.usuario.complementoEntrega,
+            district: this.usuario.bairroEntrega,
+            city: this.usuario.cidadeEntrega,
+            state: this.usuario.estadoEntrega,
+            country: "BRA",
+            zipCode: this.usuario.cepEntrega
+          }
+        }
+      };
+      var settings = {
+        async: true,
+        crossDomain: true,
+        url: "https://api.moip.com.br/v2/orders",
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "cache-control": "no-cache",
+          Authorization:
+            "Basic: Q1VDUkgxVkhUQUpHSkZHQzJVWFFNTjAzUVJLT1NER046V041UkRNRUNaTFFDUUIwWlVMVVI1S05KUTZEUlhTT0FJMFNNREJVSg=="
+        },
+        data: JSON.stringify(pedido)
+      };
+      let self = this;
+      // eslint-disable-next-line
+      $.ajax(settings).done(function(response) {
+        self.esvaziarCarrinho();
+        self.$router.push({
+          name: "BoletoGerado",
+          params: { link: response._links.checkout.payBoleto.redirectHref }
+        });
+        window.open(response._links.checkout.payBoleto.redirectHref);
+      });
     }
+    /*************     FIM METHODS BOLETO     **********************/
   },
   created() {
+    this.finalizandoCompra = false;
+    this.pagamento_selecionado = "cartao";
     this.finalizar = false;
-    this.finalizarOk = false;
     this.resetarFrete();
     this.checkCart();
     document.title = "Checkout";
@@ -1335,7 +1760,7 @@ export default {
   margin: auto;
 }
 
-.verificarLogin::before {
+.modal::before {
   content: "";
   position: fixed;
   top: 0;
@@ -1346,7 +1771,7 @@ export default {
   z-index: 96;
 }
 
-.verificarLogin {
+.modal {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1809,6 +2234,59 @@ input {
   padding: 7px;
   cursor: pointer;
 }
+
+.cobrancaContainer {
+  margin-top: 50px;
+  z-index: 99;
+  animation: fadeIn 0.3s forwards;
+  border-radius: 20px;
+  box-shadow: 0 6px 6px rgba(38, 56, 74, 0.7);
+  padding: 0;
+}
+
+.cobrancaTitulo {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 1.2em;
+  font-style: italic;
+  color: black;
+  margin: auto;
+  font-weight: bold;
+  float: left;
+}
+
+.cobrancaArea {
+  position: relative;
+  background: #f5f5f6;
+  padding: 0;
+  width: 360px;
+  padding-bottom: 10px;
+  border-top: 20px solid #f5f5f6;
+  border-right: 20px solid #f5f5f6;
+  border-left: 20px solid #f5f5f6;
+  border-bottom: none;
+  border-radius: 20px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.cobrancaAreaBottom {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 1.8em;
+  font-style: italic;
+  padding: 10px;
+  color: #fff;
+  cursor: pointer;
+  background: #a0a0a0;
+  text-align: center;
+  font-weight: 700;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.dados_cobranca_area {
+  width: 325px;
+  margin: 0 auto;
+}
 /* ******************* FIM MAIN AREA *************************/
 
 /* ******************* FINALIZAR AREA *************************/
@@ -1889,10 +2367,10 @@ input {
   max-width: 150px;
 }
 .input_finalizar.bairro_entrega {
-  max-width: 170px;
+  max-width: 160px;
 }
 .input_finalizar.uf_entrega {
-  max-width: 150px;
+  max-width: 160px;
 }
 
 .endereco_entrega {

@@ -110,6 +110,9 @@ img {
 .bg_red {
   background: red !important;
 }
+.bg_blue {
+  background: #2195be !important;
+}
 
 .radio {
   /* secret sauce to styling radio buttons */
