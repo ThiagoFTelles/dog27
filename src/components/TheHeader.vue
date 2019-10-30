@@ -450,7 +450,7 @@ section {
   border: none;
   font-size: 1rem;
   font-weight: 600;
-  font-family: cursive;
+  font-family: sans-serif;
   color: #4f4742;
 }
 

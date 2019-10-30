@@ -200,7 +200,27 @@
             v-for="(item, index) in carrinho"
             :key="`carrinho-item${index}`"
           >
-            <p class="quantidade">{{item.quantidade}}</p>
+            <p class="quantidade">
+              <span
+                class="alterarItemQuantidade"
+                :class="{alterarItemQuantidadeDisabled: item.quantidade <= 1}"
+                @click="
+                item.quantidade > 1 ?
+                reduzirItemDoCarrinho({index:index, estoque:item.estoque, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial}) : 
+                removerItemDoCarrinho({index:index, estoque:item.estoque, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})
+                "
+              >-</span>
+              {{item.quantidade}}
+              <span
+                class="alterarItemQuantidade"
+                :class="[item.estoque < 5 || item.quantidade >= 5 ? 'alterarItemQuantidadeDisabled' : '']"
+                @click="
+                item.quantidade >= 5 ?
+                null : 
+                aumentarItemDoCarrinho({index:index, estoque:item.estoque, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})
+                "
+              >+</span>
+            </p>
             <p
               class="titulo"
             >{{item.categoria | capitalize}} para cachorros {{item.estampa | lowercase}} {{item.tamanho | uppercase}}</p>
@@ -217,7 +237,7 @@
             <p class="valortotalitem">{{item.valorUnitarioCobrado * item.quantidade | numeroPreco}}</p>
             <button
               class="carrinho_remover"
-              @click="removerItemDoCarrinho({index:index, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
+              @click="removerItemDoCarrinho({index:index, estoque:item.estoque, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
             >X</button>
           </div>
         </div>
@@ -591,7 +611,7 @@
                   :class="{error: !ExpirationDate}"
                 />
               </div>
-              <div class="input_area">
+              <div class="input_area parcelasArea">
                 <label for="Installments" class="label_finalizar">Parcelas:</label>
                 <select
                   class="input_finalizar"
@@ -619,9 +639,6 @@
                   maxlength="40"
                   :class="{error: !Holder}"
                 />
-              </div>
-              <div class="input_area full">
-                <label class="label_finalizar">asdas das das das dasd asd?</label>
               </div>
             </div>
           </section>
@@ -673,7 +690,7 @@
                     >{{item.valorUnitarioCobrado * item.quantidade | numeroPreco}}</p>
                     <button
                       class="carrinho_remover"
-                      @click="removerItemDoCarrinho({index:index, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
+                      @click="removerItemDoCarrinho({index:index, estoque:item.estoque, isCombo:item.isCombo, comboFinal:item.comboFinal, comboInicial:item.comboInicial})"
                     >X</button>
                     <br />
                   </li>
@@ -1011,8 +1028,13 @@ export default {
       this.sedex.mostrar = false;
       this.resetarFrete();
     },
-    carrinho() {
-      this.checkCart();
+    carrinho: {
+      handler: function(val, oldVal) {
+        this.checkCart();
+        window.localStorage.carrinho = [];
+        this.atualizarCarrinhoTotal();
+      },
+      deep: true
     },
     CardNumber() {
       {
@@ -1034,6 +1056,8 @@ export default {
       "deleteCupom",
       "getCupom",
       "removerItemDoCarrinho",
+      "aumentarItemDoCarrinho",
+      "reduzirItemDoCarrinho",
       "atualizarCarrinhoTotal",
       "checarLocalStorage",
       "escolherFrete",
@@ -2438,6 +2462,16 @@ input {
 .carrinho_items {
   grid-area: carrinho_items;
 }
+
+.alterarItemQuantidade {
+  color: #000;
+  cursor: pointer;
+}
+
+.alterarItemQuantidadeDisabled {
+  color: #c7c7c7;
+}
+
 .carrinho_items .carrinho_item {
   display: grid;
   grid-template: "foto . . . carrinho_remover" 10px "foto titulo titulo titulo ." 20px "foto tamanho quantidade . ." 20px "foto  tamanho quantidade . carrinho_preco" 20px / 60px 60px 60px 1fr;
@@ -2747,9 +2781,160 @@ select {
 
 /* //////////////////  FIM CARRINHO ITEM ////////////////////////// */
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1100px) {
   .btn {
     width: 100%;
+  }
+  .main {
+    grid-template: "mainheader" 50px "maincontent" 1fr / 1fr;
+  }
+  .checkout-container {
+    grid-template: "logo" 150px "main " 1fr "." 30px / minmax(300px, 500px);
+  }
+  .maincontent {
+    grid-template: "topprodutos toppreco topquantidade toptotal ." 25px "itensarea itensarea itensarea itensarea itensarea " 1fr "totalarea totalarea totalarea totalarea totalarea" 180px "bottom bottom bottom bottom bottom" 70px / 2fr 1fr 1fr 1fr 25px;
+    max-width: 450px;
+    margin: 0 5px;
+  }
+  .maincontent-header {
+    font-size: 1.5rem;
+  }
+  .maincontent .maincontent-header {
+    font-size: 1rem;
+  }
+  .dados_area {
+    padding-top: 10px;
+  }
+  .topprodutos {
+    grid-area: topprodutos;
+    align-self: center;
+    margin: 0;
+    margin-left: auto;
+  }
+  .carrinho_item {
+    grid-template: "foto titulo valorunitarioitem quantidade valortotalitem carrinho_remover" 1fr / 85px 1fr 1fr 1fr 1fr 25px;
+  }
+  .carrinho_item p,
+  .carrinho_item button {
+    font-size: 0.7rem;
+  }
+
+  .carrinho_item img {
+    width: auto;
+    height: auto;
+  }
+
+  .totalarea {
+    grid-template:
+      "cupom  cupom frete frete frete " 95px
+      "total total  total total total " 70px /
+      1fr 1fr 1fr 1fr 1fr;
+  }
+  .descontotexto {
+    grid-area: descontovalor;
+  }
+  .descontovalor {
+    text-align: right;
+  }
+  .totaltexto {
+    text-align: left;
+    grid-area: totalvalor;
+    display: inline;
+  }
+  label {
+    margin: 0;
+  }
+
+  .frete label,
+  .frete p {
+    font-size: 1rem;
+  }
+
+  .bottom {
+    grid-template: "continuarcomprando fecharcompra" 1fr / 1fr 1fr;
+  }
+  .bottom .continuarcomprando {
+    width: auto;
+    height: auto;
+    margin-right: 5px;
+  }
+  .bottom .fecharcompra {
+    width: auto;
+    height: auto;
+    margin-left: 5px;
+  }
+  .bottom .continuarcomprando p,
+  .bottom .fecharcompra p {
+    font-size: 1rem;
+  }
+
+  .loginArea {
+    width: auto;
+    height: auto;
+    text-align: center;
+  }
+  .loginFechar {
+    margin-top: -50px;
+  }
+  .loginTitulo {
+    float: none;
+  }
+  .labelEmailSenha {
+    margin-top: 20px;
+  }
+
+  .emailLogin {
+    width: 230px;
+  }
+  .btnEmailSenha {
+    width: auto;
+  }
+  .emailSenha {
+    width: auto;
+  }
+
+  .finalizar {
+    min-height: 300px;
+    grid-template:
+      "dados_cliente" 250px
+      "endereco_entrega" 250px
+      "formas_de_pagamento" 350px
+      "resumo_finalizar" 1fr
+      / 1fr;
+  }
+  .formas_de_pagamento {
+    grid-template:
+      "pagamento_menu" 150px
+      "pagamento_dados" 1fr / 1fr;
+  }
+  .pagamento_menu {
+    text-align: center;
+  }
+  .pagamento_opcao {
+    text-align: center;
+    display: block;
+    padding: 15px;
+  }
+  .cartao_dados,
+  .boleto_dados {
+    width: 250px;
+    padding: 0;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .nome_cartao {
+    max-width: 100%;
+  }
+
+  .frete_carrinho .total .descontotexto {
+    grid-area: descontotexto;
+  }
+  .frete_carrinho .total .totaltexto {
+    grid-area: totaltexto;
+  }
+
+  .resumo_finalizar {
+    padding-bottom: 20px;
   }
 }
 </style> 

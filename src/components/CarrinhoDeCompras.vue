@@ -166,7 +166,7 @@ export default {
   padding: 3px 10px 0 10px;
   margin-top: 10px;
   display: grid;
-  grid-template: "foto . . . carrinho_remover" 22px "foto titulo titulo titulo ." 1fr "foto tamanho quantidade . carrinho_preco" 1fr ". tamanho quantidade . carrinho_preco" 2px / 80px 1fr 1fr 1fr;
+  grid-template: ". . . . carrinho_remover" 18px "foto titulo titulo titulo ." 1fr "foto tamanho quantidade . carrinho_preco" 1fr "foto tamanho quantidade . carrinho_preco" 2px / 65px 1fr 1fr 10px;
 }
 
 .carrinho_remover:focus {
@@ -181,7 +181,7 @@ export default {
   text-align: right;
   font-weight: 600;
   color: #4f4742;
-  font-family: cursive;
+  font-family: sans-serif;
 }
 .titulo {
   grid-area: titulo;
@@ -199,7 +199,7 @@ export default {
 
 .tamanho,
 .quantidade {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-style: italic;
   font-family: sans-serif;
   color: black;

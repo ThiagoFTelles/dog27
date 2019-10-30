@@ -387,6 +387,7 @@ export default {
       },
       variacoesDisponiveis: [],
       variacaoEscolhida: {
+        estoque: 0,
         fotoUrl: "",
         estampa: "",
         categoria: "",
@@ -438,6 +439,7 @@ export default {
     },
     comboEscolhido() {
       let produto_1 = {
+        estoque: this.variacaoEscolhida.estoque,
         fotoUrl: this.variacaoEscolhida.fotoUrl,
         categoria: this.variacaoEscolhida.categoria,
         estampa: this.variacaoEscolhida.estampa,
@@ -457,6 +459,7 @@ export default {
       };
 
       let produto_2 = {
+        estoque: this.produtoCombo.estoque,
         fotoUrl: this.produtoCombo.fotoUrl,
         categoria: this.produtoCombo.categoria,
         estampa: this.produtoCombo.estampa,
@@ -645,6 +648,7 @@ export default {
     async escolherVariacao(variacao) {
       this.produtoCombo = null;
       this.variacaoEscolhida = {
+        estoque: 0,
         fotoUrl: "",
         estampa: "",
         categoria: "",
@@ -661,6 +665,7 @@ export default {
         quantidade: 0
       };
 
+      this.variacaoEscolhida.estoque = variacao.estoque;
       this.variacaoEscolhida.categoria = variacao.categoria;
       this.variacaoEscolhida.estampa = variacao.estampa;
       this.variacaoEscolhida.fotoUrl = variacao.fotoUrl;
@@ -759,6 +764,7 @@ export default {
     },
     colocarNoCarrinho(item) {
       const itemDoCarrinho = {
+        estoque: item.estoque,
         fotoUrl: item.fotoUrl,
         categoria: item.categoria,
         estampa: item.estampa,
@@ -781,6 +787,7 @@ export default {
       let item = combo[0];
 
       let itemDoCarrinho = {
+        estoque: item.estoque,
         fotoUrl: item.fotoUrl,
         categoria: item.categoria,
         estampa: item.estampa,
@@ -800,6 +807,7 @@ export default {
       item = combo[1];
 
       itemDoCarrinho = {
+        estoque: item.estoque,
         fotoUrl: item.fotoUrl,
         categoria: item.categoria,
         estampa: item.estampa,

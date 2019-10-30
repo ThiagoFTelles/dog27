@@ -58,6 +58,35 @@ export default {
 
       state.carrinho.splice(index, cortar); //aqui o payload recebe o index do item no carrinho[]
     },
+    AUMENTAR_CART_ITEM(state, payload) {
+      let estoqueAtual = payload.estoque;
+      let index = payload.index;
+      let quantidadeAtual = state.carrinho[index].quantidade;
+      if (estoqueAtual >= 4) {
+        if (payload.isCombo && payload.comboFinal) {
+          state.carrinho[index].quantidade = quantidadeAtual + 1;
+          state.carrinho[index - 1].quantidade = quantidadeAtual + 1;
+        } else if (payload.isCombo && !payload.comboFinal) {
+          state.carrinho[index].quantidade = quantidadeAtual + 1;
+          state.carrinho[index + 1].quantidade = quantidadeAtual + 1;
+        } else {
+          state.carrinho[index].quantidade = quantidadeAtual + 1;
+        }
+      }
+    },
+    REDUZIR_CART_ITEM(state, payload) {
+      let index = payload.index;
+      let quantidadeAtual = state.carrinho[index].quantidade;
+      if (payload.isCombo && payload.comboFinal) {
+        state.carrinho[index].quantidade = quantidadeAtual - 1;
+        state.carrinho[index - 1].quantidade = quantidadeAtual - 1;
+      } else if (payload.isCombo && !payload.comboFinal) {
+        state.carrinho[index].quantidade = quantidadeAtual - 1;
+        state.carrinho[index + 1].quantidade = quantidadeAtual - 1;
+      } else {
+        state.carrinho[index].quantidade = quantidadeAtual - 1;
+      }
+    },
     TOTAL_CART(state) {
       let total = 0;
       if (state.carrinho.length) {
@@ -119,6 +148,12 @@ export default {
     },
     removerItemDoCarrinho(context, payload) {
       context.commit("REMOVE_CART_ITEM", payload);
+    },
+    aumentarItemDoCarrinho(context, payload) {
+      context.commit("AUMENTAR_CART_ITEM", payload);
+    },
+    reduzirItemDoCarrinho(context, payload) {
+      context.commit("REDUZIR_CART_ITEM", payload);
     }
   },
   getters: {
