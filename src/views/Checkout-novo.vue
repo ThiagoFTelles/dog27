@@ -1,14 +1,14 @@
 <template>
   <section class="checkout-container">
     <div class="finalizandoCompra modal" v-if="finalizandoCompra">
-      <div class="loginArea" v-if="!erros">
-        <p class="loginTitulo">Aguarde</p>
+      <div class="loginArea">
+        <p class="loginTitulo" v-if="!erros">Aguarde</p>
         <p
           v-if="erros"
           class="loginFechar"
           @click="verificarLogin = false; erros = []; mostrarDadosCobranca = false; finalizar = false;"
         >X</p>
-        <ErroNotificacao :erros="erros" />
+        <ErroNotificacao v-if="erros" :erros="erros" />
       </div>
     </div>
     <div class="verificarLogin modal" v-if="verificarLogin">
@@ -817,6 +817,7 @@ export default {
   components: {},
   data() {
     return {
+      pagou: false,
       finalizandoCompra: false,
       verificarLogin: false,
       mostrarDadosCobranca: false,
@@ -1029,10 +1030,22 @@ export default {
       this.resetarFrete();
     },
     carrinho: {
+      // eslint-disable-next-line
       handler: function(val, oldVal) {
         this.checkCart();
         window.localStorage.carrinho = [];
         this.atualizarCarrinhoTotal();
+      },
+      deep: true
+    },
+    order: {
+      // eslint-disable-next-line
+      handler: function(val, oldVal) {
+        if (this.pagamento_selecionado === "cartao" && !this.pagou) {
+          this.abrirOrdemCreditoCielo();
+        } else if (this.pagamento_selecionado === "boleto" && !this.pagou) {
+          this.abrirOrdemBoleto();
+        }
       },
       deep: true
     },
@@ -1478,6 +1491,7 @@ export default {
     },
     /*************************    METHODS CARTÃO ABAIXO     ****************************************/
     abrirOrdemCreditoCielo() {
+      this.pagamento_selecionado === "";
       this.erros = [];
       this.disabled = true;
       let data = {
@@ -1549,6 +1563,7 @@ export default {
           }
         })
         .catch(erro => {
+          this.pagou = false;
           this.disabled = false;
           return {
             status: "00",
@@ -1560,6 +1575,8 @@ export default {
       let self = this; //preciso desta variável para acessar o "this." nas funções inferiores
       this.erros = [];
       this.solicitarAutorizacaoCielo(oderPayment).then(r => {
+        console.log("r");
+        console.log(r);
         let autorizacaoStatus = r.status;
         let autorizacaoResposta = r.resposta;
 
@@ -1576,9 +1593,8 @@ export default {
       });
     },
     erroNoPagamentoCielo(resposta) {
-      let erro =
-        "Houve um problema com o pagamento. Por favor, verifique o cartão e tente novamente. " +
-        resposta;
+      this.pagou = false;
+      let erro = resposta + ". Tente novamente";
       this.erros.push(erro);
       this.disabled = false;
     },
@@ -1657,9 +1673,18 @@ export default {
       }
     },
     pagar() {
+      this.pagou = true;
       if (this.pagamento_selecionado === "cartao") {
+        this.newOrder({
+          payment_method: "cielo_credit",
+          payment_method_title: "Cartão de crédito"
+        });
         this.abrirOrdemCreditoCielo();
       } else if (this.pagamento_selecionado === "boleto") {
+        this.newOrder({
+          payment_method: "woo-moip-official",
+          payment_method_title: "Boleto"
+        });
         this.abrirOrdemBoleto();
       }
     },
@@ -1667,6 +1692,7 @@ export default {
 
     /*************     METHODS BOLETO ABAIXO     **********************/
     abrirOrdemBoleto() {
+      this.pagamento_selecionado === "";
       let data = {
         endpoint: "/orders",
         body: this.order.order
@@ -1756,6 +1782,7 @@ export default {
   },
   created() {
     this.finalizandoCompra = false;
+    this.pagou = false;
     this.pagamento_selecionado = "cartao";
     this.finalizar = false;
     this.resetarFrete();

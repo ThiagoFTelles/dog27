@@ -11,7 +11,7 @@
         placeholder="seu nome completo"
       />
       <label for="email">Email</label>
-      <input required type="email" id="email" name="email" v-model="email" />
+      <input required type="email" id="email_form" name="email" v-model="email" />
       <label for="senha">Senha</label>
       <input
         required

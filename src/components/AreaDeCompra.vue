@@ -395,7 +395,6 @@ export default {
         sku: "",
         preco: "",
         precoPromocional: "",
-        estoque: null,
         nomeDoProduto: "",
         valorUnitarioCobrado: "",
         peso: "",
@@ -447,7 +446,6 @@ export default {
         sku: this.variacaoEscolhida.sku,
         preco: this.variacaoEscolhida.preco,
         precoPromocional: this.variacaoEscolhida.precoPromocional,
-        estoque: this.variacaoEscolhida.estoque,
         nomeDoProduto: this.variacaoEscolhida.nomeDoProduto,
         valorUnitarioCobrado: this.variacaoEscolhida.precoPromocional,
         peso: this.variacaoEscolhida.peso,
@@ -467,7 +465,6 @@ export default {
         sku: this.produtoCombo.sku,
         preco: this.produtoCombo.preco,
         precoPromocional: this.produtoCombo.precoPromocional,
-        estoque: this.produtoCombo.estoque,
         nomeDoProduto:
           this.nomeDoProdutoCombo +
           " " +
@@ -656,7 +653,6 @@ export default {
         sku: "",
         preco: "",
         precoPromocional: "",
-        estoque: null,
         nomeDoProduto: "",
         valorUnitarioCobrado: "",
         peso: "",
