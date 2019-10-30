@@ -4,7 +4,7 @@
       type="email"
       placeholder="seu melhor e-mail"
       v-model="email"
-      id="email"
+      id="emailRodape"
       name="email"
       required
     />

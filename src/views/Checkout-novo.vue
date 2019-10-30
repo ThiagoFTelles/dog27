@@ -277,7 +277,7 @@
                 :class="{error: freteErrado}"
                 type="text"
                 name="postcodeEntrega"
-                id="postcodeEntrega"
+                id="postcodeEntrega1"
                 v-model="cepEntrega"
                 @keyup="preencherCepEntrega"
                 v-mask="'#####-###'"
@@ -490,7 +490,7 @@
               <input
                 type="text"
                 name="postcodeEntrega"
-                id="postcodeEntrega"
+                id="postcodeEntrega2"
                 v-model="cepEntrega"
                 @keyup="preencherCepEntrega"
                 v-mask="'#####-###'"
@@ -730,7 +730,7 @@
                     :class="{error: freteErrado}"
                     type="text"
                     name="postcodeEntrega"
-                    id="postcodeEntrega"
+                    id="postcodeEntrega3"
                     v-model="cepEntrega"
                     @keyup="preencherCepEntrega"
                     v-mask="'#####-###'"
@@ -1008,7 +1008,7 @@ export default {
       if (this.freteEscolhido.valor > 0 && !this.calculandoFrete) {
         return true;
       } else {
-        return false;
+        return true;
       }
     }
   },
@@ -1169,7 +1169,9 @@ export default {
       }
     },
     calcularPrecoPrazo() {
-      this.calculandoFrete = true;
+      if (this.cepEntrega.length >= 8) {
+        this.calculandoFrete = true;
+      }
       // Changes XML to JSON
       function xmlToJson(xml) {
         // Create the return object
