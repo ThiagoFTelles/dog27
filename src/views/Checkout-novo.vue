@@ -320,10 +320,7 @@
           </div>
           <div class="total">
             <div v-if="desconto.valor" class="descontotexto label-black">DESCONTO</div>
-            <div
-              v-if="desconto.valor"
-              class="descontovalor red"
-            >- {{String(desconto.valor).replace(".", ",") }}</div>
+            <div v-if="desconto.valor" class="descontovalor red">- {{desconto.valor | numeroPreco}}</div>
             <div class="totaltexto label-black">Total</div>
             <div class="totalvalor">{{carrinhoTotalComDesconto+freteEscolhido.valor | numeroPreco}}</div>
           </div>
@@ -784,7 +781,7 @@
                 <div
                   v-if="desconto.valor"
                   class="descontovalor red"
-                >- {{String(desconto.valor).replace(".", ",") }}</div>
+                >- {{desconto.valor | numeroPreco}}</div>
                 <div class="totaltexto label-black">Total</div>
                 <div
                   class="totalvalor"
@@ -813,7 +810,7 @@ import { api } from "@/services.js";
 import { requestCielo } from "@/helpers.js";
 
 export default {
-  name: "Checkout",
+  name: "Checkout2",
   components: {},
   data() {
     return {
@@ -1008,7 +1005,7 @@ export default {
       return this.usuario.nome.replace(/ .*/, "");
     },
     habilitarBtn() {
-      if (this.freteEscolhido.valor > 0) {
+      if (this.freteEscolhido.valor > 0 && !this.calculandoFrete) {
         return true;
       } else {
         return false;
@@ -1136,7 +1133,7 @@ export default {
       }
       this.pac.mostrar = false;
       this.sedex.mostrar = false;
-      this.resetarFrete();
+      this.calcularPrecoPrazo();
     },
 
     trocarCupom() {
@@ -2696,6 +2693,9 @@ input {
   border: 1px solid #eeedef;
   color: white;
 }
+option {
+  color: black;
+}
 
 .nome_cartao {
   text-align: center;
@@ -2816,7 +2816,9 @@ select {
     grid-template: "mainheader" 50px "maincontent" 1fr / 1fr;
   }
   .checkout-container {
-    grid-template: "logo" 150px "main " 1fr "." 30px / minmax(300px, 500px);
+    grid-template:
+      ". logo ." 150px ". main ." 1fr ". . ." 30px / 1fr minmax(300px, 500px)
+      1fr;
   }
   .maincontent {
     grid-template: "topprodutos toppreco topquantidade toptotal ." 25px "itensarea itensarea itensarea itensarea itensarea " 1fr "totalarea totalarea totalarea totalarea totalarea" 180px "bottom bottom bottom bottom bottom" 70px / 2fr 1fr 1fr 1fr 25px;

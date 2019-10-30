@@ -68,7 +68,10 @@
               <CarrinhoDeCompras v-show="hoverLinkBag" @mouseleave="hoverLinkBag = false">
                 <template v-slot:top>
                   <div class="carrinho-slot">
-                    <h2 class="carrinho_titulo">Seu carrinho</h2>
+                    <h2
+                      class="carrinho_titulo"
+                      @click="$router.push({ name: 'checkout2' })"
+                    >Seu carrinho</h2>
                     <button class="carrinho_fechar" @click="hoverLinkBag = false">X</button>
                   </div>
                 </template>
