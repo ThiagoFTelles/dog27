@@ -6,7 +6,6 @@ import MensagemEnviada from "@/views/MensagemEnviada.vue";
 import PagamentoConfirmado from "@/views/PagamentoConfirmado.vue";
 import BoletoGerado from "@/views/BoletoGerado.vue";
 import Checkout from "@/views/Checkout.vue";
-import Checkout2 from "@/views/Checkout-novo.vue";
 import CheckoutCredito from "@/components/CheckoutCredito.vue";
 import Login from "@/views/Login.vue";
 import Usuario from "@/views/usuario/Usuario.vue";
@@ -118,11 +117,6 @@ const router = new Router({
       path: "/checkout",
       name: "checkout",
       component: Checkout,
-    },
-    {
-      path: "/checkout2",
-      name: "checkout2",
-      component: Checkout2,
     },
     {
       path: "/checkoutcredito",

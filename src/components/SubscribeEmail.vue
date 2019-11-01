@@ -40,7 +40,7 @@ export default {
   methods: {
     onSubmit() {
       if (this.email) {
-        console.log("cadastro realizado!");
+        // console.log("cadastro realizado!");
       }
     }
   }

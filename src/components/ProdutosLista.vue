@@ -20,7 +20,7 @@
               <router-link
                 :to="{name: 'peitoral', params: {comprar:true }  }"
                 class="banner-link"
-              >Comprar >></router-link>
+              >Escolher estampa >></router-link>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
               <router-link
                 :to="{name: 'coleira', params: {comprar:true } }"
                 class="banner-link"
-              >Comprar >></router-link>
+              >Escolher estampa >></router-link>
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@
               <router-link
                 :to="{name: 'guia', params: {comprar:true } }"
                 class="banner-link"
-              >Comprar >></router-link>
+              >Escolher estampa >></router-link>
             </div>
           </div>
         </div>
@@ -81,7 +81,7 @@
               <router-link
                 :to="{name: 'cinto', params: {comprar:true } }"
                 class="banner-link"
-              >Comprar >></router-link>
+              >Escolher estampa >></router-link>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
               <router-link :to="{name: 'gravata', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'gravata', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'gravata', params: {comprar:true } }" class="banner-link">Escolher estampa >></router-link>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
             >Peitoral convencional ou anti-puxão? Achamos a melhor solução para você. Mude quando qusier em poucos segundos.</h2>
             <div class="links">
               <router-link :to="{name: 'cinto', params: {comprar:false } }" class="banner-link left-link">Saiba mais >></router-link>
-              <router-link :to="{name: 'cinto', params: {comprar:true } }" class="banner-link">Comprar >></router-link>
+              <router-link :to="{name: 'cinto', params: {comprar:true } }" class="banner-link">Escolher estampa >></router-link>
             </div>
           </div>
         </div>-->
@@ -250,7 +250,7 @@ export default {
   cursor: pointer;
   flex: 1;
   color: #00acff;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 .left-link {
   text-align: right;
