@@ -2937,7 +2937,7 @@ select {
     min-height: 300px;
     grid-template:
       "dados_cliente" 250px
-      "endereco_entrega" 250px
+      "endereco_entrega" 275px
       "formas_de_pagamento" 350px
       "resumo_finalizar" 1fr
       / 1fr;
