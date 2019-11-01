@@ -16,7 +16,7 @@
       >
         <img class="produto-img" :src="produto.imgSrc" alt />
         <h2 class="produto-subtitulo">{{produto.nome | uppercase}}</h2>
-        <p class="produto-paragrafo">A parir de {{Number(produto.precoMinimo) | numeroPreco}}</p>
+        <p class="produto-paragrafo">A partir de {{Number(produto.precoMinimo) | numeroPreco}}</p>
       </div>
     </div>
   </section>
