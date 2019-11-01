@@ -955,7 +955,7 @@ export default {
       return false;
     },
     freteOk() {
-      if (this.freteEscolhido.valor && this.freteEscolhido.nome) {
+      if (this.freteEscolhido.valor>=0 && this.freteEscolhido.nome) {
         return true;
       }
       return false;
@@ -1658,6 +1658,7 @@ export default {
       }
     },
     finalizarCompra() {
+      this.erros = [];
       this.finalizandoCompra = true;
       this.verificarCadastro();
     },
