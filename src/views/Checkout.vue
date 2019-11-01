@@ -2180,7 +2180,7 @@ input {
 
 .radio {
   width: 3px;
-  height: fit-content;
+  height: 3px;
   margin-left: 25px;
   margin-top: 0px;
   vertical-align: middle;
