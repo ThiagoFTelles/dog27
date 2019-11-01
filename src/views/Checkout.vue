@@ -2,9 +2,9 @@
   <section class="checkout-container">
     <div class="finalizandoCompra modal" v-if="finalizandoCompra">
       <div class="loginArea">
-        <p class="loginTitulo" v-if="!erros">Aguarde</p>
+        <p class="loginTitulo" v-if="erros=[]">Aguarde</p>
         <p
-          v-if="erros"
+          v-else
           class="loginFechar"
           @click="verificarLogin = false; erros = []; mostrarDadosCobranca = false; finalizar = false;"
         >X</p>
@@ -1025,6 +1025,7 @@ export default {
     verificarLogin() {
       if (this.verificarLogin === false && this.finalizar === true) {
         this.mostrarDadosCobranca = true;
+        this.scrollBehavior();
       }
     },
     couponCode() {
@@ -1083,6 +1084,12 @@ export default {
       "esvaziarCarrinho",
       "setOrderId"
     ]),
+    scrollBehavior() {
+      return window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    },
     fecharCompra() {
       if (this.login) {
         this.finalizar = true;
@@ -1094,6 +1101,7 @@ export default {
           this.finalizar = true;
         } else {
           this.verificarLogin = true;
+          this.scrollBehavior();
         }
       }
     },
@@ -1660,6 +1668,7 @@ export default {
     finalizarCompra() {
       this.erros = [];
       this.finalizandoCompra = true;
+      this.scrollBehavior();
       this.verificarCadastro();
     },
     verificarCadastro() {
