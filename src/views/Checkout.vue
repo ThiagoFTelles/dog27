@@ -869,7 +869,8 @@ export default {
       presente: state => state.cart.presente,
       login: state => state.login,
       idOrdemAberta: state => state.order.idOrdemAberta,
-      order: state => state.order
+      order: state => state.order,
+      metaFreteGratis: state => state.order.metaMenor
     }),
     ...mapGetters([
       "desconto",
@@ -905,6 +906,14 @@ export default {
       base: "usuario",
       mutation: "UPDATE_USUARIO"
     }),
+    freteGratis() {
+      let resposta = false;
+      if (this.valorTotalCarrinho >= this.metaFreteGratis) {
+        resposta = true;
+      }
+
+      return resposta;
+    },
     senha_confirmada() {
       if (this.confirmar_senha === this.senha) {
         return true;
