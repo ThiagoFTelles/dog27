@@ -2,11 +2,11 @@
   <section class="checkout-container">
     <div class="finalizandoCompra modal" v-if="finalizandoCompra">
       <div class="loginArea">
-        <p class="loginTitulo" v-if="erros=[]">Aguarde</p>
+        <p class="loginTitulo">Aguarde...</p>
         <p
-          v-else
+          v-if="erros"
           class="loginFechar"
-          @click="verificarLogin = false; erros = []; mostrarDadosCobranca = false; finalizar = false;"
+          @click="verificarLogin = false;finalizandoCompra=false; erros=[]; mostrarDadosCobranca = false; finalizar = false;"
         >X</p>
         <ErroNotificacao v-if="erros" :erros="erros" />
       </div>
@@ -825,7 +825,6 @@ export default {
         senha: ""
       },
       pagamento_selecionado: "cartao",
-      disabled: false,
       Installments: 1,
       CardNumber: "",
       Holder: "",
@@ -938,9 +937,9 @@ export default {
       return false;
     },
     pagamentoOk() {
-      if (this.pagamento_selecionado === "boleto") {
+      if (this.pagamento_selecionado == "boleto") {
         return true;
-      } else if (this.pagamento_selecionado === "cartao") {
+      } else if (this.pagamento_selecionado == "cartao") {
         if (
           this.Installments &&
           this.CardNumber &&
@@ -1140,6 +1139,7 @@ export default {
           this.finalizar = true;
         })
         .catch(e => {
+          
           this.erros.push(e.response.data.message);
         });
     },
@@ -1305,6 +1305,8 @@ export default {
               );
         })
         .catch(err => {
+          // eslint-disable-next-line
+          console.log("erro calcularPrecoPrazo");
           // eslint-disable-next-line
           console.log(err);
         });
@@ -1507,9 +1509,6 @@ export default {
     },
     /*************************    METHODS CARTÃO ABAIXO     ****************************************/
     abrirOrdemCreditoCielo() {
-      this.pagamento_selecionado === "";
-      this.erros = [];
-      this.disabled = true;
       let data = {
         endpoint: "/orders",
         body: this.order.order
@@ -1536,7 +1535,6 @@ export default {
       });
     },
     solicitarAutorizacaoCielo(oderPayment) {
-      this.erros = [];
       var data = JSON.stringify(oderPayment);
 
       return requestCielo(
@@ -1549,7 +1547,6 @@ export default {
           let statusDaResposta = JSON.parse(e.target.status);
 
           if (statusDaResposta == 400) {
-            this.disabled = false;
             return {
               status: resposta[0].Code,
               resposta: "Erro de preenchimento: " + resposta[0].Message
@@ -1557,7 +1554,6 @@ export default {
           } else if (statusDaResposta != 200 && statusDaResposta != 201) {
             let erro = resposta[0].Message;
             this.erros.push(erro);
-            this.disabled = false;
             return {
               status: resposta[0].Code,
               resposta: "Erro de preenchimento - " + resposta[0].Message
@@ -1571,7 +1567,6 @@ export default {
 
             return { status: resposta.Payment.Status, resposta: linkCaptura };
           } else {
-            this.disabled = false;
             return {
               status: resposta.Payment.Status,
               resposta: resposta.Payment.ReturnMessage
@@ -1579,8 +1574,8 @@ export default {
           }
         })
         .catch(erro => {
+          this.erros.push(erro.response.data.message);
           this.pagou = false;
-          this.disabled = false;
           return {
             status: "00",
             resposta: "erro no cartão. " + erro
@@ -1605,13 +1600,15 @@ export default {
         } else {
           this.erroNoPagamentoCielo(autorizacaoResposta);
         }
-      });
+      })
+      .catch(erro => {
+        this.erros.push(erro.response.data.message);
+        });
     },
     erroNoPagamentoCielo(resposta) {
-      this.pagou = false;
       let erro = resposta + ". Tente novamente";
+      this.pagou = false;
       this.erros.push(erro);
-      this.disabled = false;
     },
     atualizarOrder(statusCaptura) {
       if (statusCaptura === 2) {
@@ -1680,6 +1677,7 @@ export default {
     },
     async criarUsuario() {
       this.erros = [];
+
       try {
         await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
@@ -1691,6 +1689,7 @@ export default {
     },
     pagar() {
       this.pagou = true;
+
       if (this.pagamento_selecionado === "cartao") {
         this.newOrder({
           payment_method: "cielo_credit",
