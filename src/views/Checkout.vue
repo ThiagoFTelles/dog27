@@ -1244,7 +1244,7 @@ export default {
       let nVlLargura = this.quantidadeDeCaixas === 1 ? 18 : 28; //decimal
       let nVlDiametro = this.quantidadeDeCaixas === 1 ? 32.44 : 53.85; //decimal
       let sCdMaoPropria = "N";
-      let nVlValorDeclarado = this.valorTotalCarrinho; //decimal
+      let nVlValorDeclarado = this.valorTotalCarrinho <= 20 ? 20 : this.valorTotalCarrinho; //decimal
       let sCdAvisoRecebimento = "N";
 
       let url = `${process.env.VUE_APP_SITE_PREFIX}/miniproxy.php?http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&nCdServico=${nCdServico}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=${nVlPeso}&nCdFormato=${nCdFormato}&nVlComprimento=${nVlComprimento}&nVlAltura=${nVlAltura}&nVlLargura=${nVlLargura}&nVlDiametro=${nVlDiametro}&sCdMaoPropria=${sCdMaoPropria}&nVlValorDeclarado=${nVlValorDeclarado}&sCdAvisoRecebimento=${sCdAvisoRecebimento}`;
