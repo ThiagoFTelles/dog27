@@ -70,7 +70,6 @@
                   <div class="carrinho-slot">
                     <h2
                       class="carrinho_titulo"
-                      @click="$router.push({ name: 'checkout2' })"
                     >Seu carrinho</h2>
                     <button class="carrinho_fechar" @click="hoverLinkBag = false">X</button>
                   </div>
