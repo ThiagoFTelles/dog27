@@ -123,7 +123,7 @@ export default {
   top: 0;
   text-align: center;
   font-size: 0.9em;
-  margin: 3px;
+  margin: 3px 0;
   font-family: "Fira Sans", sans-serif;
   color: #6c6c6c;
   font-weight: 600;
