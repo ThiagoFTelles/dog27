@@ -29,6 +29,7 @@
             :disabled="usuarioCadastrado"
           />
           <button
+            type="submit"
             @click.prevent="verificarSeTemLogin"
             class="btnEmailSenha"
             :class="{bg_green: emailValido}"
@@ -954,7 +955,7 @@ export default {
       return false;
     },
     freteOk() {
-      if (this.freteEscolhido.valor>=0 && this.freteEscolhido.nome) {
+      if (this.freteEscolhido.valor >= 0 && this.freteEscolhido.nome) {
         return true;
       }
       return false;
@@ -1139,7 +1140,6 @@ export default {
           this.finalizar = true;
         })
         .catch(e => {
-          
           this.erros.push(e.response.data.message);
         });
     },
@@ -1244,7 +1244,8 @@ export default {
       let nVlLargura = this.quantidadeDeCaixas === 1 ? 18 : 28; //decimal
       let nVlDiametro = this.quantidadeDeCaixas === 1 ? 32.44 : 53.85; //decimal
       let sCdMaoPropria = "N";
-      let nVlValorDeclarado = this.valorTotalCarrinho <= 20 ? 20 : this.valorTotalCarrinho; //decimal
+      let nVlValorDeclarado =
+        this.valorTotalCarrinho <= 20 ? 20 : this.valorTotalCarrinho; //decimal
       let sCdAvisoRecebimento = "N";
 
       let url = `${process.env.VUE_APP_SITE_PREFIX}/miniproxy.php?http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?nCdEmpresa=${nCdEmpresa}&sDsSenha=${sDsSenha}&nCdServico=${nCdServico}&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=${nVlPeso}&nCdFormato=${nCdFormato}&nVlComprimento=${nVlComprimento}&nVlAltura=${nVlAltura}&nVlLargura=${nVlLargura}&nVlDiametro=${nVlDiametro}&sCdMaoPropria=${sCdMaoPropria}&nVlValorDeclarado=${nVlValorDeclarado}&sCdAvisoRecebimento=${sCdAvisoRecebimento}`;
@@ -1585,24 +1586,24 @@ export default {
     capturarCielo(oderPayment) {
       let self = this; //preciso desta variável para acessar o "this." nas funções inferiores
       this.erros = [];
-      this.solicitarAutorizacaoCielo(oderPayment).then(r => {
+      this.solicitarAutorizacaoCielo(oderPayment)
+        .then(r => {
+          let autorizacaoStatus = r.status;
+          let autorizacaoResposta = r.resposta;
 
-        let autorizacaoStatus = r.status;
-        let autorizacaoResposta = r.resposta;
-
-        if (autorizacaoStatus === 1) {
-          requestCielo("PUT", autorizacaoResposta).then(function(
-            respostaCaptura
-          ) {
-            let resposta = JSON.parse(respostaCaptura.target.response);
-            resposta.Status === 2 ? self.atualizarOrder(resposta.Status) : "";
-          });
-        } else {
-          this.erroNoPagamentoCielo(autorizacaoResposta);
-        }
-      })
-      .catch(erro => {
-        this.erros.push(erro.response.data.message);
+          if (autorizacaoStatus === 1) {
+            requestCielo("PUT", autorizacaoResposta).then(function(
+              respostaCaptura
+            ) {
+              let resposta = JSON.parse(respostaCaptura.target.response);
+              resposta.Status === 2 ? self.atualizarOrder(resposta.Status) : "";
+            });
+          } else {
+            this.erroNoPagamentoCielo(autorizacaoResposta);
+          }
+        })
+        .catch(erro => {
+          this.erros.push(erro.response.data.message);
         });
     },
     erroNoPagamentoCielo(resposta) {
@@ -1791,7 +1792,7 @@ export default {
           name: "BoletoGerado",
           params: { link: response._links.checkout.payBoleto.redirectHref }
         });
-        window.open(response._links.checkout.payBoleto.redirectHref);
+        // window.open(response._links.checkout.payBoleto.redirectHref);
       });
     }
     /*************     FIM METHODS BOLETO     **********************/
