@@ -5,6 +5,7 @@ import {
 } from "@/services.js";
 import cart from '@/store/cart.js'
 import order from '@/store/order.js'
+import rdstation from '@/store/rdstation.js'
 import areaDeCompra from '@/store/areaDeCompra.js'
 
 Vue.use(Vuex);
@@ -13,7 +14,8 @@ export default new Vuex.Store({
   modules: {
     cart,
     order,
-    areaDeCompra
+    areaDeCompra,
+    rdstation
   },
   strict: true,
   /* strict não deixa o objeto ser modificado por fora, apenas via mutation */
@@ -122,6 +124,8 @@ export default new Vuex.Store({
       return api.get(`/usuario`).then(r => {
         context.commit("UPDATE_USUARIO", r.data);
         context.commit("UPDATE_LOGIN", true);
+      }).then(() => {
+        context.dispatch("solicitarToken");
       });
     },
     criarUsuario(context, payload) {

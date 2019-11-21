@@ -22,6 +22,7 @@ import ProdutosDaEstampa from "@/views/ProdutosDaEstampa.vue";
 import ProdutosDaPesquisa from "@/views/ProdutosDaPesquisa.vue";
 import Termos from "@/views/Termos.vue";
 import CheckoutBoleto from "@/components/CheckoutBoleto.vue";
+import Teste from "@/views/Teste.vue";
 
 Vue.use(Router);
 
@@ -37,6 +38,11 @@ const router = new Router({
       path: "/",
       name: "home",
       component: Home
+    },
+    {
+      path: "/teste",
+      name: "teste",
+      component: Teste
     },
     {
       path: "/contato",
