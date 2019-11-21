@@ -1,13 +1,6 @@
 <template>
-  <section>
-    <p>
-      Tudo certo!
-      <br />criamos o seu boleto,
-      <br />caso não tenha sido redirecionado automaticamente, clique
-      <b>
-        <a :href="link" target="_blank">aqui</a>
-      </b>.
-    </p>
+  <section class="scroll">
+    <iframe class="siteBoleto" :src="link" frameborder="0"></iframe>
   </section>
 </template>
 
@@ -25,6 +18,15 @@ export default {
 </script>
 
 <style scoped>
+.scroll {
+  overflow-x: hidden;
+}
+
+.siteBoleto {
+  width: 110%;
+  height: 800px;
+}
+
 p {
   margin: auto;
   width: 100%;
@@ -32,5 +34,10 @@ p {
   padding: 150px 0;
   color: #5bc4e4;
   font-weight: 600;
+}
+@media screen and (max-width: 470px) {
+  .siteBoleto {
+    width: 100%;
+  }
 }
 </style>
