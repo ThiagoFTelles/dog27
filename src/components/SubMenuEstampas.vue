@@ -46,7 +46,7 @@ export default {
     getEstampa(estampa) {
       api
         .get(
-          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?search=${estampa.slug}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?search=${estampa.slug}&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           this.produtosDaEstampa = [];
@@ -78,7 +78,7 @@ export default {
     getEstampas() {
       api
         .get(
-          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/attributes/3/terms?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/attributes/3/terms?per_page=99&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           this.estampas = [];

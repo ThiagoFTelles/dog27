@@ -77,13 +77,13 @@ export default {
     },
     getProdutos() {
       var page = 1;
-      var url = `/products/${this.categoriaId}/variations?page=${page}&on_sale=true&stock_status=instock&status=publish&orderby=slug`;
+      var url = `/products/${this.categoriaId}/variations?page=${page}&stock_status=instock&status=publish&orderby=slug`;
       api.getApiWc(url).then(r => {
         const paginas = 3; //Number(r.headers["x-wp-totalpages"]);
         var i;
         for (i = 2; i <= paginas; i++) {
           page = i;
-          url = `/products/${this.categoriaId}/variations?page=${page}&on_sale=true&stock_status=instock&status=publish&orderby=slug`;
+          url = `/products/${this.categoriaId}/variations?page=${page}&stock_status=instock&status=publish&orderby=slug`;
         }
         this.produtos = r.data;
         r.data.forEach(this.getProduto);

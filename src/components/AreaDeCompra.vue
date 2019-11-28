@@ -507,7 +507,7 @@ export default {
       this.estampasDisponiveis = [];
       api
         .get(
-          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?category=${this.idCategoriaSelecionada}&per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products?category=${this.idCategoriaSelecionada}&per_page=99&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           response.data.forEach(this.estampasDaCategoria);
@@ -567,13 +567,13 @@ export default {
       });
     },
     estampaDisponivel(item) {
-      const isOnSale = item.on_sale;
+      // const isOnSale = item.on_sale;
       const isPurchasable = item.purchasable;
       const estoqueDisponivel = item.stock_status === "instock";
       const quantidadeEmEstoque = item.stock_quantity > 0;
 
       if (
-        isOnSale &&
+        // isOnSale &&
         isPurchasable &&
         estoqueDisponivel &&
         quantidadeEmEstoque
@@ -612,7 +612,7 @@ export default {
     getVariacoes(idProdutoPai) {
       api
         .get(
-          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/${idProdutoPai}/variations?per_page=99&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           this.variacoesDisponiveis = [];
@@ -722,7 +722,7 @@ export default {
     getProdutoCombo(sku) {
       api
         .get(
-          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/?sku=${sku}&on_sale=true&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
+          `${process.env.VUE_APP_SITE_PREFIX}/api-dog27/wp-json/wc/v3/products/?sku=${sku}&purchasable=true&stock_status=instock&consumer_key=${process.env.VUE_APP_CONSUMER_KEY}&consumer_secret=${process.env.VUE_APP_CONSUMER_SECRET}`
         )
         .then(response => {
           if (response.data.length === 0) {
