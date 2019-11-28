@@ -104,7 +104,7 @@
       </div>
       <PaginaCarregando v-else />
       <section v-if="mostrarComboArea">
-        <div class="combo" v-if="produtoCombo && 2==3">
+        <div class="combo" v-if="produtoCombo">
           <div class="combo-produtos">
             <div class="combo-produto" :class="{comboProdutoMaior : menuTamanhos}">
               <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
@@ -278,7 +278,7 @@
       </div>
       <PaginaCarregando v-else />
       <section v-if="mostrarComboArea">
-        <div class="combo" v-if="produtoCombo && 2==3">
+        <div class="combo" v-if="produtoCombo">
           <div class="combo-produtos">
             <div class="combo-produto principal" :class="{comboProdutoMaior : menuTamanhos}">
               <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
@@ -445,7 +445,10 @@ export default {
         tamanho: this.variacaoEscolhida.tamanho,
         sku: this.variacaoEscolhida.sku,
         preco: this.variacaoEscolhida.preco,
-        precoPromocional: this.variacaoEscolhida.precoPromocional,
+        precoPromocional:
+          this.variacaoEscolhida.precoPromocional > 0
+            ? this.variacaoEscolhida.precoPromocional
+            : this.variacaoEscolhida.preco,
         nomeDoProduto: this.variacaoEscolhida.nomeDoProduto,
         valorUnitarioCobrado: this.variacaoEscolhida.precoPromocional,
         peso: this.variacaoEscolhida.peso,
@@ -464,7 +467,10 @@ export default {
         tamanho: this.produtoCombo.tamanho,
         sku: this.produtoCombo.sku,
         preco: this.produtoCombo.preco,
-        precoPromocional: this.produtoCombo.precoPromocional,
+        precoPromocional:
+          this.produtoCombo.precoPromocional > 0
+            ? this.produtoCombo.precoPromocional
+            : this.produtoCombo.preco,
         nomeDoProduto:
           this.nomeDoProdutoCombo +
           " " +
@@ -668,7 +674,10 @@ export default {
       this.variacaoEscolhida.tamanho = variacao.tamanho;
       this.variacaoEscolhida.sku = variacao.sku;
       this.variacaoEscolhida.preco = variacao.preco;
-      this.variacaoEscolhida.precoPromocional = variacao.precoPromocional;
+      this.variacaoEscolhida.precoPromocional =
+        variacao.precoPromocional > 0
+          ? variacao.precoPromocional
+          : variacao.preco;
       this.variacaoEscolhida.nomeDoProduto = this.estampaEscolhida.nomeDoProduto;
       this.variacaoEscolhida.valorUnitarioCobrado = variacao.preco;
       this.variacaoEscolhida.peso = variacao.peso;
@@ -743,7 +752,10 @@ export default {
                   ? "G"
                   : this.variacaoEscolhida.tamanho,
               preco: resposta.regular_price,
-              precoPromocional: resposta.sale_price,
+              precoPromocional:
+                resposta.sale_price > 0
+                  ? resposta.sale_price
+                  : resposta.regular_price,
               idDaVariacao: resposta.id,
               pesoUnitario: resposta.weight,
               sku: resposta.sku,
@@ -835,9 +847,8 @@ export default {
         tamanho: tamanho,
         preco: item.regular_price,
         peso: item.weight,
-        precoPromocional: item.sale_price
-          ? item.sale_price
-          : item.regular_price,
+        precoPromocional:
+          item.sale_price > 0 ? item.sale_price : item.regular_price,
         estoque: item.stock_quantity
       });
     }
