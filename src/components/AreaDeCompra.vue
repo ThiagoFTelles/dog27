@@ -104,7 +104,7 @@
       </div>
       <PaginaCarregando v-else />
       <section v-if="mostrarComboArea">
-        <div class="combo" v-if="produtoCombo">
+        <div class="combo" v-if="produtoCombo && 2==3">
           <div class="combo-produtos">
             <div class="combo-produto" :class="{comboProdutoMaior : menuTamanhos}">
               <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
@@ -278,7 +278,7 @@
       </div>
       <PaginaCarregando v-else />
       <section v-if="mostrarComboArea">
-        <div class="combo" v-if="produtoCombo">
+        <div class="combo" v-if="produtoCombo && 2==3">
           <div class="combo-produtos">
             <div class="combo-produto principal" :class="{comboProdutoMaior : menuTamanhos}">
               <img :src="estampaEscolhida.fotoClicada" alt="Dog27" class="img-combo" />
