@@ -20,10 +20,11 @@ export default {
   },
   actions: {
     setOrder(context, payload) {
-      context.commit("CRIAR_ORDER", payload)
+      context.commit("CRIAR_ORDER", payload);
+      context.dispatch("solicitarToken", "Comprou");
     },
     setOrderId(context, payload) {
-      context.commit("ID_DA_ORDER", payload)
+      context.commit("ID_DA_ORDER", payload);
     },
   },
   watch: {

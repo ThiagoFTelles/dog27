@@ -125,7 +125,7 @@ export default new Vuex.Store({
         context.commit("UPDATE_USUARIO", r.data);
         context.commit("UPDATE_LOGIN", true);
       }).then(() => {
-        context.dispatch("solicitarToken");
+        context.dispatch("solicitarToken", "Login");
       });
     },
     criarUsuario(context, payload) {
