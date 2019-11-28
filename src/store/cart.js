@@ -14,14 +14,14 @@ export default {
     desconto: 0,
     carrinhoTotal: 0,
     presente: {
-      product_id: 65, //Durval (preto)
-      variation_id: 66, //tamanho único
+      product_id: 61, //Juca (azul)
+      variation_id: 62, //id do produto na variation (Tam. U)
       quantity: 1,
       total: "0"
     },
     nomeDoPresente: "Presente: Cinto de segurança Dog27",
     fotoDoPresente: process.env.VUE_APP_SITE_PREFIX +
-      "/api-dog27/wp-content/uploads/2019/10/4334344934_cinto-durval-1.jpg",
+      "/api-dog27/wp-content/uploads/2019/10/4333359173_cinto-juca-1.jpg",
     ganhouPresente: false
   },
   mutations: {
