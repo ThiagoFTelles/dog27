@@ -6,8 +6,8 @@ export default {
   strict: true,
   state: {
     order: null,
-    metaMenor: 169,
-    metaMaior: 269,
+    metaMenor: 239,
+    metaMaior: 379,
     idOrdemAberta: null
   },
   mutations: {
