@@ -1039,6 +1039,7 @@ export default {
     carrinho: {
       // eslint-disable-next-line
       handler: function(val, oldVal) {
+        this.setCart();
         this.checkCart();
         window.localStorage.carrinho = [];
         this.atualizarCarrinhoTotal();
@@ -1483,6 +1484,7 @@ export default {
       this.setOrder(order);
     },
     setCart() {
+      this.line_items = [];
       this.$store.state.cart.carrinho.forEach(item => {
         let total = item.valorUnitarioCobrado * item.quantidade;
         let cartItem = {
