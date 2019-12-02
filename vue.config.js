@@ -8,5 +8,8 @@
 // };
 
 module.exports = {
-  publicPath: "/"
+  publicPath: "/",
+  configureWebpack: {
+    devtool: 'source-map'
+  }
 };

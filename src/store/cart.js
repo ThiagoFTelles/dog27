@@ -17,7 +17,8 @@ export default {
       product_id: 61, //Juca (azul)
       variation_id: 62, //id do produto na variation (Tam. U)
       quantity: 1,
-      total: "0"
+      total: "0",
+      subtotal: "0"
     },
     nomeDoPresente: "Presente: Cinto de segurança Dog27",
     fotoDoPresente: process.env.VUE_APP_SITE_PREFIX +

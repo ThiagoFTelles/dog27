@@ -1689,8 +1689,6 @@ export default {
       }
     },
     pagar() {
-      this.pagou = true;
-
       if (this.pagamento_selecionado === "cartao") {
         this.newOrder({
           payment_method: "cielo_credit",
@@ -1704,6 +1702,7 @@ export default {
         });
         this.abrirOrdemBoleto();
       }
+      this.pagou = true;
     },
     /*************     FIM METHODS CARTAO CIELO     **********************/
 
@@ -1714,6 +1713,7 @@ export default {
         endpoint: "/orders",
         body: this.order.order
       };
+
       api.postApiWc(data).then(r => {
         this.redirecionarParaMoip(r);
       });
@@ -1726,7 +1726,7 @@ export default {
           product: element.name,
           quantity: element.quantity,
           detail: element.sku,
-          price: element.price > 0 ? element.price * 100 : 1
+          price: element.price > 0 ? Math.floor(element.price * 100) : 1
         });
       });
 
