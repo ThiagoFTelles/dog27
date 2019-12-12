@@ -1094,12 +1094,14 @@ export default {
     fecharCompra() {
       if (this.login) {
         this.finalizar = true;
+        this.mostrarDadosCobranca = true;
       } else {
         this.email = "";
         this.usuarioCadastrado = false;
 
         if (this.login) {
           this.finalizar = true;
+          this.mostrarDadosCobranca = true;
         } else {
           this.verificarLogin = true;
           this.scrollBehavior();
@@ -2232,6 +2234,24 @@ input {
   cursor: pointer;
 }
 
+.btn-frete.bg_red {
+  animation-name: incomplete;
+  animation-duration: 1.1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes incomplete {
+  from {
+    background-color: red;
+    color: white;
+  }
+  to {
+    background-color: white;
+    color: red;
+  }
+}
+
 .total {
   padding-top: 50px;
   grid-area: total;
@@ -2356,6 +2376,10 @@ input {
 .dados_cobranca_area {
   width: 325px;
   margin: 0 auto;
+}
+
+.dados_cobranca_area .loginFechar {
+  margin-top: 0;
 }
 /* ******************* FIM MAIN AREA *************************/
 

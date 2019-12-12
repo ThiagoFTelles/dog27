@@ -5,10 +5,16 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "BoletoGerado",
   props: ["link"],
+  methods: {
+    // ...mapActions(["deslogarUsuario"])
+  },
   created() {
+    // this.deslogarUsuario();
     document.title = "Boleto dog27";
     if (!this.link) {
       this.$router.push({ name: "home" });

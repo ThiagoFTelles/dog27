@@ -26,17 +26,19 @@ export default {
     };
   },
   created() {
-    if (window.localStorage.token) {
-      api
-        .validateToken()
-        .then(() => {
-          this.$store.dispatch("getUsuario");
-        })
-        .catch(() => {
-          window.localStorage.removeItem("token");
-          this.componentKey += 1; // mudar a key faz o vue re-renderizar o componente.
-        });
-    }
+    this.$store.dispatch("deslogarUsuario");
+    // if (window.localStorage.token) {
+    //   api
+    //     .validateToken()
+    //     .then(() => {
+    //       this.$store.dispatch("getUsuario");
+    //     })
+    //     .catch(() => {
+    //       window.localStorage.removeItem("token");
+    //       this.componentKey += 1;
+    //       // mudar a key faz o vue re-renderizar o componente.
+    //     });
+    // }
   }
 };
 </script>

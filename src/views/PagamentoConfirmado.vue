@@ -9,11 +9,17 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "PagamentoConfirmado",
   components: {},
   methods: {},
+  methods: {
+    // ...mapActions(["deslogarUsuario"])
+  },
   created() {
+    // this.deslogarUsuario();
     document.title = "Pagamento Confirmado!";
   }
 };
