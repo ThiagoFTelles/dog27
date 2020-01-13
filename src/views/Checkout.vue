@@ -932,19 +932,22 @@ export default {
       return false;
     },
     finalizarOk() {
-      console.log("------VERIFICAÇÃO-----");
-      console.log("dadosCobranca = " + this.dadosCobranca);
-      console.log("dadosEntrega = " + this.dadosEntrega);
-      console.log("cpf = " + this.cpf);
-      console.log("nascimento = " + this.nascimento);
-      console.log("email = " + this.email);
-      console.log("login = " + this.login);
-      console.log("senha = " + this.senha);
-      console.log("dadosOk = " + this.dadosOk);
-      console.log("pagamento = " + this.pagamento_selecionado);
-      console.log("pagamentoOk = " + this.pagamentoOk);
-      console.log("freteOk = " + this.freteOk);
-      console.log("---------FIM------------");
+      // console.log("------VERIFICAÇÃO-----");
+      // console.log("dadosCobranca = " + this.dadosCobranca);
+      // console.log("dadosEntrega = " + this.dadosEntrega);
+      // console.log("cpf = " + this.cpf);
+      // console.log("nascimento = " + this.nascimento);
+      // console.log("email = " + this.email);
+      // console.log("login = " + this.login);
+      // console.log("senha = " + this.senha ? "preenchida" : "");
+      // console.log(
+      //   "senha_confirmada = " + this.senha_confirmada ? "preenchida" : ""
+      // );
+      // console.log("dadosOk = " + this.dadosOk);
+      // console.log("pagamento = " + this.pagamento_selecionado);
+      // console.log("pagamentoOk = " + this.pagamentoOk);
+      // console.log("freteOk = " + this.freteOk);
+      // console.log("---------FIM------------");
       if (this.dadosOk && this.pagamentoOk && this.freteOk) {
         return true;
       }
@@ -1013,7 +1016,11 @@ export default {
       ) {
         if (!this.login && !this.senha) {
           return false;
-        } else if (this.login && !this.senha) {
+        }
+        // else if (this.login && !this.senha) {
+        //   return true;
+        // }
+        else if (this.login) {
           return true;
         } else if (!this.login && this.senha && this.senha_confirmada) {
           return true;
