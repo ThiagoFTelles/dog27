@@ -56,8 +56,8 @@ export default {
       ano: new Date().getFullYear(),
       nomeEmpresarial: "Dog Vinte Sete Comercial S/A",
       endereco:
-        "Rua Izidro Benezath 75 Enseada do Suá, Vitória ES CEP 29050300 - Brasil",
-      // "Av. Brasil, 2078 - Galpão C - São Diogo II, Serra - ES, 29163-165 - Brasil",
+        // "Rua Izidro Benezath 75 Enseada do Suá, Vitória ES CEP 29050300 - Brasil",
+        "Av. Brasil, 2078 - Galpão C - São Diogo II, Serra - ES, 29163-165 - Brasil",
       cnpj: "25.069.492.0001/91"
     };
   },
