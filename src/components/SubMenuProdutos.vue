@@ -47,7 +47,11 @@ export default {
         {
           nome: "guias",
           path: "guia"
-        }
+        },
+        {
+          nome: "treats",
+          path: "treat"
+        },
         // {
         //   nome: "comedouros",
         //   path: "comedouro"

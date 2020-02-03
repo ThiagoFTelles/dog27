@@ -12,6 +12,7 @@ import Usuario from "@/views/usuario/Usuario.vue";
 import UsuarioEditar from "@/views/usuario/UsuarioEditar.vue";
 import PaginaNaoEncontrada from "@/views/PaginaNaoEncontrada.vue";
 import Peitoral from "@/views/Peitoral.vue";
+import Treat from "@/views/Treat.vue";
 import Coleira from "@/views/Coleira.vue";
 import Cinto from "@/views/Cinto.vue";
 import Comedouro from "@/views/Comedouro.vue";
@@ -69,6 +70,12 @@ const router = new Router({
       path: "/peitoral-para-cachorros-dog27",
       name: "peitoral",
       component: Peitoral,
+      props: true
+    },
+    {
+      path: "/petisco-para-cachorros-dog27",
+      name: "treat",
+      component: Treat,
       props: true
     },
     {

@@ -25,7 +25,7 @@
               <p class="quantidade">Quantidade: {{item.quantidade}}</p>
               <p
                 class="titulo"
-              >{{item.categoria | uppercase}} PARA CACHORROS {{item.estampa | uppercase}}</p>
+              >{{item.categoria | uppercase}} {{item.categoria == "Treats" ? item.nomeDoProduto : " PARA CACHORROS "+item.estampa | uppercase}}</p>
               <p class="tamanho">Tamanho: {{item.tamanho}}</p>
               <img
                 :src="item.fotoUrl"

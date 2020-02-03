@@ -222,9 +222,12 @@
                 "
               >+</span>
             </p>
+            <!-- <p
+              class="titulo"
+            >{{item.categoria | capitalize}} para cachorros {{item.estampa | lowercase}} {{item.tamanho | uppercase}}</p>-->
             <p
               class="titulo"
-            >{{item.categoria | capitalize}} para cachorros {{item.estampa | lowercase}} {{item.tamanho | uppercase}}</p>
+            >{{item.categoria }} {{item.categoria == "Treats" ? item.nomeDoProduto+" "+item.tamanho : " para cachorros "+item.estampa }}</p>
             <img
               :src="item.fotoUrl"
               :alt="`${item.categoria} para cachorros ${item.estampa}`"

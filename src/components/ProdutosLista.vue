@@ -5,6 +5,27 @@
       <div class="produtos" key="produtos">
         <div class="produto duplo">
           <div class="banner-imagem">
+            <img src="../assets/home/petisco-para-cachorro-dog27-treats.jpg" alt="peitoral" />
+          </div>
+          <div class="banner-textos">
+            <h1 class="banner-titulo">TREATS</h1>
+            <h2
+              class="banner-descricao"
+            >Petiscos saudáveis, 100% naturais, livres de corantes e conservantes artificiais.</h2>
+            <div class="links">
+              <router-link
+                :to="{name: 'treat', params: {comprar:true }  }"
+                class="banner-link left-link"
+              >Saiba mais >></router-link>
+              <router-link
+                :to="{name: 'treat', params: {comprar:true }  }"
+                class="banner-link"
+              >Escolher sabor >></router-link>
+            </div>
+          </div>
+        </div>
+        <div class="produto duplo">
+          <div class="banner-imagem">
             <img src="../assets/home/peitoral-hibrido-para-cachorro-dog27.jpg" alt="peitoral" />
           </div>
           <div class="banner-textos">

@@ -54,6 +54,9 @@
             <li class="menu-option">
               <router-link tag="a" :to="{name:'guia'}">GUIAS ></router-link>
             </li>
+            <li class="menu-option">
+              <router-link tag="a" :to="{name:'treat'}">TREATS ></router-link>
+            </li>
             <!-- <li class="menu-option">
               <router-link tag="a" :to="{name:'comedouro'}">COMEDOUROS ></router-link>
             </li>
